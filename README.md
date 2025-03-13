@@ -1,2 +1,3 @@
-# piech-dev
-Personal portfolio page
+# piech.dev
+
+Personal page

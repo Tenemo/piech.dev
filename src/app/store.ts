@@ -1,5 +1,6 @@
 import type { Action, ThunkAction } from '@reduxjs/toolkit';
 import { configureStore } from '@reduxjs/toolkit';
+import { createReduxEnhancer } from '@sentry/react';
 import { combineReducers } from 'redux';
 import { createLogger } from 'redux-logger';
 
@@ -7,6 +8,9 @@ import { appThemeSlice } from 'features/AppTheme/appThemeSlice';
 import { exampleRequestSlice } from 'features/ExampleRequest/exampleRequestSlice';
 
 export type RootState = ReturnType<typeof rootReducer>;
+
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+const sentryReduxEnhancer = createReduxEnhancer({});
 
 const logger = createLogger({
     diff: true,
@@ -29,6 +33,8 @@ export const makeStoreDev = (preloadedState?: Partial<RootState>) => {
         middleware: (getDefaultMiddleware) =>
             getDefaultMiddleware().concat(middleware).concat(logger),
         preloadedState,
+        enhancers: (getDefaultEnhancers) =>
+            getDefaultEnhancers().concat(sentryReduxEnhancer),
     });
     return store;
 };

@@ -1,10 +1,17 @@
 import { HelmetProvider } from '@dr.pogodin/react-helmet';
-import { browserTracingIntegration } from '@sentry/browser';
 import * as Sentry from '@sentry/react';
 import React, { useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import {
+    BrowserRouter,
+    useLocation,
+    useNavigationType,
+    createRoutesFromChildren,
+    matchRoutes,
+    Route,
+    Routes,
+} from 'react-router';
 
 import App from 'app/App';
 import { store } from 'app/store';
@@ -12,6 +19,21 @@ import { store } from 'app/store';
 import 'styles/global.scss';
 
 declare const __BUILD_DATE__: string;
+
+Sentry.init({
+    dsn: import.meta.env.VITE_SENTRY_DSN,
+    integrations: [
+        Sentry.reactRouterV7BrowserTracingIntegration({
+            useEffect: useEffect,
+            useLocation,
+            useNavigationType,
+            createRoutesFromChildren,
+            matchRoutes,
+        }),
+    ],
+    tracesSampleRate: 1.0,
+});
+const SentryRoutes = Sentry.withSentryReactRouterV7Routing(Routes);
 
 export const Root = (): React.JSX.Element => {
     useEffect(() => {
@@ -32,19 +54,15 @@ export const Root = (): React.JSX.Element => {
             <Provider store={store}>
                 <HelmetProvider>
                     <BrowserRouter>
-                        <App />
+                        <SentryRoutes>
+                            <Route element={<App />} path="*" />
+                        </SentryRoutes>
                     </BrowserRouter>
                 </HelmetProvider>
             </Provider>
         </React.StrictMode>
     );
 };
-
-Sentry.init({
-    dsn: import.meta.env.VITE_SENTRY_DSN,
-    integrations: [browserTracingIntegration()],
-    tracesSampleRate: 1.0,
-});
 
 const container = document.getElementById('root');
 

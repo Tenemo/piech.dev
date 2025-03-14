@@ -6,7 +6,7 @@ import 'fonts/RobotoMono-Regular.woff';
 import { Helmet } from '@dr.pogodin/react-helmet';
 import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router';
 
 import styles from './app.module.scss';
 

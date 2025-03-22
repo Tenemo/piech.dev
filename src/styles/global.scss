@@ -42,3 +42,12 @@ h3 {
     margin: 0;
     padding: 0;
 }
+a {
+    color: var(--link-color);
+    &:visited {
+        color: var(--link-visited-color);
+    }
+    &:hover {
+        color: var(--link-hover-color);
+    }
+}

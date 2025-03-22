@@ -54,7 +54,9 @@
 
 .activeLink {
     color: var(--nav-active-color);
-
+    &:visited {
+        color: var(--nav-active-color);
+    }
     &::after {
         width: 100%;
     }

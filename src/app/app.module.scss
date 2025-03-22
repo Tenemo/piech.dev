@@ -8,17 +8,14 @@
     color: var(--text-color);
     background-color: var(--background-color);
     main {
-        background-color: rgba(0, 0, 0, 0.15);
-        border-radius: 4px;
-        padding: 20px;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
     }
 }
 .error {
     color: var(--error-color);
-    margin: 10px 20px;
+    margin: 0.5rem 1rem;
 }
 .errorInfo {
     color: var(--error-info-color);
-    margin-top: 20px;
+    margin-top: 1rem;
 }

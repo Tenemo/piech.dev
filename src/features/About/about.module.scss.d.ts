@@ -6,7 +6,6 @@
  * https://npmjs.com/vite-css-modules
  */
 
-const about: string;
 const buttonsContainer: string;
 const divider: string;
 const dividerText: string;
@@ -14,7 +13,6 @@ const mainButton: string;
 const contactButton: string;
 
 export {
-	about,
 	buttonsContainer,
 	divider,
 	dividerText,
@@ -23,7 +21,6 @@ export {
 };
 
 export default {
-	about,
 	buttonsContainer,
 	divider,
 	dividerText,

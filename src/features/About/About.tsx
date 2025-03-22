@@ -5,7 +5,7 @@ import styles from './about.module.scss';
 
 const About = (): React.JSX.Element => {
     return (
-        <main className={styles.about}>
+        <main>
             <h2>About me</h2>
             <div className={styles.divider} />
             <p>[TODO: short paragraph about me]</p>

@@ -1,14 +1,18 @@
 :root {
-    --text-color: #d4d4d4;
     --background-color: #505050;
-    --secondary-bg-color: #3e095a;
+    --secondary-bg-color: #212121;
+
+    --text-color: #d4d4d4;
+    --accent-color: white;
+
     --link-color: #a4a4a4;
     --link-visited-color: #cccccc;
     --link-hover-color: white;
-    --header-color: #212121;
+
+    --header-color: var(--secondary-bg-color);
+    --nav-hover-color: white;
+    --nav-active-color: white;
+
     --error-color: darkred;
     --error-info-color: #ff6b6b;
-    --nav-hover-color: #ffffff;
-    --nav-active-color: #ffffff;
-    --accent-color: #ffffff;
 }

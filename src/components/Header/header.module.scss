@@ -1,0 +1,50 @@
+.header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-top: 0.5rem;
+    margin-bottom: 2rem;
+    gap: 2rem;
+    a h1 {
+        color: inherit;
+        text-decoration: none;
+    }
+}
+
+.logo {
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.navigation {
+    display: flex;
+    gap: 2rem;
+}
+
+.navLink {
+    text-decoration: none;
+    position: relative;
+
+    &::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -4px;
+        left: 0;
+        background-color: currentColor;
+        transition: width 0.3s ease;
+    }
+
+    &:hover::after {
+        width: 100%;
+    }
+}
+
+.activeLink {
+    font-weight: bold;
+
+    &::after {
+        width: 100%;
+    }
+}

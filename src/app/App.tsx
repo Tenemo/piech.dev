@@ -6,17 +6,15 @@ import 'fonts/RobotoMono-Regular.woff';
 import { Helmet } from '@dr.pogodin/react-helmet';
 import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { Route, Routes } from 'react-router';
+import { Navigate, Route, Routes } from 'react-router';
 
 import styles from './app.module.scss';
 
+import Header from 'components/Header/Header';
 import NotFound from 'components/NotFound/NotFound';
-import Header from 'features/Header/Header';
-import HomePage from 'features/HomePage/HomePage';
-
-const Portfolio = (): React.JSX.Element => <main>Portfolio Page</main>;
-const About = (): React.JSX.Element => <main>About Me Page</main>;
-const Contact = (): React.JSX.Element => <main>Contact Page</main>;
+import About from 'features/About/About';
+import Contact from 'features/Contact/Contact';
+import Portfolio from 'features/Portfolio/Portfolio';
 
 const App = (): React.JSX.Element => {
     return (
@@ -36,7 +34,10 @@ const App = (): React.JSX.Element => {
             >
                 <Header />
                 <Routes>
-                    <Route element={<HomePage />} path="/" />
+                    <Route
+                        element={<Navigate replace to="/about" />}
+                        path="/"
+                    />
                     <Route element={<Portfolio />} path="/portfolio" />
                     <Route element={<About />} path="/about" />
                     <Route element={<Contact />} path="/contact" />

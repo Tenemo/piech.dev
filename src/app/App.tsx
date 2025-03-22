@@ -10,20 +10,17 @@ import { Route, Routes } from 'react-router';
 
 import styles from './app.module.scss';
 
-import { useAppSelector } from 'app/hooks';
 import NotFound from 'components/NotFound/NotFound';
-import { selectAppTheme } from 'features/AppTheme/appThemeSlice';
 import Header from 'features/Header/Header';
 import HomePage from 'features/HomePage/HomePage';
 
-const App = (): React.JSX.Element => {
-    const appTheme = useAppSelector(selectAppTheme);
-    const classNames = `${styles.app} ${
-        appTheme === 'dark' ? 'theme-dark' : 'theme-light'
-    }`;
+const Portfolio = (): React.JSX.Element => <main>Portfolio Page</main>;
+const About = (): React.JSX.Element => <main>About Me Page</main>;
+const Contact = (): React.JSX.Element => <main>Contact Page</main>;
 
+const App = (): React.JSX.Element => {
     return (
-        <div className={classNames}>
+        <div className={styles.app}>
             <Helmet>
                 <title>piech.dev</title>
             </Helmet>
@@ -40,6 +37,9 @@ const App = (): React.JSX.Element => {
                 <Header />
                 <Routes>
                     <Route element={<HomePage />} path="/" />
+                    <Route element={<Portfolio />} path="/portfolio" />
+                    <Route element={<About />} path="/about" />
+                    <Route element={<Contact />} path="/contact" />
                     <Route element={<NotFound />} path="*" />
                 </Routes>
             </ErrorBoundary>

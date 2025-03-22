@@ -2,7 +2,6 @@ import { HelmetProvider } from '@dr.pogodin/react-helmet';
 import * as Sentry from '@sentry/react';
 import React, { useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Provider } from 'react-redux';
 import {
     BrowserRouter,
     useLocation,
@@ -14,8 +13,6 @@ import {
 } from 'react-router';
 
 import App from 'app/App';
-import { store } from 'app/store';
-
 import 'styles/global.scss';
 
 declare const __BUILD_DATE__: string;
@@ -51,15 +48,13 @@ export const Root = (): React.JSX.Element => {
 
     return (
         <React.StrictMode>
-            <Provider store={store}>
-                <HelmetProvider>
-                    <BrowserRouter>
-                        <SentryRoutes>
-                            <Route element={<App />} path="*" />
-                        </SentryRoutes>
-                    </BrowserRouter>
-                </HelmetProvider>
-            </Provider>
+            <HelmetProvider>
+                <BrowserRouter>
+                    <SentryRoutes>
+                        <Route element={<App />} path="*" />
+                    </SentryRoutes>
+                </BrowserRouter>
+            </HelmetProvider>
         </React.StrictMode>
     );
 };

@@ -104,10 +104,6 @@ export default tseslint.config(
                     allowTypedFunctionExpressions: true,
                 },
             ],
-            // RTK Query suggests to use that
-            // https://redux-toolkit.js.org/rtk-query/usage-with-typescript#typing-query-and-mutation-endpoints
-            // https://stackoverflow.com/questions/74698932/rtk-query-eslint-gives-errors-typescript-eslint-no-invalid-void-type-if-query
-            '@typescript-eslint/no-invalid-void-type': OFF,
 
             // eslint-plugin-react
             'react/destructuring-assignment': [ERROR, 'always'],

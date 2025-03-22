@@ -1,22 +1,18 @@
-import { screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { describe, it, expect } from 'vitest';
 
-import { makeStore } from 'app/store';
 import Header from 'features/Header/Header';
-import { renderWithProviders } from 'utils/test-utils';
 
 describe('Header', () => {
-    it('clicking theme toggle button should change the theme', () => {
-        const store = makeStore({
-            appTheme: { theme: 'dark' },
+    it('should render header with piech.dev title', () => {
+        render(<Header />);
+
+        const headingElement = screen.getByRole('heading', {
+            level: 1,
+            name: /piech\.dev/i,
         });
 
-        renderWithProviders(<Header />, { store });
-
-        const button = screen.getByRole('button');
-        button.click();
-
-        expect(store.getState().appTheme.theme).toBe('light');
+        expect(headingElement).toBeInTheDocument();
     });
 });

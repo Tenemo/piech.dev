@@ -41,6 +41,7 @@
     "type": "module",
     "dependencies": {
         "@dr.pogodin/react-helmet": "^2.0.4",
+        "@mui/icons-material": "^6.4.8",
         "@sentry/browser": "^9.5.0",
         "@sentry/react": "^9.5.0",
         "@sentry/react-router": "^9.5.0",

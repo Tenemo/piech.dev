@@ -1,9 +1,15 @@
+@use "styles/variables";
+
 html,
 body,
 #root {
     height: 100%;
-    font-size: 16px;
+    font-size: 1rem;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: "Open Sans", sans-serif;
 }
+
 *,
 *:before,
 *:after {
@@ -16,4 +22,23 @@ body.using-mouse {
         outline: none;
         box-shadow: initial;
     }
+}
+
+h1 {
+    color: var(--accent-color);
+    font-size: 1.6rem;
+    margin: 0;
+    padding: 0;
+}
+h2 {
+    color: var(--accent-color);
+    font-size: 1.4rem;
+    margin: 0;
+    padding: 0;
+}
+h3 {
+    color: var(--accent-color);
+    font-size: 1.2rem;
+    margin: 0;
+    padding: 0;
 }

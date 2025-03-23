@@ -8,27 +8,6 @@ const Contact = (): React.JSX.Element => {
             <h2>Contact</h2>
             <div className={styles.contactInfoContainer}>
                 [TODO: contact info]
-                <br />
-                [TODO: contact info]
-                <br />
-                [TODO: contact info]
-                <br />
-                [TODO: contact info]
-                <br />
-                [TODO: contact info]
-                <br />
-                [TODO: contact info]
-                <br />
-                [TODO: contact info]
-                <br />
-                [TODO: contact info]
-                <br />
-                [TODO: contact info]
-                <br />
-                [TODO: contact info]
-                <br />
-                [TODO: contact info]
-                <br />
             </div>
         </main>
     );

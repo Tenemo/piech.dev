@@ -9,24 +9,24 @@
 const card: string;
 const image: string;
 const imageContainer: string;
+const content: string;
 const imageRight: string;
 const imageLeft: string;
-const content: string;
 
 export {
 	card,
 	image,
 	imageContainer,
+	content,
 	imageRight,
-	imageLeft,
-	content
+	imageLeft
 };
 
 export default {
 	card,
 	image,
 	imageContainer,
+	content,
 	imageRight,
-	imageLeft,
-	content
+	imageLeft
 };

@@ -7,6 +7,10 @@
     background-color: var(--secondary-bg-color);
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    &:hover {
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+    }
+    transition: box-shadow 0.3s ease;
 }
 .image {
     width: 100%;
@@ -21,24 +25,24 @@
     padding: 0.5rem;
 }
 
-.imageRight {
-    flex-direction: row-reverse;
-    .imageContainer {
-        border-left: 2px solid var(--muted-color);
-    }
-}
-
-.imageLeft {
-    flex-direction: row;
-    .imageContainer {
-        border-right: 2px solid var(--muted-color);
-    }
-}
-
 .content {
     flex: 1;
     padding: 1rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+.imageRight {
+    flex-direction: row-reverse;
+    .content {
+        border-right: 10px solid var(--background-color);
+    }
+}
+
+.imageLeft {
+    flex-direction: row;
+    .content {
+        border-left: 10px solid var(--background-color);
+    }
 }

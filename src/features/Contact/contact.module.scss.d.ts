@@ -7,11 +7,14 @@
  */
 
 const contactInfoContainer: string;
+const contactItem: string;
 
 export {
-	contactInfoContainer
+	contactInfoContainer,
+	contactItem
 };
 
 export default {
-	contactInfoContainer
+	contactInfoContainer,
+	contactItem
 };

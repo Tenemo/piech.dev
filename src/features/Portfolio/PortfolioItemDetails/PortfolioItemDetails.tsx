@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import type { Components } from 'react-markdown';
 import { useParams } from 'react-router';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
@@ -8,8 +9,13 @@ import styles from './portfolioItemDetails.module.scss';
 
 const OWNER = 'tenemo';
 
+type GitHubRepoResponse = {
+    default_branch: string;
+    [key: string]: unknown;
+};
+
 const PortfolioItemDetails = (): React.JSX.Element => {
-    const { repo } = useParams();
+    const { repo } = useParams<{ repo: string }>();
     const [markdown, setMarkdown] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -21,7 +27,7 @@ const PortfolioItemDetails = (): React.JSX.Element => {
             return;
         }
 
-        const fetchReadme = async () => {
+        const fetchReadme = async (): Promise<void> => {
             try {
                 setIsLoading(true);
                 setError(null);
@@ -31,12 +37,11 @@ const PortfolioItemDetails = (): React.JSX.Element => {
                 );
 
                 if (!repoResponse.ok) {
-                    throw new Error(
-                        `Failed to fetch repository information: ${repoResponse.statusText}`,
-                    );
+                    throw new Error(`Failed to fetch repository information.`);
                 }
 
-                const repoData = await repoResponse.json();
+                const repoData =
+                    (await repoResponse.json()) as GitHubRepoResponse;
                 const defaultBranch = repoData.default_branch;
 
                 const readmeResponse = await fetch(
@@ -62,10 +67,10 @@ const PortfolioItemDetails = (): React.JSX.Element => {
             }
         };
 
-        fetchReadme();
+        void fetchReadme();
     }, [repo]);
 
-    const urlTransform = (url: string, key: string, node: any): string => {
+    const urlTransform = (url: string, key: string, _node: unknown): string => {
         if (url.startsWith('http')) {
             return url;
         }
@@ -74,45 +79,71 @@ const PortfolioItemDetails = (): React.JSX.Element => {
             url = url.replace(/^\.\//g, '');
         }
 
-        if (key === 'src') {
+        if (key === 'src' && repo) {
             return `https://github.com/${OWNER}/${repo}/blob/master/${url}?raw=true`;
         }
 
-        if (key === 'href' && !url.startsWith('#')) {
+        if (key === 'href' && !url.startsWith('#') && repo) {
             return `https://github.com/${OWNER}/${repo}/blob/master/${url}`;
         }
 
         return url;
     };
 
-    const components = {
-        code(props: any) {
-            const { children, className, node, ...rest } = props;
-            const match = /language-(\w+)/.exec(className || '');
-
-            return (
-                <code
-                    {...rest}
-                    className={match ? styles.codeBlock : styles.inlineCode}
-                >
+    const components: Components = {
+        code({ className, children, ...props }) {
+            const match = /language-(\w+)/.exec(className ?? '');
+            return match ? (
+                <code {...props} className={styles.codeBlock}>
+                    {children}
+                </code>
+            ) : (
+                <code {...props} className={styles.inlineCode}>
                     {children}
                 </code>
             );
         },
-        img(props: any) {
-            return <img {...props} style={{ maxWidth: '100%' }} />;
+        img({ src, alt, ...props }) {
+            return (
+                <img
+                    alt={alt}
+                    src={src}
+                    {...props}
+                    style={{ maxWidth: '100%' }}
+                />
+            );
         },
-        h1(props: any) {
-            return <h1 {...props} style={{ color: 'var(--accent-color)' }} />;
+        h1({ children, ...props }) {
+            return (
+                <h1 {...props} style={{ color: 'var(--accent-color)' }}>
+                    {children}
+                </h1>
+            );
         },
-        h2(props: any) {
-            return <h2 {...props} style={{ color: 'var(--accent-color)' }} />;
+        h2({ children, ...props }) {
+            return (
+                <h2 {...props} style={{ color: 'var(--accent-color)' }}>
+                    {children}
+                </h2>
+            );
         },
-        h3(props: any) {
-            return <h3 {...props} style={{ color: 'var(--accent-color)' }} />;
+        h3({ children, ...props }) {
+            return (
+                <h3 {...props} style={{ color: 'var(--accent-color)' }}>
+                    {children}
+                </h3>
+            );
         },
-        a(props: any) {
-            return <a {...props} style={{ color: 'var(--link-color)' }} />;
+        a({ href, children, ...props }) {
+            return (
+                <a
+                    href={href}
+                    {...props}
+                    style={{ color: 'var(--link-color)' }}
+                >
+                    {children}
+                </a>
+            );
         },
     };
 

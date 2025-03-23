@@ -7,17 +7,11 @@
  */
 
 const app: string;
-const error: string;
-const errorInfo: string;
 
 export {
-	app,
-	error,
-	errorInfo
+	app
 };
 
 export default {
-	app,
-	error,
-	errorInfo
+	app
 };

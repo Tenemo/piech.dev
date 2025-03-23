@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { useParams } from 'react-router';
+import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 
 import styles from './portfolioItemDetails.module.scss';
@@ -25,7 +26,6 @@ const PortfolioItemDetails = (): React.JSX.Element => {
                 setIsLoading(true);
                 setError(null);
 
-                // First try to get the default branch
                 const repoResponse = await fetch(
                     `https://api.github.com/repos/${OWNER}/${repo}`,
                 );
@@ -39,7 +39,6 @@ const PortfolioItemDetails = (): React.JSX.Element => {
                 const repoData = await repoResponse.json();
                 const defaultBranch = repoData.default_branch;
 
-                // Then get the README content
                 const readmeResponse = await fetch(
                     `https://raw.githubusercontent.com/${OWNER}/${repo}/${defaultBranch}/README.md`,
                 );
@@ -64,33 +63,29 @@ const PortfolioItemDetails = (): React.JSX.Element => {
         };
 
         fetchReadme();
-    }, [OWNER, repo]);
+    }, [repo]);
 
-    // URL transformers for images and links
     const urlTransform = (url: string, key: string, node: any): string => {
         if (url.startsWith('http')) {
             return url;
         }
 
-        // Handle relative paths
         if (url.startsWith('./') || url.startsWith('../')) {
             url = url.replace(/^\.\//g, '');
         }
 
         if (key === 'src') {
-            return `https://raw.githubusercontent.com/${OWNER}/${repo}/main/${url}`;
+            return `https://github.com/${OWNER}/${repo}/blob/master/${url}?raw=true`;
         }
 
         if (key === 'href' && !url.startsWith('#')) {
-            return `https://github.com/${OWNER}/${repo}/blob/main/${url}`;
+            return `https://github.com/${OWNER}/${repo}/blob/master/${url}`;
         }
 
         return url;
     };
 
-    // Custom components for markdown rendering
     const components = {
-        // Style for code blocks
         code(props: any) {
             const { children, className, node, ...rest } = props;
             const match = /language-(\w+)/.exec(className || '');
@@ -104,11 +99,9 @@ const PortfolioItemDetails = (): React.JSX.Element => {
                 </code>
             );
         },
-        // Style for images
         img(props: any) {
             return <img {...props} style={{ maxWidth: '100%' }} />;
         },
-        // Add styling for headings
         h1(props: any) {
             return <h1 {...props} style={{ color: 'var(--accent-color)' }} />;
         },
@@ -118,7 +111,6 @@ const PortfolioItemDetails = (): React.JSX.Element => {
         h3(props: any) {
             return <h3 {...props} style={{ color: 'var(--accent-color)' }} />;
         },
-        // Style for links
         a(props: any) {
             return <a {...props} style={{ color: 'var(--link-color)' }} />;
         },
@@ -146,6 +138,7 @@ const PortfolioItemDetails = (): React.JSX.Element => {
             <div className={styles.markdownContainer}>
                 <ReactMarkdown
                     components={components}
+                    rehypePlugins={[rehypeRaw]}
                     remarkPlugins={[remarkGfm]}
                     urlTransform={urlTransform}
                 >

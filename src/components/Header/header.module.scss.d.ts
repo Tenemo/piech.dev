@@ -7,7 +7,6 @@
  */
 
 const header: string;
-const gitHubLink: string;
 const logo: string;
 const navigation: string;
 const navLink: string;
@@ -15,7 +14,6 @@ const activeLink: string;
 
 export {
 	header,
-	gitHubLink,
 	logo,
 	navigation,
 	navLink,
@@ -24,7 +22,6 @@ export {
 
 export default {
 	header,
-	gitHubLink,
 	logo,
 	navigation,
 	navLink,

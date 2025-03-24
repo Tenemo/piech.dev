@@ -1,0 +1,23 @@
+.footer {
+    margin-top: auto;
+    padding: 1rem;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: var(--secondary-bg-color);
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.gitHubLink {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    &:hover path {
+        fill: var(--link-hover-color) !important;
+    }
+
+    &:visited path {
+        fill: var(--color-text);
+    }
+}

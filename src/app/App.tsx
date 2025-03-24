@@ -10,6 +10,7 @@ import { Navigate, Route, Routes } from 'react-router';
 
 import styles from './app.module.scss';
 
+import Footer from 'components/Footer/Footer';
 import Header from 'components/Header/Header';
 import NotFound from 'components/NotFound/NotFound';
 import About from 'features/About/About';
@@ -48,6 +49,7 @@ const App = (): React.JSX.Element => {
                     <Route element={<Contact />} path="/contact" />
                     <Route element={<NotFound />} path="*" />
                 </Routes>
+                <Footer />
             </ErrorBoundary>
         </div>
     );

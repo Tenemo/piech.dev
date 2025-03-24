@@ -8,22 +8,29 @@ import styles from './contact.module.scss';
 
 const Contact = (): React.JSX.Element => {
     return (
-        <main>
+        <main className={styles.main}>
             <h2>Contact</h2>
             <div className={styles.contactInfoContainer}>
+                <p>
+                    If you have a project idea, questions about a project of
+                    mine, I look like a good candidate for an open position, or
+                    you would like to get in touch for other reasons, please
+                    feel free to reach out via email or Telegram. I provide my
+                    resume upon request.
+                </p>
                 <div className={styles.contactItem}>
-                    <a href="mailto:piotr@piech.dev">
-                        <EmailIcon />
-                        piotr@piech.dev
-                    </a>
+                    <EmailIcon />
+                    email:
+                    <a href="mailto:piotr@piech.dev">piotr@piech.dev</a>
                 </div>
                 <div className={styles.contactItem}>
+                    <TelegramIcon />
+                    telegram:
                     <a
                         href="https://t.me/tenemo"
                         rel="noopener noreferrer"
                         target="_blank"
                     >
-                        <TelegramIcon />
                         @tenemo
                     </a>
                 </div>

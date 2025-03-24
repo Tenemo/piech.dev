@@ -8,13 +8,16 @@
 
 const contactInfoContainer: string;
 const contactItem: string;
+const main: string;
 
 export {
 	contactInfoContainer,
-	contactItem
+	contactItem,
+	main
 };
 
 export default {
 	contactInfoContainer,
-	contactItem
+	contactItem,
+	main
 };

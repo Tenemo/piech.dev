@@ -7,11 +7,14 @@
  */
 
 const portfolio: string;
+const portfolioItemsContainer: string;
 
 export {
-	portfolio
+	portfolio,
+	portfolioItemsContainer
 };
 
 export default {
-	portfolio
+	portfolio,
+	portfolioItemsContainer
 };

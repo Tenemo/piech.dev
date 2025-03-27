@@ -7,6 +7,7 @@
  */
 
 const main: string;
+const aboutMeDescription: string;
 const buttonsContainer: string;
 const dividerText: string;
 const mainButton: string;
@@ -14,6 +15,7 @@ const contactButton: string;
 
 export {
 	main,
+	aboutMeDescription,
 	buttonsContainer,
 	dividerText,
 	mainButton,
@@ -22,6 +24,7 @@ export {
 
 export default {
 	main,
+	aboutMeDescription,
 	buttonsContainer,
 	dividerText,
 	mainButton,

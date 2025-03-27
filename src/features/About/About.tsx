@@ -8,12 +8,14 @@ const About = (): React.JSX.Element => {
         <main className={styles.main}>
             <h2>About me</h2>
             <div className={'divider'} />
-            <p>
-                My name is Piotr and I&apos;m an IT specialist with over 12
-                years of experience. I have over 5 years of management
-                experience, leading teams and managing projects since 2020.
-            </p>
-            <p>Almost my entire career has been spent working remotely.</p>
+            <div className={styles.aboutMeDescription}>
+                <p>
+                    My name is Piotr and I&apos;m an IT specialist with over 12
+                    years of experience. I have over 5 years of management
+                    experience, leading teams and managing projects since 2020.
+                    Almost my entire career has been spent working remotely.
+                </p>
+            </div>
 
             <div className={styles.buttonsContainer}>
                 <Link className={styles.mainButton} to="/portfolio">

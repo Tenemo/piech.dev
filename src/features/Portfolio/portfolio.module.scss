@@ -1,8 +1,16 @@
 .portfolio {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    align-items: center;
+    width: 100%;
     a {
         text-decoration: none;
     }
+}
+.portfolioItemsContainer {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 1200px;
 }

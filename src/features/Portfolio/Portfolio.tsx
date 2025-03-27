@@ -8,27 +8,30 @@ const Portfolio = (): React.JSX.Element => {
     return (
         <main className={styles.portfolio}>
             <h2>Portfolio</h2>
+            <div className={'divider'} />
 
-            <Link to="/portfolio/reactplate">
-                <PortfolioCard
-                    imageAlt="Reactplate project"
-                    imageUrl="/path/to/image1.jpg"
-                >
-                    <h3>Reactplate</h3>
-                    <p>A React template. TODO: longer description</p>
-                </PortfolioCard>
-            </Link>
+            <div className={styles.portfolioItemsContainer}>
+                <Link to="/portfolio/reactplate">
+                    <PortfolioCard
+                        imageAlt="Reactplate project"
+                        imageUrl="src/images/reactplate_lighthouse.png"
+                    >
+                        <h3>Reactplate</h3>
+                        <p>A React template. TODO: longer description</p>
+                    </PortfolioCard>
+                </Link>
 
-            <Link to="/portfolio/expressplate">
-                <PortfolioCard
-                    imageAlt="Expressplate project"
-                    imageOnRight={true}
-                    imageUrl="/path/to/image2.jpg"
-                >
-                    <h3>Expressplate</h3>
-                    <p>An Express.js template. TODO: longer description</p>
-                </PortfolioCard>
-            </Link>
+                <Link to="/portfolio/expressplate">
+                    <PortfolioCard
+                        imageAlt="Expressplate project"
+                        imageOnRight={true}
+                        imageUrl="/path/to/image2.jpg"
+                    >
+                        <h3>Expressplate</h3>
+                        <p>An Express.js template. TODO: longer description</p>
+                    </PortfolioCard>
+                </Link>
+            </div>
         </main>
     );
 };

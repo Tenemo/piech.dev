@@ -12,6 +12,8 @@ const imageContainer: string;
 const content: string;
 const imageRight: string;
 const imageLeft: string;
+const technologiesContainer: string;
+const techLogo: string;
 
 export {
 	card,
@@ -19,7 +21,9 @@ export {
 	imageContainer,
 	content,
 	imageRight,
-	imageLeft
+	imageLeft,
+	technologiesContainer,
+	techLogo
 };
 
 export default {
@@ -28,5 +32,7 @@ export default {
 	imageContainer,
 	content,
 	imageRight,
-	imageLeft
+	imageLeft,
+	technologiesContainer,
+	techLogo
 };

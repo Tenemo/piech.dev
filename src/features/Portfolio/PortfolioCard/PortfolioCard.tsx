@@ -7,6 +7,7 @@ type PortfolioCardProps = {
     imageUrl: string;
     imageAlt: string;
     imageOnRight?: boolean;
+    technologies?: string[]; // Added technologies array prop
 };
 
 const PortfolioCard = ({
@@ -14,6 +15,7 @@ const PortfolioCard = ({
     imageUrl,
     imageAlt,
     imageOnRight = false,
+    technologies = [], // Default to empty array
 }: PortfolioCardProps): React.JSX.Element => {
     return (
         <div
@@ -22,7 +24,22 @@ const PortfolioCard = ({
             <div className={styles.imageContainer}>
                 <img alt={imageAlt} className={styles.image} src={imageUrl} />
             </div>
-            <div className={styles.content}>{children}</div>
+            <div className={styles.content}>
+                {children}
+
+                {technologies.length > 0 && (
+                    <div className={styles.technologiesContainer}>
+                        {technologies.map((technologyName) => (
+                            <img
+                                alt={`${technologyName} logo`}
+                                className={styles.techLogo}
+                                key={technologyName}
+                                src={`src/images/${technologyName}_logo.png`}
+                            />
+                        ))}
+                    </div>
+                )}
+            </div>
         </div>
     );
 };

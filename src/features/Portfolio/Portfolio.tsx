@@ -15,6 +15,15 @@ const Portfolio = (): React.JSX.Element => {
                     <PortfolioCard
                         imageAlt="Reactplate project"
                         imageUrl="src/images/reactplate_lighthouse.png"
+                        technologies={[
+                            'typescript',
+                            'react',
+                            'redux',
+                            'sass',
+                            'vitejs',
+                            'eslint',
+                            'prettier',
+                        ]}
                     >
                         <h3>Reactplate</h3>
                         <p>A React template. TODO: longer description</p>

@@ -3,6 +3,7 @@ import path from 'path';
 
 import { Schema, ValidateEnv } from '@julr/vite-plugin-validate-env';
 import react from '@vitejs/plugin-react';
+import browserslistToEsbuild from 'browserslist-to-esbuild';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, loadEnv } from 'vite';
 import { patchCssModules } from 'vite-css-modules';
@@ -19,6 +20,14 @@ srcRootContent.forEach((directory) => {
     // eslint-disable-next-line security/detect-object-injection
     absolutePathAliases[directory] = path.join(srcPath, directory);
 });
+
+const manualChunks = (id: string): string | null => {
+    if (id.includes('node_modules')) {
+        return 'vendor';
+    }
+
+    return null;
+};
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), '');
@@ -48,6 +57,10 @@ export default defineConfig(({ mode }) => {
                     {
                         src: 'src/favicon/*',
                         dest: 'favicon',
+                    },
+                    {
+                        src: 'src/robots.txt',
+                        dest: '',
                     },
                 ],
             }),
@@ -85,6 +98,13 @@ export default defineConfig(({ mode }) => {
             sourcemap: false,
             outDir: 'dist',
             cssCodeSplit: true,
+
+            target: browserslistToEsbuild(),
+            rollupOptions: {
+                output: {
+                    manualChunks,
+                },
+            },
         },
     };
 });

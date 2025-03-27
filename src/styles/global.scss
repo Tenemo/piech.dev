@@ -53,3 +53,8 @@ a {
         color: var(--link-hover-color) !important;
     }
 }
+
+.divider {
+    width: 100%;
+    border-bottom: 1px solid var(--muted-color);
+}

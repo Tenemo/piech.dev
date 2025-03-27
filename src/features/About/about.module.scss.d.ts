@@ -6,23 +6,23 @@
  * https://npmjs.com/vite-css-modules
  */
 
+const main: string;
 const buttonsContainer: string;
-const divider: string;
 const dividerText: string;
 const mainButton: string;
 const contactButton: string;
 
 export {
+	main,
 	buttonsContainer,
-	divider,
 	dividerText,
 	mainButton,
 	contactButton
 };
 
 export default {
+	main,
 	buttonsContainer,
-	divider,
 	dividerText,
 	mainButton,
 	contactButton

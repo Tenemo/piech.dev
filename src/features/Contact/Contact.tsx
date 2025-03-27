@@ -10,6 +10,7 @@ const Contact = (): React.JSX.Element => {
     return (
         <main className={styles.main}>
             <h2>Contact</h2>
+            <div className={'divider'} />
             <div className={styles.contactInfoContainer}>
                 <p>
                     If you have a project idea, questions about a project of
@@ -18,21 +19,23 @@ const Contact = (): React.JSX.Element => {
                     feel free to reach out via email or Telegram. I provide my
                     resume upon request.
                 </p>
-                <div className={styles.contactItem}>
-                    <EmailIcon />
-                    email:
-                    <a href="mailto:piotr@piech.dev">piotr@piech.dev</a>
-                </div>
-                <div className={styles.contactItem}>
-                    <TelegramIcon />
-                    telegram:
-                    <a
-                        href="https://t.me/tenemo"
-                        rel="noopener noreferrer"
-                        target="_blank"
-                    >
-                        @tenemo
-                    </a>
+                <div className={styles.contactItemsContainer}>
+                    <div className={styles.contactItem}>
+                        <EmailIcon />
+                        email:
+                        <a href="mailto:piotr@piech.dev">piotr@piech.dev</a>
+                    </div>
+                    <div className={styles.contactItem}>
+                        <TelegramIcon />
+                        telegram:
+                        <a
+                            href="https://t.me/tenemo"
+                            rel="noopener noreferrer"
+                            target="_blank"
+                        >
+                            @tenemo
+                        </a>
+                    </div>
                 </div>
             </div>
         </main>

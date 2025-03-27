@@ -17,9 +17,9 @@ const Header = (): React.JSX.Element => {
                             ? `${styles.navLink} ${styles.activeLink}`
                             : styles.navLink
                     }
-                    to="/portfolio"
+                    to="/about"
                 >
-                    Portfolio
+                    About me
                 </NavLink>
                 <NavLink
                     className={({ isActive }) =>
@@ -27,9 +27,9 @@ const Header = (): React.JSX.Element => {
                             ? `${styles.navLink} ${styles.activeLink}`
                             : styles.navLink
                     }
-                    to="/about"
+                    to="/portfolio"
                 >
-                    About me
+                    Portfolio
                 </NavLink>
                 <NavLink
                     className={({ isActive }) =>

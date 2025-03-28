@@ -1,3 +1,4 @@
+import { OpenInNew as OpenInNewIcon } from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 
@@ -6,7 +7,7 @@ import { TECHNOLOGIES } from '../technologies';
 import styles from './portfolioCard.module.scss';
 
 type PortfolioCardProps = {
-    imageUrl: string;
+    imagePath: string;
     imageOnRight?: boolean;
     technologies: string[];
     project: string;
@@ -21,7 +22,7 @@ const OWNER = 'tenemo';
 const BRANCH = 'master';
 
 const PortfolioCard = ({
-    imageUrl,
+    imagePath,
     imageOnRight = false,
     technologies,
     project,
@@ -90,7 +91,9 @@ const PortfolioCard = ({
 
         return (
             <>
-                <h3>{packageInfo?.name ?? project}</h3>
+                <h3>
+                    {packageInfo?.name ?? project} <OpenInNewIcon />
+                </h3>
                 <p>{packageInfo?.description ?? 'No description available'}</p>
             </>
         );
@@ -102,43 +105,52 @@ const PortfolioCard = ({
         >
             <>
                 <div className={styles.imageContainer}>
-                    <img
-                        alt={`${project} preview`}
-                        className={styles.image}
-                        src={imageUrl}
-                    />
+                    <Link to={`/portfolio/${project}`}>
+                        <img
+                            alt={`${project} preview`}
+                            className={styles.image}
+                            src={imagePath}
+                        />
+                    </Link>
                 </div>
                 <div className={styles.content}>
-                    <Link to={`/portfolio/${project}`}>{renderContent()}</Link>
-
-                    {technologies.length > 0 && (
-                        <div className={styles.technologiesContainer}>
-                            {technologies.map((technologyName) => {
-                                const technologyInfo =
-                                    TECHNOLOGIES[
-                                        technologyName as keyof typeof TECHNOLOGIES
-                                    ];
-                                return (
-                                    <a
-                                        href={technologyInfo.url}
-                                        key={technologyName}
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                        }}
-                                        rel="noopener noreferrer"
-                                        target="_blank"
-                                        title={technologyInfo.fullName}
-                                    >
-                                        <img
-                                            alt={`${technologyName} logo`}
-                                            className={styles.techLogo}
-                                            src={`src/images/logos/${technologyName}_logo.png`}
-                                        />
-                                    </a>
-                                );
-                            })}
-                        </div>
-                    )}
+                    <Link
+                        className={styles.description}
+                        to={`/portfolio/${project}`}
+                    >
+                        {renderContent()}
+                    </Link>
+                    <div className={styles.technologiesContainer}>
+                        <h4>Key technologies used: </h4>
+                        {technologies.length > 0 && (
+                            <div className={styles.technologiesIconsContainer}>
+                                {technologies.map((technologyName) => {
+                                    const technologyInfo =
+                                        TECHNOLOGIES[
+                                            technologyName as keyof typeof TECHNOLOGIES
+                                        ];
+                                    return (
+                                        <a
+                                            href={technologyInfo.url}
+                                            key={technologyName}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                            }}
+                                            rel="noopener noreferrer"
+                                            target="_blank"
+                                            title={technologyInfo.fullName}
+                                        >
+                                            <img
+                                                alt={`${technologyName} logo`}
+                                                className={styles.techLogo}
+                                                src={`src/images/logos/${technologyName}_logo.png`}
+                                            />
+                                        </a>
+                                    );
+                                })}
+                            </div>
+                        )}{' '}
+                    </div>
                 </div>
             </>
         </div>

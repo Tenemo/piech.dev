@@ -13,6 +13,8 @@ import {
 } from 'react-router';
 
 import App from 'app/App';
+import { PortfolioProvider } from 'features/Portfolio/PortfolioContext';
+
 import 'styles/global.scss';
 
 declare const __BUILD_DATE__: string;
@@ -49,11 +51,13 @@ export const Root = (): React.JSX.Element => {
     return (
         <React.StrictMode>
             <HelmetProvider>
-                <BrowserRouter>
-                    <SentryRoutes>
-                        <Route element={<App />} path="*" />
-                    </SentryRoutes>
-                </BrowserRouter>
+                <PortfolioProvider>
+                    <BrowserRouter>
+                        <SentryRoutes>
+                            <Route element={<App />} path="*" />
+                        </SentryRoutes>
+                    </BrowserRouter>
+                </PortfolioProvider>
             </HelmetProvider>
         </React.StrictMode>
     );

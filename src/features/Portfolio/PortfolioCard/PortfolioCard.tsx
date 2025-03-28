@@ -2,6 +2,7 @@ import { OpenInNew as OpenInNewIcon } from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 
+import { usePortfolio, PackageInfo } from '../PortfolioContext';
 import { TECHNOLOGIES } from '../technologies';
 
 import styles from './portfolioCard.module.scss';
@@ -13,11 +14,6 @@ type PortfolioCardProps = {
     project: string;
 };
 
-type PackageInfo = {
-    name: string;
-    description: string;
-};
-
 const OWNER = 'tenemo';
 const BRANCH = 'master';
 
@@ -27,11 +23,23 @@ const PortfolioCard = ({
     technologies,
     project,
 }: PortfolioCardProps): React.JSX.Element => {
-    const [packageInfo, setPackageInfo] = useState<PackageInfo | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const { getPackageInfo, setPackageInfo } = usePortfolio();
+    const [packageInfo, setLocalPackageInfo] = useState<PackageInfo | null>(
+        null,
+    );
 
     useEffect(() => {
+        // Check for cached data immediately
+        const cachedInfo = getPackageInfo(project);
+
+        if (cachedInfo) {
+            setLocalPackageInfo(cachedInfo);
+            setIsLoading(false);
+            return;
+        }
+
         const fetchPackageInfo = async (): Promise<void> => {
             try {
                 setIsLoading(true);
@@ -50,12 +58,17 @@ const PortfolioCard = ({
                 const packageJsonData = (await packageJsonResponse.json()) as
                     | PackageInfo
                     | undefined;
-                setPackageInfo({
+
+                const newPackageInfo = {
                     name: packageJsonData?.name ?? project,
                     description:
                         packageJsonData?.description ??
                         'No description available',
-                });
+                };
+
+                // Update both local state and context cache
+                setLocalPackageInfo(newPackageInfo);
+                setPackageInfo(project, newPackageInfo);
             } catch (err) {
                 setError(
                     err instanceof Error
@@ -69,7 +82,7 @@ const PortfolioCard = ({
         };
 
         void fetchPackageInfo();
-    }, [project]);
+    }, [project, setPackageInfo, getPackageInfo]);
 
     const renderContent = (): React.ReactNode => {
         if (isLoading) {

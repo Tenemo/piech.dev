@@ -6,7 +6,7 @@ import { Link, useParams } from 'react-router';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 
-import styles from './portfolioItemDetails.module.scss';
+import styles from './portfolioItem.module.scss';
 
 const OWNER = 'tenemo';
 const BRANCH = 'master';

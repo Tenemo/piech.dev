@@ -16,7 +16,7 @@ import NotFound from 'components/NotFound/NotFound';
 import About from 'features/About/About';
 import Contact from 'features/Contact/Contact';
 import Portfolio from 'features/Portfolio/Portfolio';
-import PortfolioItemDetails from 'features/Portfolio/PortfolioItemDetails/PortfolioItemDetails';
+import PortfolioItem from 'features/Portfolio/PortfolioItem/PortfolioItem';
 
 const App = (): React.JSX.Element => {
     return (
@@ -41,7 +41,7 @@ const App = (): React.JSX.Element => {
                         path="/"
                     />
                     <Route
-                        element={<PortfolioItemDetails />}
+                        element={<PortfolioItem />}
                         path="/portfolio/:repo"
                     />
                     <Route element={<Portfolio />} path="/portfolio" />

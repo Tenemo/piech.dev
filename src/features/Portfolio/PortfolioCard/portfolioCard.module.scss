@@ -7,6 +7,11 @@
     background-color: var(--secondary-bg-color);
     border-radius: 5px;
     transition: box-shadow 0.3s ease;
+
+    @media (max-width: 768px) {
+        flex-direction: column !important;
+        min-height: auto;
+    }
 }
 
 .imageContainer {
@@ -15,6 +20,11 @@
     display: flex;
     align-items: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+
+    @media (max-width: 768px) {
+        width: 100%;
+        min-height: 200px;
+    }
 }
 
 .image {
@@ -51,6 +61,11 @@
     flex-direction: row-reverse;
     .content {
         border-right: 0.4rem solid var(--background-color);
+
+        @media (max-width: 768px) {
+            border-right: none;
+            border-top: 0.4rem solid var(--background-color);
+        }
     }
 }
 
@@ -58,6 +73,11 @@
     flex-direction: row;
     .content {
         border-left: 0.4rem solid var(--background-color);
+
+        @media (max-width: 768px) {
+            border-left: none;
+            border-top: 0.4rem solid var(--background-color);
+        }
     }
 }
 

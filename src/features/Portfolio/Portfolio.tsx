@@ -5,13 +5,13 @@ import PortfolioCard from './PortfolioCard/PortfolioCard';
 import { TECHNOLOGIES } from './technologies';
 
 const PORTFOLIO_ITEMS: {
-    imagePath: string;
+    previewImage: string;
     project: string;
     repoName?: string;
     technologies: (keyof typeof TECHNOLOGIES)[];
 }[] = [
     {
-        imagePath: 'images/projects/reactplate_lighthouse.png',
+        previewImage: 'reactplate_lighthouse.png',
         project: 'reactplate',
         technologies: [
             'typescript',
@@ -26,12 +26,12 @@ const PORTFOLIO_ITEMS: {
         ],
     },
     {
-        imagePath: 'YYYYYYYYY',
+        previewImage: 'YYYYYYYYY',
         project: 'threshold-elgamal',
         technologies: ['typescript', 'npm'],
     },
     {
-        imagePath: 'YYYYYYYYY',
+        previewImage: 'YYYYYYYYY',
         project: 'sealed.vote',
         repoName: 'sealed-vote-web',
         technologies: [
@@ -45,7 +45,7 @@ const PORTFOLIO_ITEMS: {
         ],
     },
     {
-        imagePath: 'YYYYYYYYY',
+        previewImage: 'YYYYYYYYY',
         project: 'bob',
         technologies: [
             'cpp',
@@ -58,7 +58,7 @@ const PORTFOLIO_ITEMS: {
         ],
     },
     {
-        imagePath: 'images/projects/expressplate.png',
+        previewImage: 'expressplate.png',
         project: 'expressplate',
         technologies: [
             'typescript',
@@ -71,12 +71,12 @@ const PORTFOLIO_ITEMS: {
         ],
     },
     {
-        imagePath: 'YYYYYYYYY',
+        previewImage: 'aliases.sh.png',
         project: 'aliases.sh',
         technologies: ['bash'],
     },
     {
-        imagePath: 'YYYYYYYYY',
+        previewImage: 'YYYYYYYYY',
         project: 'tiles.town',
         repoName: 'tiles-town',
         technologies: ['typescript', 'react', 'redux', 'netlify', 'sentry'],
@@ -91,12 +91,12 @@ const Portfolio = (): React.JSX.Element => {
 
             <div className={styles.portfolioItemsContainer}>
                 {PORTFOLIO_ITEMS.map(
-                    ({ imagePath, project, technologies }, index) => (
+                    ({ previewImage, project, technologies }, index) => (
                         <>
                             <PortfolioCard
                                 imageOnRight={index % 2 === 1}
-                                imagePath={imagePath}
                                 key={project}
+                                previewImage={previewImage}
                                 project={project}
                                 technologies={technologies}
                                 {...(PORTFOLIO_ITEMS[index].repoName

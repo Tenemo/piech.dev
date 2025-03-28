@@ -14,8 +14,11 @@ export type PackageInfo = {
 
 type PortfolioContextType = {
     packageInfoCache: Record<string, PackageInfo>;
+    readmeContentCache: Record<string, string>;
     setPackageInfo: (project: string, info: PackageInfo) => void;
     getPackageInfo: (project: string) => PackageInfo | undefined;
+    setReadmeContent: (project: string, content: string) => void;
+    getReadmeContent: (project: string) => string | undefined;
 };
 
 const PortfolioContext = createContext<PortfolioContextType | undefined>(
@@ -27,6 +30,9 @@ export const PortfolioProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
     const [packageInfoCache, setPackageInfoCache] = useState<
         Record<string, PackageInfo>
+    >({});
+    const [readmeContentCache, setReadmeContentCache] = useState<
+        Record<string, string>
     >({});
 
     const setPackageInfo = (project: string, info: PackageInfo): void => {
@@ -41,13 +47,33 @@ export const PortfolioProvider: React.FC<{ children: ReactNode }> = ({
         [packageInfoCache],
     );
 
+    const setReadmeContent = (project: string, content: string): void => {
+        setReadmeContentCache((prev) => ({
+            ...prev,
+            [project]: content,
+        }));
+    };
+
+    const getReadmeContent = useCallback(
+        (project: string): string | undefined => readmeContentCache[project],
+        [readmeContentCache],
+    );
+
     const contextValue = useMemo(
         () => ({
             packageInfoCache,
+            readmeContentCache,
             setPackageInfo,
             getPackageInfo,
+            setReadmeContent,
+            getReadmeContent,
         }),
-        [getPackageInfo, packageInfoCache],
+        [
+            getPackageInfo,
+            getReadmeContent,
+            packageInfoCache,
+            readmeContentCache,
+        ],
     );
 
     return (

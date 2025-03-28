@@ -6,6 +6,8 @@ import { Link, useParams } from 'react-router';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 
+import { usePortfolio } from '../PortfolioContext';
+
 import styles from './portfolioItem.module.scss';
 
 const OWNER = 'tenemo';
@@ -16,10 +18,19 @@ const PortfolioItemDetails = (): React.JSX.Element => {
     const [markdown, setMarkdown] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const { getReadmeContent, setReadmeContent } = usePortfolio();
 
     useEffect(() => {
         if (!repo) {
             setError('Repository information is missing');
+            setIsLoading(false);
+            return;
+        }
+
+        const cachedReadme = getReadmeContent(repo);
+
+        if (cachedReadme) {
+            setMarkdown(cachedReadme);
             setIsLoading(false);
             return;
         }
@@ -41,6 +52,7 @@ const PortfolioItemDetails = (): React.JSX.Element => {
 
                 const readmeContent = await readmeResponse.text();
                 setMarkdown(readmeContent);
+                setReadmeContent(repo, readmeContent);
             } catch (err) {
                 setError(
                     err instanceof Error
@@ -53,7 +65,7 @@ const PortfolioItemDetails = (): React.JSX.Element => {
         };
 
         void fetchReadme();
-    }, [repo]);
+    }, [repo, getReadmeContent, setReadmeContent]);
 
     const urlTransform = (url: string, key: string, _node: unknown): string => {
         if (url.startsWith('http')) {

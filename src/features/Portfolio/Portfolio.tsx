@@ -36,6 +36,7 @@ const Portfolio = (): React.JSX.Element => {
                         imageOnRight={true}
                         imageUrl="/path/to/image2.jpg"
                         technologies={[
+                            'nodejs',
                             'typescript',
                             'express',
                             'vitejs',

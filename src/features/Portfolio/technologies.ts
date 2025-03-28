@@ -31,4 +31,36 @@ export const TECHNOLOGIES = {
         fullName: 'Express.js',
         url: 'https://expressjs.com/',
     },
+    cpp: {
+        fullName: 'C++',
+        url: 'https://isocpp.org/',
+    },
+    nodejs: {
+        fullName: 'Node.js',
+        url: 'https://nodejs.org/',
+    },
+    esp32: {
+        fullName: 'ESP32',
+        url: 'https://www.espressif.com/en/products/socs/esp32',
+    },
+    'esp32-s3': {
+        fullName: 'ESP32-S3',
+        url: 'https://www.espressif.com/en/products/socs/esp32-s3',
+    },
+    fastify: {
+        fullName: 'Fastify',
+        url: 'https://www.fastify.io/',
+    },
+    openai: {
+        fullName: 'OpenAI',
+        url: 'https://openai.com/',
+    },
+    platformio: {
+        fullName: 'PlatformIO',
+        url: 'https://platformio.org/',
+    },
+    sentry: {
+        fullName: 'Sentry',
+        url: 'https://sentry.io/',
+    },
 } as const;

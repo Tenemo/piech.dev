@@ -27,7 +27,7 @@ const Portfolio = (): React.JSX.Element => {
                 />
                 <PortfolioCard
                     imageOnRight={true}
-                    imagePath="/path/to/image2.jpg"
+                    imagePath="images/projects/expressplate.png"
                     project="expressplate"
                     technologies={[
                         'typescript',

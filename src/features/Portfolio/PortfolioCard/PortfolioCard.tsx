@@ -11,6 +11,7 @@ type PortfolioCardProps = {
     imageOnRight?: boolean;
     technologies: (keyof typeof TECHNOLOGIES)[];
     project: string;
+    repoName?: string;
 };
 
 const OWNER = 'tenemo';
@@ -21,7 +22,9 @@ const PortfolioCard = ({
     imageOnRight = false,
     technologies,
     project,
+    repoName,
 }: PortfolioCardProps): React.JSX.Element => {
+    const githubRepository = repoName ?? project;
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const { getPackageInfo, setPackageInfo } = usePortfolio();
@@ -30,7 +33,7 @@ const PortfolioCard = ({
     );
 
     useEffect(() => {
-        const cachedInfo = getPackageInfo(project);
+        const cachedInfo = getPackageInfo(githubRepository);
 
         if (cachedInfo) {
             setLocalPackageInfo(cachedInfo);
@@ -44,7 +47,7 @@ const PortfolioCard = ({
                 setError(null);
 
                 const packageJsonResponse = await fetch(
-                    `https://raw.githubusercontent.com/${OWNER}/${project}/${BRANCH}/package.json`,
+                    `https://raw.githubusercontent.com/${OWNER}/${githubRepository}/${BRANCH}/package.json`,
                 );
 
                 if (!packageJsonResponse.ok) {
@@ -65,7 +68,7 @@ const PortfolioCard = ({
                 };
 
                 setLocalPackageInfo(newPackageInfo);
-                setPackageInfo(project, newPackageInfo);
+                setPackageInfo(githubRepository, newPackageInfo);
             } catch (err) {
                 setError(
                     err instanceof Error
@@ -79,7 +82,7 @@ const PortfolioCard = ({
         };
 
         void fetchPackageInfo();
-    }, [project, setPackageInfo, getPackageInfo]);
+    }, [githubRepository, setPackageInfo, getPackageInfo, project]);
 
     const renderContent = (): React.ReactNode => {
         if (isLoading) {
@@ -113,7 +116,7 @@ const PortfolioCard = ({
         >
             <>
                 <div className={styles.imageContainer}>
-                    <Link to={`/portfolio/${project}`}>
+                    <Link to={`/portfolio/${githubRepository}`}>
                         <img
                             alt={`${project} preview`}
                             className={styles.image}
@@ -124,7 +127,7 @@ const PortfolioCard = ({
                 <div className={styles.content}>
                     <Link
                         className={styles.description}
-                        to={`/portfolio/${project}`}
+                        to={`/portfolio/${githubRepository}`}
                     >
                         {renderContent()}
                     </Link>

@@ -52,10 +52,12 @@ export const TECHNOLOGIES = {
     fastify: {
         fullName: 'Fastify',
         url: 'https://www.fastify.io/',
+        wideLogo: true,
     },
     openai: {
         fullName: 'OpenAI',
         url: 'https://openai.com/',
+        wideLogo: true,
     },
     platformio: {
         fullName: 'PlatformIO',
@@ -69,6 +71,23 @@ export const TECHNOLOGIES = {
     netlify: {
         fullName: 'Netlify',
         url: 'https://www.netlify.com/',
+        wideLogo: true,
+    },
+    mui: {
+        fullName: 'Material UI',
+        url: 'https://mui.com/',
+    },
+    jest: {
+        fullName: 'Jest',
+        url: 'https://jestjs.io/',
+    },
+    postgresql: {
+        fullName: 'PostgreSQL',
+        url: 'https://www.postgresql.org/',
+    },
+    bash: {
+        fullName: 'Bash',
+        url: 'https://www.gnu.org/software/bash/',
         wideLogo: true,
     },
 } as const;

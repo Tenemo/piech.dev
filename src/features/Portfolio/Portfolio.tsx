@@ -28,7 +28,7 @@ const PORTFOLIO_ITEMS: {
     {
         imagePath: 'YYYYYYYYY',
         project: 'threshold-elgamal',
-        technologies: ['typescript'],
+        technologies: ['typescript', 'npm'],
     },
     {
         imagePath: 'YYYYYYYYY',

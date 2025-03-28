@@ -90,4 +90,9 @@ export const TECHNOLOGIES = {
         url: 'https://www.gnu.org/software/bash/',
         wideLogo: true,
     },
+    npm: {
+        fullName: 'npm',
+        url: 'https://www.npmjs.com/',
+        wideLogo: true,
+    },
 } as const;

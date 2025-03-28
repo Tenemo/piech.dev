@@ -8,23 +8,21 @@
     max-width: 900px;
 }
 
-.repoLink {
-    margin-bottom: 1.5rem;
+.backLink {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
 
     a {
-        color: var(--link-color);
-        text-decoration: none;
         display: inline-flex;
         align-items: center;
+        gap: 0.5rem;
+        color: var(--link-color);
         font-weight: 500;
+        transition: color 0.2s ease;
 
-        &:hover {
-            text-decoration: underline;
-        }
-
-        &::before {
-            content: "↗";
-            margin-right: 0.5rem;
+        svg {
             font-size: 1.2rem;
         }
     }

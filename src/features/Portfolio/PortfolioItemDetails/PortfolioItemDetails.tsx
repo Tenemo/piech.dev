@@ -1,7 +1,8 @@
+import { ArrowBack } from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import type { Components } from 'react-markdown';
-import { useParams } from 'react-router';
+import { Link, useParams } from 'react-router';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 
@@ -150,6 +151,11 @@ const PortfolioItemDetails = (): React.JSX.Element => {
 
     return (
         <div className={styles.container}>
+            <div className={styles.backLink}>
+                <Link to="/portfolio">
+                    <ArrowBack /> Back to Portfolio
+                </Link>
+            </div>
             <div className={styles.markdownContainer}>
                 <ReactMarkdown
                     components={components}

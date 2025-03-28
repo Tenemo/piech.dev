@@ -7,7 +7,7 @@
  */
 
 const container: string;
-const repoLink: string;
+const backLink: string;
 const markdownContainer: string;
 const codeBlock: string;
 const inlineCode: string;
@@ -16,7 +16,7 @@ const error: string;
 
 export {
 	container,
-	repoLink,
+	backLink,
 	markdownContainer,
 	codeBlock,
 	inlineCode,
@@ -26,7 +26,7 @@ export {
 
 export default {
 	container,
-	repoLink,
+	backLink,
 	markdownContainer,
 	codeBlock,
 	inlineCode,

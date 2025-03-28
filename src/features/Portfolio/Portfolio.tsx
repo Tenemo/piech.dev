@@ -30,8 +30,8 @@ const Portfolio = (): React.JSX.Element => {
                     imagePath="/path/to/image2.jpg"
                     project="expressplate"
                     technologies={[
-                        'nodejs',
                         'typescript',
+                        'nodejs',
                         'express',
                         'vitejs',
                         'eslint',

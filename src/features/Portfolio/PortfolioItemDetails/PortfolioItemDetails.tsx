@@ -8,11 +8,7 @@ import remarkGfm from 'remark-gfm';
 import styles from './portfolioItemDetails.module.scss';
 
 const OWNER = 'tenemo';
-
-type GitHubRepoResponse = {
-    default_branch: string;
-    [key: string]: unknown;
-};
+const BRANCH = 'master';
 
 const PortfolioItemDetails = (): React.JSX.Element => {
     const { repo } = useParams<{ repo: string }>();
@@ -32,20 +28,8 @@ const PortfolioItemDetails = (): React.JSX.Element => {
                 setIsLoading(true);
                 setError(null);
 
-                const repoResponse = await fetch(
-                    `https://api.github.com/repos/${OWNER}/${repo}`,
-                );
-
-                if (!repoResponse.ok) {
-                    throw new Error(`Failed to fetch repository information.`);
-                }
-
-                const repoData =
-                    (await repoResponse.json()) as GitHubRepoResponse;
-                const defaultBranch = repoData.default_branch;
-
                 const readmeResponse = await fetch(
-                    `https://raw.githubusercontent.com/${OWNER}/${repo}/${defaultBranch}/README.md`,
+                    `https://raw.githubusercontent.com/${OWNER}/${repo}/${BRANCH}/README.md`,
                 );
 
                 if (!readmeResponse.ok) {
@@ -80,11 +64,11 @@ const PortfolioItemDetails = (): React.JSX.Element => {
         }
 
         if (key === 'src' && repo) {
-            return `https://github.com/${OWNER}/${repo}/blob/master/${url}?raw=true`;
+            return `https://github.com/${OWNER}/${repo}/blob/${BRANCH}/${url}?raw=true`;
         }
 
         if (key === 'href' && !url.startsWith('#') && repo) {
-            return `https://github.com/${OWNER}/${repo}/blob/master/${url}`;
+            return `https://github.com/${OWNER}/${repo}/blob/${BRANCH}/${url}`;
         }
 
         return url;

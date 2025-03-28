@@ -14,6 +14,9 @@ const imageRight: string;
 const imageLeft: string;
 const technologiesContainer: string;
 const techLogo: string;
+const loadingContainer: string;
+const errorContainer: string;
+const errorMessage: string;
 
 export {
 	card,
@@ -23,7 +26,10 @@ export {
 	imageRight,
 	imageLeft,
 	technologiesContainer,
-	techLogo
+	techLogo,
+	loadingContainer,
+	errorContainer,
+	errorMessage
 };
 
 export default {
@@ -34,5 +40,8 @@ export default {
 	imageRight,
 	imageLeft,
 	technologiesContainer,
-	techLogo
+	techLogo,
+	loadingContainer,
+	errorContainer,
+	errorMessage
 };

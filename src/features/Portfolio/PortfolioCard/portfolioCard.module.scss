@@ -69,3 +69,28 @@
         opacity: 1;
     }
 }
+
+.loadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100px;
+    p {
+        color: var(--text-color);
+        opacity: 0.8;
+        margin: 0;
+        font-style: italic;
+    }
+}
+
+.errorContainer {
+    h3 {
+        color: var(--accent-color);
+    }
+}
+
+.errorMessage {
+    color: var(--error-info-color);
+    font-size: 0.9rem;
+    margin: 0.5rem 0;
+}

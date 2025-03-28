@@ -17,7 +17,6 @@ const srcRootContent = readdirSync(srcPath, { withFileTypes: true }).map(
     (direct) => direct.name.replace(/(\.ts){1}(x?)/, ''),
 );
 srcRootContent.forEach((directory) => {
-    // eslint-disable-next-line security/detect-object-injection
     absolutePathAliases[directory] = path.join(srcPath, directory);
 });
 

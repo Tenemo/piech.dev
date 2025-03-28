@@ -1,4 +1,4 @@
-import { ArrowBack } from '@mui/icons-material';
+import { ArrowBack, GitHub } from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import type { Components } from 'react-markdown';
@@ -151,10 +151,21 @@ const PortfolioItemDetails = (): React.JSX.Element => {
 
     return (
         <div className={styles.container}>
-            <div className={styles.backLink}>
+            <div className={styles.topBar}>
                 <Link to="/portfolio">
                     <ArrowBack /> Back to Portfolio
                 </Link>
+                {repo && (
+                    <a
+                        className={styles.githubLink}
+                        href={`https://github.com/${OWNER}/${repo}`}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                        title={`View ${repo} on GitHub`}
+                    >
+                        <GitHub /> github.com/{OWNER}/{repo}
+                    </a>
+                )}
             </div>
             <div className={styles.markdownContainer}>
                 <ReactMarkdown

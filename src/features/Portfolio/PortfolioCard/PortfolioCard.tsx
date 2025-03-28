@@ -1,4 +1,3 @@
-import { OpenInNew as OpenInNewIcon } from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 
@@ -102,9 +101,7 @@ const PortfolioCard = ({
 
         return (
             <>
-                <h3>
-                    {packageInfo?.name ?? project} <OpenInNewIcon />
-                </h3>
+                <h3>{packageInfo?.name ?? project}</h3>
                 <p>{packageInfo?.description ?? 'No description available'}</p>
             </>
         );

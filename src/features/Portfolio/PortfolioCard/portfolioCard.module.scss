@@ -13,18 +13,16 @@
     transition: box-shadow 0.3s ease;
 }
 
-.image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.imageContainer {
+    width: 40%;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
 }
 
-.imageContainer {
-    flex: 0 0 40%;
-    height: 100%;
-    overflow: hidden;
-    padding: 0.5rem;
-    border: 1px solid var(--background-color);
+.image {
+    object-fit: cover;
+    width: 100%;
 }
 
 .content {
@@ -38,14 +36,14 @@
 .imageRight {
     flex-direction: row-reverse;
     .content {
-        border-right: 10px solid var(--background-color);
+        border-right: 0.4rem solid var(--background-color);
     }
 }
 
 .imageLeft {
     flex-direction: row;
     .content {
-        border-left: 10px solid var(--background-color);
+        border-left: 0.4rem solid var(--background-color);
     }
 }
 

@@ -13,7 +13,7 @@ const Portfolio = (): React.JSX.Element => {
             <div className={styles.portfolioItemsContainer}>
                 <Link to="/portfolio/reactplate">
                     <PortfolioCard
-                        imageAlt="Reactplate project"
+                        imageAlt="Reactplate project and its lighthouse scores"
                         imageUrl="src/images/projects/reactplate_lighthouse.png"
                         technologies={[
                             'typescript',

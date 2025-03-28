@@ -7,8 +7,8 @@
  */
 
 const card: string;
-const image: string;
 const imageContainer: string;
+const image: string;
 const content: string;
 const imageRight: string;
 const imageLeft: string;
@@ -17,8 +17,8 @@ const techLogo: string;
 
 export {
 	card,
-	image,
 	imageContainer,
+	image,
 	content,
 	imageRight,
 	imageLeft,
@@ -28,8 +28,8 @@ export {
 
 export default {
 	card,
-	image,
 	imageContainer,
+	image,
 	content,
 	imageRight,
 	imageLeft,

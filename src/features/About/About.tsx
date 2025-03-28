@@ -16,9 +16,10 @@ const About = (): React.JSX.Element => {
                     some of my non-commercial projects that I worked on.
                 </p>
                 <p>
-                    When it comes to my career, I have over 5 years of
+                    When it comes to my track record, I have over 6 years of
                     management experience, leading teams and managing projects
-                    since 2020. My entire has been spent working remotely.
+                    since 2018. My entire career has been spent working
+                    remotely.
                 </p>
             </div>
 

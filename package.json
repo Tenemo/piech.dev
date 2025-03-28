@@ -3,7 +3,7 @@
     "version": "0.0.1",
     "author": "Piotr Piech <piotr@piech.dev>",
     "license": "UNLICENSED",
-    "description": "piech.dev",
+    "description": "Personal portfolio page.",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/Tenemo/piech.dev.git"

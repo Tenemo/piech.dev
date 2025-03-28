@@ -31,7 +31,6 @@ const PortfolioCard = ({
     );
 
     useEffect(() => {
-        // Check for cached data immediately
         const cachedInfo = getPackageInfo(project);
 
         if (cachedInfo) {
@@ -66,7 +65,6 @@ const PortfolioCard = ({
                         'No description available',
                 };
 
-                // Update both local state and context cache
                 setLocalPackageInfo(newPackageInfo);
                 setPackageInfo(project, newPackageInfo);
             } catch (err) {

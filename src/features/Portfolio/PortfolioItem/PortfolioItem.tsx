@@ -150,7 +150,7 @@ const PortfolioItemDetails = (): React.JSX.Element => {
     }
 
     return (
-        <div className={styles.container}>
+        <main className={styles.container}>
             <div className={styles.topBar}>
                 <Link to="/portfolio">
                     <ArrowBack /> Back to Portfolio
@@ -177,7 +177,7 @@ const PortfolioItemDetails = (): React.JSX.Element => {
                     {markdown}
                 </ReactMarkdown>
             </div>
-        </div>
+        </main>
     );
 };
 

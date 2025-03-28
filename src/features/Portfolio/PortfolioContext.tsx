@@ -41,7 +41,6 @@ export const PortfolioProvider: React.FC<{ children: ReactNode }> = ({
         [packageInfoCache],
     );
 
-    // Use useMemo to prevent unnecessary re-creation of the context value
     const contextValue = useMemo(
         () => ({
             packageInfoCache,

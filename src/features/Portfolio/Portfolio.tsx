@@ -11,7 +11,7 @@ const Portfolio = (): React.JSX.Element => {
 
             <div className={styles.portfolioItemsContainer}>
                 <PortfolioCard
-                    imagePath="src/images/projects/reactplate_lighthouse.png"
+                    imagePath="images/projects/reactplate_lighthouse.png"
                     project="reactplate"
                     technologies={[
                         'typescript',

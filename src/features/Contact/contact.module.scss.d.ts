@@ -6,21 +6,21 @@
  * https://npmjs.com/vite-css-modules
  */
 
-const main: string;
 const contactInfoContainer: string;
+const main: string;
 const contactItemsContainer: string;
 const contactItem: string;
 
 export {
-	main,
 	contactInfoContainer,
+	main,
 	contactItemsContainer,
 	contactItem
 };
 
 export default {
-	main,
 	contactInfoContainer,
+	main,
 	contactItemsContainer,
 	contactItem
 };

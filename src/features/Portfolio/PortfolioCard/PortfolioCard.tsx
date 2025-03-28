@@ -158,7 +158,7 @@ const PortfolioCard = ({
                                             <img
                                                 alt={`${technologyName} logo`}
                                                 className={`${styles.logo} ${isWideLogo ? styles.wideLogo : ''}`}
-                                                src={`src/images/logos/${technologyName}_logo.png`}
+                                                src={`images/logos/${technologyName}_logo.png`}
                                             />
                                         </a>
                                     );

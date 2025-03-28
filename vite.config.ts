@@ -58,6 +58,10 @@ export default defineConfig(({ mode }) => {
                         dest: 'favicon',
                     },
                     {
+                        src: 'images/*',
+                        dest: 'images',
+                    },
+                    {
                         src: 'src/robots.txt',
                         dest: '',
                     },

@@ -7,7 +7,7 @@ import { TECHNOLOGIES } from '../technologies';
 import styles from './portfolioCard.module.scss';
 
 type PortfolioCardProps = {
-    previewImage: string;
+    projectPreview: string;
     imageOnRight?: boolean;
     technologies: (keyof typeof TECHNOLOGIES)[];
     project: string;
@@ -18,7 +18,7 @@ const OWNER = 'tenemo';
 const BRANCH = 'master';
 
 const PortfolioCard = ({
-    previewImage,
+    projectPreview,
     imageOnRight = false,
     technologies,
     project,
@@ -120,7 +120,7 @@ const PortfolioCard = ({
                         <img
                             alt={`${project} preview`}
                             className={styles.image}
-                            src={`/images/projects/${previewImage}`}
+                            src={`/images/projects/${projectPreview}`}
                         />
                     </Link>
                 </div>

@@ -10,10 +10,15 @@ const About = (): React.JSX.Element => {
             <div className={'divider'} />
             <div className={styles.aboutMeDescription}>
                 <p>
-                    My name is Piotr and I&apos;m an IT specialist with over 12
-                    years of experience. I have over 5 years of management
-                    experience, leading teams and managing projects since 2020.
-                    Almost my entire career has been spent working remotely.
+                    Welcome to my tiny personal website - my name is Piotr and
+                    I&apos;m an IT specialist with over 12 years of experience.
+                    I created this site so that I have an easy way of sharing
+                    some of my non-commercial projects that I worked on.
+                </p>
+                <p>
+                    When it comes to my career, I have over 5 years of
+                    management experience, leading teams and managing projects
+                    since 2020. My entire has been spent working remotely.
                 </p>
             </div>
 

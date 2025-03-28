@@ -14,7 +14,7 @@ const Portfolio = (): React.JSX.Element => {
                 <Link to="/portfolio/reactplate">
                     <PortfolioCard
                         imageAlt="Reactplate project"
-                        imageUrl="src/images/reactplate_lighthouse.png"
+                        imageUrl="src/images/projects/reactplate_lighthouse.png"
                         technologies={[
                             'typescript',
                             'react',
@@ -35,6 +35,13 @@ const Portfolio = (): React.JSX.Element => {
                         imageAlt="Expressplate project"
                         imageOnRight={true}
                         imageUrl="/path/to/image2.jpg"
+                        technologies={[
+                            'typescript',
+                            'express',
+                            'vitejs',
+                            'eslint',
+                            'prettier',
+                        ]}
                     >
                         <h3>Expressplate</h3>
                         <p>An Express.js template. TODO: longer description</p>

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { TECHNOLOGIES } from '../technologies';
+
 import styles from './portfolioCard.module.scss';
 
 type PortfolioCardProps = {
@@ -7,7 +9,7 @@ type PortfolioCardProps = {
     imageUrl: string;
     imageAlt: string;
     imageOnRight?: boolean;
-    technologies?: string[]; // Added technologies array prop
+    technologies: string[];
 };
 
 const PortfolioCard = ({
@@ -15,7 +17,7 @@ const PortfolioCard = ({
     imageUrl,
     imageAlt,
     imageOnRight = false,
-    technologies = [], // Default to empty array
+    technologies,
 }: PortfolioCardProps): React.JSX.Element => {
     return (
         <div
@@ -29,18 +31,30 @@ const PortfolioCard = ({
 
                 {technologies.length > 0 && (
                     <div className={styles.technologiesContainer}>
-                        {technologies.map((technologyName) => (
-                            <img
-                                alt={`${technologyName} logo`}
-                                className={styles.techLogo}
-                                key={technologyName}
-                                src={`src/images/${technologyName}_logo.png`}
-                                title={
-                                    technologyName.charAt(0).toUpperCase() +
-                                    technologyName.slice(1)
-                                }
-                            />
-                        ))}
+                        {technologies.map((technologyName) => {
+                            const technologyInfo =
+                                TECHNOLOGIES[
+                                    technologyName as keyof typeof TECHNOLOGIES
+                                ];
+                            return (
+                                <a
+                                    href={technologyInfo.url}
+                                    key={technologyName}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                    }}
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                    title={technologyInfo.fullName}
+                                >
+                                    <img
+                                        alt={`${technologyName} logo`}
+                                        className={styles.techLogo}
+                                        src={`src/images/logos/${technologyName}_logo.png`}
+                                    />
+                                </a>
+                            );
+                        })}
                     </div>
                 )}
             </div>

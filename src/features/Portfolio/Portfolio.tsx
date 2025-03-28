@@ -21,6 +21,8 @@ const Portfolio = (): React.JSX.Element => {
                         'vitejs',
                         'eslint',
                         'prettier',
+                        'netlify',
+                        'sentry',
                     ]}
                 />
                 <PortfolioCard
@@ -34,6 +36,7 @@ const Portfolio = (): React.JSX.Element => {
                         'vitejs',
                         'eslint',
                         'prettier',
+                        'sentry',
                     ]}
                 />
             </div>

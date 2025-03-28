@@ -30,6 +30,7 @@ export const TECHNOLOGIES = {
     express: {
         fullName: 'Express.js',
         url: 'https://expressjs.com/',
+        wideLogo: true,
     },
     cpp: {
         fullName: 'C++',
@@ -38,6 +39,7 @@ export const TECHNOLOGIES = {
     nodejs: {
         fullName: 'Node.js',
         url: 'https://nodejs.org/',
+        wideLogo: true,
     },
     esp32: {
         fullName: 'ESP32',
@@ -62,5 +64,11 @@ export const TECHNOLOGIES = {
     sentry: {
         fullName: 'Sentry',
         url: 'https://sentry.io/',
+        wideLogo: true,
+    },
+    netlify: {
+        fullName: 'Netlify',
+        url: 'https://www.netlify.com/',
+        wideLogo: true,
     },
 } as const;

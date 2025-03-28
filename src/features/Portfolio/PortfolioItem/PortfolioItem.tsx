@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import type { Components } from 'react-markdown';
 import { Link, useParams } from 'react-router';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 
@@ -90,14 +92,19 @@ const PortfolioItemDetails = (): React.JSX.Element => {
     const components: Components = {
         code({ className, children, ...props }) {
             const match = /language-(\w+)/.exec(className ?? '');
-            return match ? (
-                <code {...props} className={styles.codeBlock}>
-                    {children}
-                </code>
-            ) : (
-                <code {...props} className={styles.inlineCode}>
-                    {children}
-                </code>
+            return (
+                <SyntaxHighlighter
+                    className={styles.codeBlock}
+                    language={match?.[1] ?? undefined}
+                    // @ts-expect-error broken @type/ typings
+                    style={vscDarkPlus}
+                    wrapLines={true}
+                    wrapLongLines={true}
+                    {...props}
+                >
+                    {/* eslint-disable-next-line @typescript-eslint/no-base-to-string */}
+                    {String(children).replace(/\n$/, '')}
+                </SyntaxHighlighter>
             );
         },
         img({ src, alt, ...props }) {

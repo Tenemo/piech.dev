@@ -95,4 +95,8 @@ export const TECHNOLOGIES = {
         url: 'https://www.npmjs.com/',
         wideLogo: true,
     },
+    typedoc: {
+        fullName: 'TypeDoc',
+        url: 'https://typedoc.org/',
+    },
 } as const;

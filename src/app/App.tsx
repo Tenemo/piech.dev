@@ -1,8 +1,5 @@
 import 'normalize.css';
 
-import 'fonts/RobotoMono-Regular.woff2';
-import 'fonts/RobotoMono-Regular.woff';
-
 import { Helmet } from '@dr.pogodin/react-helmet';
 import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';

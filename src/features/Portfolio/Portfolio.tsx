@@ -26,9 +26,9 @@ const PORTFOLIO_ITEMS: {
         ],
     },
     {
-        projectPreview: 'YYYYYYYYY',
+        projectPreview: 'threshold-elgamal.png',
         project: 'threshold-elgamal',
-        technologies: ['typescript', 'npm'],
+        technologies: ['typescript', 'npm', 'typedoc'],
     },
     {
         projectPreview: 'YYYYYYYYY',
@@ -58,6 +58,11 @@ const PORTFOLIO_ITEMS: {
         ],
     },
     {
+        projectPreview: 'aliases.sh.png',
+        project: 'aliases.sh',
+        technologies: ['bash'],
+    },
+    {
         projectPreview: 'expressplate.png',
         project: 'expressplate',
         technologies: [
@@ -69,11 +74,6 @@ const PORTFOLIO_ITEMS: {
             'prettier',
             'sentry',
         ],
-    },
-    {
-        projectPreview: 'aliases.sh.png',
-        project: 'aliases.sh',
-        technologies: ['bash'],
     },
     {
         projectPreview: 'YYYYYYYYY',

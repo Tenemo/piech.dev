@@ -6,7 +6,6 @@
     min-height: 300px;
     background-color: var(--secondary-bg-color);
     border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     transition: box-shadow 0.3s ease;
 }
 
@@ -15,6 +14,7 @@
     padding: 0.5rem;
     display: flex;
     align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .image {
@@ -23,13 +23,14 @@
 }
 
 .content {
-    padding: 1rem;
     flex: 1;
     display: flex;
     flex-direction: column;
 }
 
 .description {
+    padding: 1rem;
+    color: var(--text-color) !important;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -61,14 +62,9 @@
 }
 
 .technologiesContainer {
-    display: flex;
-    flex-direction: column;
-    h4 {
-        margin: 0;
-    }
-}
-
-.technologiesIconsContainer {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 0.5rem;
+    border-top: 0.4rem solid var(--background-color);
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
@@ -79,7 +75,7 @@
     }
 }
 
-.techLogo {
+.logo {
     width: 3rem;
     height: 3rem;
     object-fit: contain;
@@ -89,6 +85,11 @@
     &:hover {
         opacity: 1;
     }
+}
+
+.wideLogo {
+    width: 6rem;
+    height: 3rem;
 }
 
 .loadingContainer {

@@ -9,7 +9,7 @@ import styles from './portfolioCard.module.scss';
 type PortfolioCardProps = {
     imagePath: string;
     imageOnRight?: boolean;
-    technologies: string[];
+    technologies: (keyof typeof TECHNOLOGIES)[];
     project: string;
 };
 
@@ -121,14 +121,21 @@ const PortfolioCard = ({
                         {renderContent()}
                     </Link>
                     <div className={styles.technologiesContainer}>
-                        <h4>Key technologies used: </h4>
                         {technologies.length > 0 && (
-                            <div className={styles.technologiesIconsContainer}>
+                            <>
                                 {technologies.map((technologyName) => {
                                     const technologyInfo =
-                                        TECHNOLOGIES[
-                                            technologyName as keyof typeof TECHNOLOGIES
-                                        ];
+                                        TECHNOLOGIES[technologyName];
+                                    let isWideLogo = false;
+                                    if (
+                                        Object.prototype.hasOwnProperty.call(
+                                            technologyInfo,
+                                            'wideLogo',
+                                        )
+                                    ) {
+                                        isWideLogo = true;
+                                    }
+
                                     return (
                                         <a
                                             href={technologyInfo.url}
@@ -142,14 +149,14 @@ const PortfolioCard = ({
                                         >
                                             <img
                                                 alt={`${technologyName} logo`}
-                                                className={styles.techLogo}
+                                                className={`${styles.logo} ${isWideLogo ? styles.wideLogo : ''}`}
                                                 src={`src/images/logos/${technologyName}_logo.png`}
                                             />
                                         </a>
                                     );
                                 })}
-                            </div>
-                        )}{' '}
+                            </>
+                        )}
                     </div>
                 </div>
             </>

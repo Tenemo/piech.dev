@@ -174,6 +174,9 @@ export default tseslint.config(
                     argsIgnorePattern: '^_',
                 },
             ],
+
+            // eslint-plugin-security
+            'security/detect-object-injection': OFF,
         },
     },
     {

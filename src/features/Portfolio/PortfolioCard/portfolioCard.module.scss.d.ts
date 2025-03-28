@@ -14,8 +14,8 @@ const description: string;
 const imageRight: string;
 const imageLeft: string;
 const technologiesContainer: string;
-const technologiesIconsContainer: string;
-const techLogo: string;
+const logo: string;
+const wideLogo: string;
 const loadingContainer: string;
 const errorContainer: string;
 const errorMessage: string;
@@ -29,8 +29,8 @@ export {
 	imageRight,
 	imageLeft,
 	technologiesContainer,
-	technologiesIconsContainer,
-	techLogo,
+	logo,
+	wideLogo,
 	loadingContainer,
 	errorContainer,
 	errorMessage
@@ -45,8 +45,8 @@ export default {
 	imageRight,
 	imageLeft,
 	technologiesContainer,
-	technologiesIconsContainer,
-	techLogo,
+	logo,
+	wideLogo,
 	loadingContainer,
 	errorContainer,
 	errorMessage

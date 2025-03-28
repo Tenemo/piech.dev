@@ -35,6 +35,10 @@ const PortfolioCard = ({
                                 className={styles.techLogo}
                                 key={technologyName}
                                 src={`src/images/${technologyName}_logo.png`}
+                                title={
+                                    technologyName.charAt(0).toUpperCase() +
+                                    technologyName.slice(1)
+                                }
                             />
                         ))}
                     </div>

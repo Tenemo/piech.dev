@@ -58,11 +58,6 @@ const PORTFOLIO_ITEMS: {
     //     ],
     // },
     {
-        projectPreview: 'aliases.sh.png',
-        project: 'aliases.sh',
-        technologies: ['bash'],
-    },
-    {
         projectPreview: 'expressplate.png',
         project: 'expressplate',
         technologies: [
@@ -75,6 +70,17 @@ const PORTFOLIO_ITEMS: {
             'sentry',
         ],
     },
+    {
+        projectPreview: 'aliases.sh.png',
+        project: 'aliases.sh',
+        technologies: ['bash'],
+    },
+    // {
+    //     project: 'stellaris_mods',
+    //     repoName: 'stellaris-mod-slow-play',
+    //     projectPreview: 'YYYYYYYYYY',
+    //     technologies: [],
+    // },
     // {
     //     projectPreview: 'YYYYYYYYY',
     //     project: 'tiles.town',
@@ -84,12 +90,6 @@ const PORTFOLIO_ITEMS: {
     // {
     //     project: 'particle.golf',
     //     repoName: 'particle-golf',
-    //     projectPreview: 'YYYYYYYYYY',
-    //     technologies: [],
-    // },
-    // {
-    //     project: 'stellaris_mods',
-    //     repoName: 'stellaris-mod-slow-play',
     //     projectPreview: 'YYYYYYYYYY',
     //     technologies: [],
     // },

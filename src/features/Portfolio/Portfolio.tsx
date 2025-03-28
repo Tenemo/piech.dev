@@ -30,33 +30,33 @@ const PORTFOLIO_ITEMS: {
         project: 'threshold-elgamal',
         technologies: ['typescript', 'npm', 'typedoc'],
     },
-    {
-        projectPreview: 'YYYYYYYYY',
-        project: 'sealed.vote',
-        repoName: 'sealed-vote-web',
-        technologies: [
-            'typescript',
-            'fastify',
-            'postgresql',
-            'react',
-            'redux',
-            'mui',
-            'jest',
-        ],
-    },
-    {
-        projectPreview: 'YYYYYYYYY',
-        project: 'bob',
-        technologies: [
-            'cpp',
-            'platformio',
-            'openai',
-            'esp32',
-            'esp32-s3',
-            'typescript',
-            'react',
-        ],
-    },
+    // {
+    //     projectPreview: 'YYYYYYYYY',
+    //     project: 'sealed.vote',
+    //     repoName: 'sealed-vote-web',
+    //     technologies: [
+    //         'typescript',
+    //         'fastify',
+    //         'postgresql',
+    //         'react',
+    //         'redux',
+    //         'mui',
+    //         'jest',
+    //     ],
+    // },
+    // {
+    //     projectPreview: 'YYYYYYYYY',
+    //     project: 'bob',
+    //     technologies: [
+    //         'cpp',
+    //         'platformio',
+    //         'openai',
+    //         'esp32',
+    //         'esp32-s3',
+    //         'typescript',
+    //         'react',
+    //     ],
+    // },
     {
         projectPreview: 'aliases.sh.png',
         project: 'aliases.sh',
@@ -75,12 +75,24 @@ const PORTFOLIO_ITEMS: {
             'sentry',
         ],
     },
-    {
-        projectPreview: 'YYYYYYYYY',
-        project: 'tiles.town',
-        repoName: 'tiles-town',
-        technologies: ['typescript', 'react', 'redux', 'netlify', 'sentry'],
-    },
+    // {
+    //     projectPreview: 'YYYYYYYYY',
+    //     project: 'tiles.town',
+    //     repoName: 'tiles-town',
+    //     technologies: ['typescript', 'react', 'redux', 'netlify', 'sentry'],
+    // },
+    // {
+    //     project: 'particle.golf',
+    //     repoName: 'particle-golf',
+    //     projectPreview: 'YYYYYYYYYY',
+    //     technologies: [],
+    // },
+    // {
+    //     project: 'stellaris_mods',
+    //     repoName: 'stellaris-mod-slow-play',
+    //     projectPreview: 'YYYYYYYYYY',
+    //     technologies: [],
+    // },
 ];
 
 const Portfolio = (): React.JSX.Element => {

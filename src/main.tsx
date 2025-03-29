@@ -19,20 +19,27 @@ import 'styles/global.scss';
 
 declare const __BUILD_DATE__: string;
 
-Sentry.init({
-    dsn: import.meta.env.VITE_SENTRY_DSN,
-    integrations: [
-        Sentry.reactRouterV7BrowserTracingIntegration({
-            useEffect: useEffect,
-            useLocation,
-            useNavigationType,
-            createRoutesFromChildren,
-            matchRoutes,
-        }),
-    ],
-    tracesSampleRate: 1.0,
-});
-const SentryRoutes = Sentry.withSentryReactRouterV7Routing(Routes);
+const sentryDsn = import.meta.env.VITE_SENTRY_DSN;
+let SentryRoutes: ReturnType<
+    typeof Sentry.withSentryReactRouterV7Routing
+> | null = null;
+
+if (sentryDsn) {
+    Sentry.init({
+        dsn: import.meta.env.VITE_SENTRY_DSN,
+        integrations: [
+            Sentry.reactRouterV7BrowserTracingIntegration({
+                useEffect: useEffect,
+                useLocation,
+                useNavigationType,
+                createRoutesFromChildren,
+                matchRoutes,
+            }),
+        ],
+        tracesSampleRate: 1.0,
+    });
+    SentryRoutes = Sentry.withSentryReactRouterV7Routing(Routes);
+}
 
 export const Root = (): React.JSX.Element => {
     useEffect(() => {
@@ -53,9 +60,15 @@ export const Root = (): React.JSX.Element => {
             <HelmetProvider>
                 <PortfolioProvider>
                     <BrowserRouter>
-                        <SentryRoutes>
-                            <Route element={<App />} path="*" />
-                        </SentryRoutes>
+                        {SentryRoutes ? (
+                            <SentryRoutes>
+                                <Route element={<App />} path="*" />
+                            </SentryRoutes>
+                        ) : (
+                            <Routes>
+                                <Route element={<App />} path="*" />
+                            </Routes>
+                        )}
                     </BrowserRouter>
                 </PortfolioProvider>
             </HelmetProvider>

@@ -93,7 +93,6 @@ const PortfolioCard = ({
             return (
                 <video autoPlay className={styles.image} loop muted playsInline>
                     <source
-                        aria-label={`${project} preview`}
                         src={`/images/projects/${projectPreview}`}
                         type={`video/${projectPreview.split('.').pop() ?? ''}`}
                     />

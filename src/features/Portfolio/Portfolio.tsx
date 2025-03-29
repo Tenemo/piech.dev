@@ -1,3 +1,4 @@
+import { Helmet } from '@dr.pogodin/react-helmet';
 import React from 'react';
 
 import styles from './portfolio.module.scss';
@@ -99,6 +100,9 @@ const PORTFOLIO_ITEMS: {
 const Portfolio = (): React.JSX.Element => {
     return (
         <main className={styles.portfolio}>
+            <Helmet>
+                <title>Portfolio | piech.dev</title>
+            </Helmet>
             <h2>Portfolio</h2>
             <div className={'divider'} />
 

@@ -1,5 +1,4 @@
 import 'normalize.css';
-
 import { Helmet } from '@dr.pogodin/react-helmet';
 import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';

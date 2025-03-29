@@ -1,3 +1,4 @@
+import { Helmet } from '@dr.pogodin/react-helmet';
 import {
     AlternateEmail as EmailIcon,
     Telegram as TelegramIcon,
@@ -9,6 +10,9 @@ import styles from './contact.module.scss';
 const Contact = (): React.JSX.Element => {
     return (
         <main className={styles.main}>
+            <Helmet>
+                <title>Contact | piech.dev</title>
+            </Helmet>
             <h2>Contact</h2>
             <div className={'divider'} />
             <div className={styles.contactInfoContainer}>

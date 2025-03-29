@@ -1,3 +1,4 @@
+import { Helmet } from '@dr.pogodin/react-helmet';
 import React from 'react';
 import { Link } from 'react-router';
 
@@ -6,6 +7,9 @@ import styles from './about.module.scss';
 const About = (): React.JSX.Element => {
     return (
         <main className={styles.main}>
+            <Helmet>
+                <title>About me | piech.dev</title>
+            </Helmet>
             <h2>About me</h2>
             <div className={'divider'} />
             <div className={styles.aboutMeDescription}>

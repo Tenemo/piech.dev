@@ -40,7 +40,7 @@ describe('PortfolioCard', () => {
         const { container } = renderWithProviders(
             <PortfolioCard
                 project="test-project"
-                projectPreview="test.png"
+                projectPreview="test.webp"
                 technologies={['typescript', 'react']}
             />,
             { withRouter: true, withPortfolio: true },
@@ -74,7 +74,7 @@ describe('PortfolioCard', () => {
         renderWithProviders(
             <PortfolioCard
                 project="loading-test"
-                projectPreview="test.png"
+                projectPreview="test.webp"
                 technologies={['typescript']}
             />,
             { withRouter: true, withPortfolio: true },
@@ -98,7 +98,7 @@ describe('PortfolioCard', () => {
         const { container } = renderWithProviders(
             <PortfolioCard
                 project="img-test"
-                projectPreview="test.png"
+                projectPreview="test.webp"
                 technologies={['typescript']}
             />,
             { withRouter: true, withPortfolio: true },
@@ -109,7 +109,7 @@ describe('PortfolioCard', () => {
         });
 
         const imgElement = container.querySelector(
-            `img[src="/images/projects/test.png"]`,
+            `img[src="/images/projects/test.webp"]`,
         );
         expect(imgElement).toBeInTheDocument();
         expect(
@@ -165,7 +165,7 @@ describe('PortfolioCard', () => {
             <PortfolioCard
                 imageOnRight={true}
                 project="right-test"
-                projectPreview="test.png"
+                projectPreview="test.webp"
                 technologies={['typescript']}
             />,
             { withRouter: true, withPortfolio: true },
@@ -193,7 +193,7 @@ describe('PortfolioCard', () => {
         renderWithProviders(
             <PortfolioCard
                 project="display-name"
-                projectPreview="test.png"
+                projectPreview="test.webp"
                 repoName="custom-repo"
                 technologies={['typescript']}
             />,
@@ -214,7 +214,7 @@ describe('PortfolioCard', () => {
         renderWithProviders(
             <PortfolioCard
                 project="error-test"
-                projectPreview="test.png"
+                projectPreview="test.webp"
                 technologies={['typescript']}
             />,
             { withRouter: true, withPortfolio: true },
@@ -236,7 +236,7 @@ describe('PortfolioCard', () => {
         const { rerender } = renderWithProviders(
             <PortfolioCard
                 project="cached-project"
-                projectPreview="test.png"
+                projectPreview="test.webp"
                 repoName="cached-repo"
                 technologies={['typescript']}
             />,
@@ -252,7 +252,7 @@ describe('PortfolioCard', () => {
         rerender(
             <PortfolioCard
                 project="cached-project"
-                projectPreview="test.png"
+                projectPreview="test.webp"
                 repoName="cached-repo"
                 technologies={['typescript']}
             />,
@@ -280,7 +280,7 @@ describe('PortfolioCard', () => {
         renderWithProviders(
             <PortfolioCard
                 project="link-test"
-                projectPreview="test.png"
+                projectPreview="test.webp"
                 technologies={['typescript']}
             />,
             { withRouter: true, withPortfolio: true },

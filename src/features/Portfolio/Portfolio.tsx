@@ -13,7 +13,7 @@ const PORTFOLIO_ITEMS: {
 }[] = [
     {
         project: 'reactplate',
-        projectPreview: 'reactplate_lighthouse.png',
+        projectPreview: 'reactplate_lighthouse.webp',
         technologies: [
             'typescript',
             'react',
@@ -28,7 +28,7 @@ const PORTFOLIO_ITEMS: {
     },
     {
         project: 'threshold-elgamal',
-        projectPreview: 'threshold-elgamal.png',
+        projectPreview: 'threshold-elgamal.webp',
         technologies: ['typescript', 'npm', 'typedoc'],
     },
     {
@@ -61,7 +61,7 @@ const PORTFOLIO_ITEMS: {
     // },
     {
         project: 'expressplate',
-        projectPreview: 'expressplate.png',
+        projectPreview: 'expressplate.webp',
         technologies: [
             'typescript',
             'nodejs',
@@ -74,7 +74,7 @@ const PORTFOLIO_ITEMS: {
     },
     {
         project: 'aliases.sh',
-        projectPreview: 'aliases.sh.png',
+        projectPreview: 'aliases.sh.webp',
         technologies: ['bash'],
     },
     // {

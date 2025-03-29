@@ -40,7 +40,7 @@ describe('PortfolioMarkdown', () => {
     });
 
     it('should transform relative image URLs to GitHub raw URLs', () => {
-        const markdown = '![Test Image](./images/test.png)';
+        const markdown = '![Test Image](./images/test.webp)';
 
         render(<PortfolioMarkdown markdown={markdown} repo="test-repo" />);
 
@@ -48,7 +48,7 @@ describe('PortfolioMarkdown', () => {
         expect(image).toBeInTheDocument();
         expect(image).toHaveAttribute(
             'src',
-            'https://github.com/tenemo/test-repo/blob/master/images/test.png?raw=true',
+            'https://github.com/tenemo/test-repo/blob/master/images/test.webp?raw=true',
         );
     });
 

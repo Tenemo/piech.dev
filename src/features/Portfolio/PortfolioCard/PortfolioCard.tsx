@@ -32,6 +32,8 @@ const PortfolioCard = ({
         null,
     );
 
+    const isVideo = /\.(mp4|webm|ogg)$/i.test(projectPreview);
+
     useEffect(() => {
         const cachedInfo = getPackageInfo(githubRepository);
 
@@ -84,6 +86,28 @@ const PortfolioCard = ({
         void fetchPackageInfo();
     }, [githubRepository, setPackageInfo, getPackageInfo, project]);
 
+    const renderPreview = (): React.ReactNode => {
+        if (isVideo) {
+            return (
+                <video autoPlay className={styles.image} loop muted playsInline>
+                    <source
+                        src={`/images/projects/${projectPreview}`}
+                        type={`video/${projectPreview.split('.').pop() ?? ''}`}
+                    />
+                    Your browser does not support the video tag.
+                </video>
+            );
+        }
+
+        return (
+            <img
+                alt={`${project} preview`}
+                className={styles.image}
+                src={`/images/projects/${projectPreview}`}
+            />
+        );
+    };
+
     const renderContent = (): React.ReactNode => {
         if (isLoading) {
             return (
@@ -117,11 +141,7 @@ const PortfolioCard = ({
             <>
                 <div className={styles.imageContainer}>
                     <Link to={`/portfolio/${githubRepository}`}>
-                        <img
-                            alt={`${project} preview`}
-                            className={styles.image}
-                            src={`/images/projects/${projectPreview}`}
-                        />
+                        {renderPreview()}
                     </Link>
                 </div>
                 <div className={styles.content}>

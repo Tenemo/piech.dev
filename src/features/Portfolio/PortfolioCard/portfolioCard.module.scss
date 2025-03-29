@@ -32,6 +32,11 @@
     width: 100%;
 }
 
+video.image {
+    height: 100%;
+    background-color: black;
+}
+
 .content {
     flex: 1;
     display: flex;

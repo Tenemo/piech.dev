@@ -92,10 +92,10 @@ const PortfolioItemDetails = (): React.JSX.Element => {
     const components: Components = {
         code({ className, children, ...props }) {
             const match = /language-(\w+)/.exec(className ?? '');
-            return (
+            return match ? (
                 <SyntaxHighlighter
                     className={styles.codeBlock}
-                    language={match?.[1] ?? undefined}
+                    language={match[1]}
                     // @ts-expect-error broken @type/ typings
                     style={vscDarkPlus}
                     wrapLines={true}
@@ -105,6 +105,10 @@ const PortfolioItemDetails = (): React.JSX.Element => {
                     {/* eslint-disable-next-line @typescript-eslint/no-base-to-string */}
                     {String(children).replace(/\n$/, '')}
                 </SyntaxHighlighter>
+            ) : (
+                <code className={styles.inlineCode} {...props}>
+                    {children}
+                </code>
             );
         },
         img({ src, alt, ...props }) {

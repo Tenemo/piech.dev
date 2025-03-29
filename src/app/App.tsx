@@ -1,5 +1,4 @@
 import 'normalize.css';
-import { Helmet } from '@dr.pogodin/react-helmet';
 import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Navigate, Route, Routes } from 'react-router';
@@ -17,9 +16,6 @@ import PortfolioItem from 'features/Portfolio/PortfolioItem/PortfolioItem';
 const App = (): React.JSX.Element => {
     return (
         <div className={styles.app}>
-            <Helmet>
-                <title>piech.dev</title>
-            </Helmet>
             <ErrorBoundary
                 fallback={
                     <div>

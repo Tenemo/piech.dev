@@ -1,6 +1,6 @@
 import { ArrowBack, GitHub } from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
-import { Helmet } from '@dr.pogodin/react-helmet';
+import { Helmet } from 'react-helmet';
 import { Link, useParams } from 'react-router';
 
 import { usePortfolio } from '../PortfolioContext';
@@ -92,28 +92,26 @@ const PortfolioItemDetails = (): React.JSX.Element => {
     }
 
     return (
-        <>
+        <main className={styles.container}>
             <Helmet>
                 <title>{`${repo} | piech.dev`}</title>
             </Helmet>
-            <main className={styles.container}>
-                <div className={styles.topBar}>
-                    <Link to="/portfolio">
-                        <ArrowBack /> Back to Portfolio
-                    </Link>
-                    <a
-                        className={styles.githubLink}
-                        href={`https://github.com/${OWNER}/${repo}`}
-                        rel="noopener noreferrer"
-                        target="_blank"
-                        title={`View ${repo} on GitHub`}
-                    >
-                        <GitHub /> github.com/{OWNER}/{repo}
-                    </a>
-                </div>
-                <PortfolioMarkdown markdown={markdown} repo={repo} />
-            </main>
-        </>
+            <div className={styles.topBar}>
+                <Link to="/portfolio">
+                    <ArrowBack /> Back to Portfolio
+                </Link>
+                <a
+                    className={styles.githubLink}
+                    href={`https://github.com/${OWNER}/${repo}`}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    title={`View ${repo} on GitHub`}
+                >
+                    <GitHub /> github.com/{OWNER}/{repo}
+                </a>
+            </div>
+            <PortfolioMarkdown markdown={markdown} repo={repo} />
+        </main>
     );
 };
 

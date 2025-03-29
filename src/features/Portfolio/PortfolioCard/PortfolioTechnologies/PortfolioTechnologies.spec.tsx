@@ -12,7 +12,7 @@ vi.mock('./portfolioTechnologies.module.scss', () => ({
     },
 }));
 
-vi.mock('../../technologies', () => ({
+vi.mock('features/Portfolio/technologies', () => ({
     TECHNOLOGIES: {
         react: {
             fullName: 'React',

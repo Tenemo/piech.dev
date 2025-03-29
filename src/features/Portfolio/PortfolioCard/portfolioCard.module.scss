@@ -14,13 +14,12 @@
     }
 }
 
-.imageContainer {
+.previewContainer {
     width: 40%;
     padding: 0.5rem;
     display: flex;
     align-items: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-
     @media (max-width: 768px) {
         width: 100%;
         min-height: 200px;
@@ -28,13 +27,13 @@
 }
 
 .image {
-    object-fit: cover;
+    object-fit: contain;
     width: 100%;
 }
 
 video.image {
     height: 100%;
-    background-color: black;
+    background-color: var(--secondary-background-color);
 }
 
 .content {
@@ -51,8 +50,15 @@ video.image {
     flex-direction: column;
     justify-content: center;
     text-decoration: none;
-    h3 {
-        text-decoration: underline;
+}
+
+.projectTitle {
+    text-decoration: underline;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    svg {
+        font-size: 1.1rem;
     }
 }
 

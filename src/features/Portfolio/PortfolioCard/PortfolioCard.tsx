@@ -1,3 +1,4 @@
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 
@@ -92,6 +93,7 @@ const PortfolioCard = ({
             return (
                 <video autoPlay className={styles.image} loop muted playsInline>
                     <source
+                        aria-label={`${project} preview`}
                         src={`/images/projects/${projectPreview}`}
                         type={`video/${projectPreview.split('.').pop() ?? ''}`}
                     />
@@ -133,23 +135,20 @@ const PortfolioCard = ({
         <div
             className={`${styles.card} ${imageOnRight ? styles.imageRight : styles.imageLeft}`}
         >
-            <>
-                <div className={styles.imageContainer}>
-                    <Link to={`/portfolio/${githubRepository}`}>
-                        {renderPreview()}
-                    </Link>
-                </div>
-                <div className={styles.content}>
-                    <Link
-                        className={styles.description}
-                        to={`/portfolio/${githubRepository}`}
-                    >
-                        <h3>{project}</h3>
-                        {renderContent()}
-                    </Link>
-                    <PortfolioTechnologies technologies={technologies} />
-                </div>
-            </>
+            <div className={styles.previewContainer}>{renderPreview()}</div>
+            <div className={styles.content}>
+                <Link
+                    className={styles.description}
+                    to={`/portfolio/${githubRepository}`}
+                >
+                    <h3 className={styles.projectTitle}>
+                        {project}
+                        <OpenInNewIcon fontSize="small" />
+                    </h3>
+                    {renderContent()}
+                </Link>
+                <PortfolioTechnologies technologies={technologies} />
+            </div>
         </div>
     );
 };

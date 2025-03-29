@@ -7,10 +7,11 @@
  */
 
 const card: string;
-const imageContainer: string;
+const previewContainer: string;
 const image: string;
 const content: string;
 const description: string;
+const projectTitle: string;
 const imageRight: string;
 const imageLeft: string;
 const loadingContainer: string;
@@ -19,10 +20,11 @@ const errorMessage: string;
 
 export {
 	card,
-	imageContainer,
+	previewContainer,
 	image,
 	content,
 	description,
+	projectTitle,
 	imageRight,
 	imageLeft,
 	loadingContainer,
@@ -32,10 +34,11 @@ export {
 
 export default {
 	card,
-	imageContainer,
+	previewContainer,
 	image,
 	content,
 	description,
+	projectTitle,
 	imageRight,
 	imageLeft,
 	loadingContainer,

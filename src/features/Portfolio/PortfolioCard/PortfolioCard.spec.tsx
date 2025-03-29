@@ -54,10 +54,10 @@ describe('PortfolioCard', () => {
         expect(cardElement).toBeInTheDocument();
         expect(cardElement).toHaveClass(styles.imageLeft);
 
-        const imageContainer = container.querySelector(
-            `.${styles.imageContainer}`,
+        const previewContainer = container.querySelector(
+            `.${styles.previewContainer}`,
         );
-        expect(imageContainer).toBeInTheDocument();
+        expect(previewContainer).toBeInTheDocument();
 
         const contentContainer = container.querySelector(`.${styles.content}`);
         expect(contentContainer).toBeInTheDocument();

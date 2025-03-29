@@ -10,6 +10,8 @@ const container: string;
 const githubLink: string;
 const topBar: string;
 const markdownContainer: string;
+const videoContainer: string;
+const videoPlayer: string;
 const codeBlock: string;
 const inlineCode: string;
 const loading: string;
@@ -20,6 +22,8 @@ export {
 	githubLink,
 	topBar,
 	markdownContainer,
+	videoContainer,
+	videoPlayer,
 	codeBlock,
 	inlineCode,
 	loading,
@@ -31,6 +35,8 @@ export default {
 	githubLink,
 	topBar,
 	markdownContainer,
+	videoContainer,
+	videoPlayer,
 	codeBlock,
 	inlineCode,
 	loading,

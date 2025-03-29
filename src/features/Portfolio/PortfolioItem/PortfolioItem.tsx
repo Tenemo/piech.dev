@@ -14,6 +14,8 @@ import styles from './portfolioItem.module.scss';
 
 const OWNER = 'tenemo';
 const BRANCH = 'master';
+const GITHUB_USER_ATTACHMENT_PATTERN =
+    /^https:\/\/github\.com\/user-attachments\/assets\/[a-f0-9-]+$/;
 
 const PortfolioItemDetails = (): React.JSX.Element => {
     const { repo } = useParams<{ repo: string }>();
@@ -71,6 +73,11 @@ const PortfolioItemDetails = (): React.JSX.Element => {
 
     const urlTransform = (url: string, key: string, _node: unknown): string => {
         if (url.startsWith('http')) {
+            // Don't transform GitHub user-attachment URLs in urlTransform
+            // We'll handle them in the component rendering
+            if (GITHUB_USER_ATTACHMENT_PATTERN.test(url)) {
+                return url;
+            }
             return url;
         }
 
@@ -112,6 +119,21 @@ const PortfolioItemDetails = (): React.JSX.Element => {
             );
         },
         img({ src, alt, ...props }) {
+            if (GITHUB_USER_ATTACHMENT_PATTERN.test(src ?? '')) {
+                return (
+                    <video
+                        autoPlay
+                        className={styles.videoPlayer}
+                        controls
+                        loop
+                        muted
+                        playsInline
+                        src={src}
+                        title={alt ?? 'Video attachment'}
+                        {...props}
+                    />
+                );
+            }
             return (
                 <img
                     alt={alt}
@@ -119,6 +141,39 @@ const PortfolioItemDetails = (): React.JSX.Element => {
                     {...props}
                     style={{ maxWidth: '100%' }}
                 />
+            );
+        },
+        a({ href, children, ...props }) {
+            // Check if href is a GitHub user-attachment URL
+            if (GITHUB_USER_ATTACHMENT_PATTERN.test(href ?? '')) {
+                return (
+                    <div className={styles.videoContainer}>
+                        <video
+                            autoPlay
+                            className={styles.videoPlayer}
+                            controls
+                            loop
+                            muted
+                            playsInline
+                            src={href}
+                            title={
+                                typeof children === 'string'
+                                    ? children
+                                    : 'Video attachment'
+                            }
+                            {...props}
+                        />
+                    </div>
+                );
+            }
+            return (
+                <a
+                    href={href}
+                    {...props}
+                    style={{ color: 'var(--link-color)' }}
+                >
+                    {children}
+                </a>
             );
         },
         h1({ children, ...props }) {
@@ -140,17 +195,6 @@ const PortfolioItemDetails = (): React.JSX.Element => {
                 <h3 {...props} style={{ color: 'var(--accent-color)' }}>
                     {children}
                 </h3>
-            );
-        },
-        a({ href, children, ...props }) {
-            return (
-                <a
-                    href={href}
-                    {...props}
-                    style={{ color: 'var(--link-color)' }}
-                >
-                    {children}
-                </a>
             );
         },
     };

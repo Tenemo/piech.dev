@@ -132,6 +132,22 @@
     }
 }
 
+.videoContainer {
+    width: 100%;
+    margin: 1rem 0;
+    display: flex;
+    justify-content: center;
+}
+
+.videoPlayer {
+    max-width: 100%;
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    display: block;
+    margin: 0.5rem 0;
+}
+
 .codeBlock {
     font-family: monospace;
     font-size: 0.9rem;

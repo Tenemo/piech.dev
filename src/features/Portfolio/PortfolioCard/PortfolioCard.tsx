@@ -33,7 +33,7 @@ const PortfolioCard = ({
         null,
     );
 
-    const isVideo = /\.(mp4|webm|ogg)$/i.test(projectPreview);
+    const isVideo = /\.(mp4|webm|ogg)$/i.test(projectPreview.toLowerCase());
 
     useEffect(() => {
         const cachedInfo = getPackageInfo(githubRepository);

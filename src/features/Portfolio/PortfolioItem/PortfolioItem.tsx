@@ -1,6 +1,6 @@
+import { Helmet } from '@dr.pogodin/react-helmet';
 import { ArrowBack, GitHub } from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet';
 import { Link, useParams } from 'react-router';
 
 import { usePortfolio } from '../PortfolioContext';

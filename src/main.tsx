@@ -34,7 +34,6 @@ Sentry.init({
 });
 const SentryRoutes = Sentry.withSentryReactRouterV7Routing(Routes);
 
-const helmetContext = {};
 export const Root = (): React.JSX.Element => {
     useEffect(() => {
         // https://stackoverflow.com/questions/31402576/enable-focus-only-on-keyboard-use-or-tab-press
@@ -51,15 +50,15 @@ export const Root = (): React.JSX.Element => {
 
     return (
         <React.StrictMode>
-            <PortfolioProvider>
-                <BrowserRouter>
-                    <HelmetProvider context={helmetContext}>
+            <HelmetProvider>
+                <PortfolioProvider>
+                    <BrowserRouter>
                         <SentryRoutes>
                             <Route element={<App />} path="*" />
                         </SentryRoutes>
-                    </HelmetProvider>
-                </BrowserRouter>
-            </PortfolioProvider>
+                    </BrowserRouter>
+                </PortfolioProvider>
+            </HelmetProvider>
         </React.StrictMode>
     );
 };

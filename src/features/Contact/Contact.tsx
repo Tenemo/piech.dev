@@ -1,9 +1,9 @@
+import { Helmet } from '@dr.pogodin/react-helmet';
 import {
     AlternateEmail as EmailIcon,
     Telegram as TelegramIcon,
 } from '@mui/icons-material';
 import React from 'react';
-import { Helmet } from 'react-helmet';
 
 import styles from './contact.module.scss';
 

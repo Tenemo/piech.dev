@@ -1,5 +1,5 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
+import { Helmet } from '@dr.pogodin/react-helmet';
 
 import styles from './portfolio.module.scss';
 import PortfolioCard from './PortfolioCard/PortfolioCard';

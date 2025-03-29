@@ -119,7 +119,7 @@ const PortfolioItemDetails = (): React.JSX.Element => {
             );
         },
         img({ src, alt, ...props }) {
-            if (GITHUB_USER_ATTACHMENT_PATTERN.test(src ?? '')) {
+            if (src && GITHUB_USER_ATTACHMENT_PATTERN.test(src)) {
                 return (
                     <video
                         autoPlay
@@ -130,7 +130,6 @@ const PortfolioItemDetails = (): React.JSX.Element => {
                         playsInline
                         src={src}
                         title={alt ?? 'Video attachment'}
-                        {...props}
                     />
                 );
             }
@@ -144,8 +143,7 @@ const PortfolioItemDetails = (): React.JSX.Element => {
             );
         },
         a({ href, children, ...props }) {
-            // Check if href is a GitHub user-attachment URL
-            if (GITHUB_USER_ATTACHMENT_PATTERN.test(href ?? '')) {
+            if (href && GITHUB_USER_ATTACHMENT_PATTERN.test(href)) {
                 return (
                     <div className={styles.videoContainer}>
                         <video
@@ -161,7 +159,6 @@ const PortfolioItemDetails = (): React.JSX.Element => {
                                     ? children
                                     : 'Video attachment'
                             }
-                            {...props}
                         />
                     </div>
                 );

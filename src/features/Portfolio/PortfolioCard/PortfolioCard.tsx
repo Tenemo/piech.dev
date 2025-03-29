@@ -5,6 +5,7 @@ import { usePortfolio, PackageInfo } from '../PortfolioContext';
 import { TECHNOLOGIES } from '../technologies';
 
 import styles from './portfolioCard.module.scss';
+import PortfolioTechnologies from './PortfolioTechnologies/PortfolioTechnologies';
 
 type PortfolioCardProps = {
     projectPreview: string;
@@ -151,44 +152,7 @@ const PortfolioCard = ({
                     >
                         {renderContent()}
                     </Link>
-                    <div className={styles.technologiesContainer}>
-                        {technologies.length > 0 && (
-                            <>
-                                {technologies.map((technologyName) => {
-                                    const technologyInfo =
-                                        TECHNOLOGIES[technologyName];
-                                    let isWideLogo = false;
-                                    if (
-                                        Object.prototype.hasOwnProperty.call(
-                                            technologyInfo,
-                                            'wideLogo',
-                                        )
-                                    ) {
-                                        isWideLogo = true;
-                                    }
-
-                                    return (
-                                        <a
-                                            href={technologyInfo.url}
-                                            key={technologyName}
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                            }}
-                                            rel="noopener noreferrer"
-                                            target="_blank"
-                                            title={technologyInfo.fullName}
-                                        >
-                                            <img
-                                                alt={`${technologyName} logo`}
-                                                className={`${styles.logo} ${isWideLogo ? styles.wideLogo : ''}`}
-                                                src={`images/logos/${technologyName}_logo.png`}
-                                            />
-                                        </a>
-                                    );
-                                })}
-                            </>
-                        )}
-                    </div>
+                    <PortfolioTechnologies technologies={technologies} />
                 </div>
             </>
         </div>

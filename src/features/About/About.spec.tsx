@@ -1,34 +1,15 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import React from 'react';
-import { BrowserRouter } from 'react-router';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
 import About from './About';
+import styles from './about.module.scss';
 
-vi.mock('@dr.pogodin/react-helmet', () => ({
-    Helmet: ({ children }: { children: React.ReactNode }) => (
-        <div>{children}</div>
-    ),
-}));
-
-vi.mock('./about.module.scss', () => ({
-    default: {
-        main: 'mock-main',
-        aboutMeDescription: 'mock-about-me-description',
-        buttonsContainer: 'mock-buttons-container',
-        dividerText: 'mock-divider-text',
-        mainButton: 'mock-main-button',
-        contactButton: 'mock-contact-button',
-    },
-}));
+import { renderWithProviders } from 'utils/testUtils';
 
 describe('About', () => {
     it('should render the heading and general structure', () => {
-        render(
-            <BrowserRouter>
-                <About />
-            </BrowserRouter>,
-        );
+        renderWithProviders(<About />);
 
         expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument();
 
@@ -39,21 +20,20 @@ describe('About', () => {
     });
 
     it('should render navigation buttons', () => {
-        render(
-            <BrowserRouter>
-                <About />
-            </BrowserRouter>,
-        );
+        renderWithProviders(<About />);
 
         const portfolioLink = screen.getByRole('link', { name: /portfolio/i });
         expect(portfolioLink).toBeInTheDocument();
         expect(portfolioLink).toHaveAttribute('href', '/portfolio');
+        expect(portfolioLink).toHaveClass(styles.mainButton);
 
         const contactLink = screen.getByRole('link', { name: /contact/i });
         expect(contactLink).toBeInTheDocument();
         expect(contactLink).toHaveAttribute('href', '/contact');
+        expect(contactLink).toHaveClass(styles.contactButton);
 
         const dividerText = screen.getByText('OR');
         expect(dividerText).toBeInTheDocument();
+        expect(dividerText).toHaveClass(styles.dividerText);
     });
 });

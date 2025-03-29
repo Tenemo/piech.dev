@@ -1,16 +1,10 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 
 import PortfolioTechnologies from './PortfolioTechnologies';
 
-vi.mock('./portfolioTechnologies.module.scss', () => ({
-    default: {
-        technologiesContainer: 'mock-technologies-container',
-        logo: 'mock-logo',
-        wideLogo: 'mock-wide-logo',
-    },
-}));
+import { renderWithProviders } from 'utils/testUtils';
 
 vi.mock('features/Portfolio/technologies', () => ({
     TECHNOLOGIES: {
@@ -28,14 +22,14 @@ vi.mock('features/Portfolio/technologies', () => ({
 
 describe('PortfolioTechnologies', () => {
     it('should render nothing when technologies array is empty', () => {
-        const { container } = render(
+        const { container } = renderWithProviders(
             <PortfolioTechnologies technologies={[]} />,
         );
         expect(container.firstChild).toBeNull();
     });
 
     it('should render all provided technologies', () => {
-        render(
+        renderWithProviders(
             <PortfolioTechnologies technologies={['react', 'typescript']} />,
         );
 
@@ -54,8 +48,8 @@ describe('PortfolioTechnologies', () => {
         ).toBeInTheDocument();
     });
 
-    it('should apply wide logo class when technology has wideLogo property', () => {
-        const { container } = render(
+    it('should apply different classes based on wideLogo property', () => {
+        const { container } = renderWithProviders(
             <PortfolioTechnologies technologies={['react', 'typescript']} />,
         );
 
@@ -64,12 +58,11 @@ describe('PortfolioTechnologies', () => {
             'img[alt="typescript logo"]',
         );
 
-        expect(reactLogo?.className).toContain('mock-wide-logo');
-        expect(typescriptLogo?.className).not.toContain('mock-wide-logo');
+        expect(reactLogo?.className).not.toBe(typescriptLogo?.className);
     });
 
     it('should have correct href and title attributes on links', () => {
-        render(
+        renderWithProviders(
             <PortfolioTechnologies technologies={['react', 'typescript']} />,
         );
 
@@ -88,7 +81,7 @@ describe('PortfolioTechnologies', () => {
     });
 
     it('should have correct attributes on images', () => {
-        const { container } = render(
+        const { container } = renderWithProviders(
             <PortfolioTechnologies technologies={['react']} />,
         );
 

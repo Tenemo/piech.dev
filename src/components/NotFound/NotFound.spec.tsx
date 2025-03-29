@@ -1,8 +1,10 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import React from 'react';
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 
 import NotFound from './NotFound';
+
+import { renderWithProviders } from 'utils/testUtils';
 
 describe('NotFound', () => {
     const originalPathname = window.location.pathname;
@@ -26,7 +28,7 @@ describe('NotFound', () => {
     });
 
     it('should render the not found message with the current path', () => {
-        const { container } = render(<NotFound />);
+        const { container } = renderWithProviders(<NotFound />);
 
         expect(container.textContent).toContain(
             'Path /invalid-path not found.',
@@ -37,7 +39,7 @@ describe('NotFound', () => {
     });
 
     it('should display the pathname in a strong element', () => {
-        render(<NotFound />);
+        renderWithProviders(<NotFound />);
 
         const strongElement = screen.getByText('/invalid-path');
         expect(strongElement.tagName).toBe('STRONG');

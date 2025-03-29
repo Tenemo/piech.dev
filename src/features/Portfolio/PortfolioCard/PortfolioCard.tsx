@@ -121,18 +121,12 @@ const PortfolioCard = ({
         if (error) {
             return (
                 <div className={styles.errorContainer}>
-                    <h3>{project}</h3>
                     <p className={styles.errorMessage}>{error}</p>
                 </div>
             );
         }
 
-        return (
-            <>
-                <h3>{packageInfo?.name ?? project}</h3>
-                <p>{packageInfo?.description ?? 'No description available'}</p>
-            </>
-        );
+        return <p>{packageInfo?.description ?? 'No description available'}</p>;
     };
 
     return (
@@ -150,6 +144,7 @@ const PortfolioCard = ({
                         className={styles.description}
                         to={`/portfolio/${githubRepository}`}
                     >
+                        <h3>{project}</h3>
                         {renderContent()}
                     </Link>
                     <PortfolioTechnologies technologies={technologies} />

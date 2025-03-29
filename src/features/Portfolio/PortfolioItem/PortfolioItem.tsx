@@ -1,5 +1,6 @@
 import { Helmet } from '@dr.pogodin/react-helmet';
-import { ArrowBack, GitHub } from '@mui/icons-material';
+import ArrowBack from '@mui/icons-material/ArrowBack';
+import GitHub from '@mui/icons-material/GitHub';
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router';
 

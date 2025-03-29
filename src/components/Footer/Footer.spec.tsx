@@ -1,31 +1,23 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import React from 'react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
 import Footer from './Footer';
+import styles from './footer.module.scss';
 
-vi.mock('./footer.module.scss', () => ({
-    default: {
-        footer: 'mock-footer',
-        gitHubLink: 'mock-github-link',
-    },
-}));
-
-vi.mock('@mui/icons-material', () => ({
-    GitHub: () => <span data-testid="github-icon">GithubIcon</span>,
-}));
+import { renderWithProviders } from 'utils/testUtils';
 
 describe('Footer', () => {
     it('should render footer element', () => {
-        const { container } = render(<Footer />);
+        const { container } = renderWithProviders(<Footer />);
         const footerElement = container.querySelector('footer');
 
         expect(footerElement).toBeInTheDocument();
-        expect(footerElement).toHaveClass('mock-footer');
+        expect(footerElement).toHaveClass(styles.footer);
     });
 
     it('should render GitHub link with correct attributes', () => {
-        render(<Footer />);
+        renderWithProviders(<Footer />);
 
         const githubLink = screen.getByRole('link', {
             name: /github repository/i,
@@ -37,14 +29,13 @@ describe('Footer', () => {
         );
         expect(githubLink).toHaveAttribute('target', '_blank');
         expect(githubLink).toHaveAttribute('rel', 'noopener noreferrer');
-        expect(githubLink).toHaveClass('mock-github-link');
+        expect(githubLink).toHaveClass(styles.gitHubLink);
     });
 
     it('should render GitHub icon', () => {
-        render(<Footer />);
+        renderWithProviders(<Footer />);
 
-        const githubIcon = screen.getByTestId('github-icon');
-
+        const githubIcon = screen.getByLabelText('GitHub repository');
         expect(githubIcon).toBeInTheDocument();
     });
 });

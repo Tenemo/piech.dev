@@ -1,4 +1,4 @@
-import { GitHub as GitHubIcon } from '@mui/icons-material';
+import GitHubIcon from '@mui/icons-material/GitHub';
 import React from 'react';
 
 import styles from './footer.module.scss';

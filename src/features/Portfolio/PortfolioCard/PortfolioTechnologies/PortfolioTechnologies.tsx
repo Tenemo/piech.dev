@@ -28,9 +28,6 @@ const PortfolioTechnologies = ({
                     <a
                         href={technologyInfo.url}
                         key={technologyName}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                        }}
                         rel="noopener noreferrer"
                         target="_blank"
                         title={technologyInfo.fullName}

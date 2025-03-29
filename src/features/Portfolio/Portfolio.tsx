@@ -11,8 +11,8 @@ const PORTFOLIO_ITEMS: {
     technologies: (keyof typeof TECHNOLOGIES)[];
 }[] = [
     {
-        projectPreview: 'reactplate_lighthouse.png',
         project: 'reactplate',
+        projectPreview: 'reactplate_lighthouse.png',
         technologies: [
             'typescript',
             'react',
@@ -26,14 +26,14 @@ const PORTFOLIO_ITEMS: {
         ],
     },
     {
-        projectPreview: 'threshold-elgamal.png',
         project: 'threshold-elgamal',
+        projectPreview: 'threshold-elgamal.png',
         technologies: ['typescript', 'npm', 'typedoc'],
     },
     {
-        projectPreview: 'sealed.vote.mp4',
         project: 'sealed.vote',
         repoName: 'sealed-vote-web',
+        projectPreview: 'sealed.vote.mp4',
         technologies: [
             'typescript',
             'fastify',
@@ -46,8 +46,8 @@ const PORTFOLIO_ITEMS: {
         ],
     },
     // {
-    //     projectPreview: 'YYYYYYYYY',
     //     project: 'bob',
+    //     projectPreview: 'YYYYYYYYY',
     //     technologies: [
     //         'cpp',
     //         'platformio',
@@ -59,8 +59,8 @@ const PORTFOLIO_ITEMS: {
     //     ],
     // },
     {
-        projectPreview: 'expressplate.png',
         project: 'expressplate',
+        projectPreview: 'expressplate.png',
         technologies: [
             'typescript',
             'nodejs',
@@ -72,8 +72,8 @@ const PORTFOLIO_ITEMS: {
         ],
     },
     {
-        projectPreview: 'aliases.sh.png',
         project: 'aliases.sh',
+        projectPreview: 'aliases.sh.png',
         technologies: ['bash'],
     },
     // {
@@ -83,9 +83,9 @@ const PORTFOLIO_ITEMS: {
     //     technologies: [],
     // },
     // {
-    //     projectPreview: 'YYYYYYYYY',
     //     project: 'tiles.town',
     //     repoName: 'tiles-town',
+    //     projectPreview: 'YYYYYYYYY',
     //     technologies: ['typescript', 'react', 'redux', 'netlify', 'sentry'],
     // },
     // {

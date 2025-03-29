@@ -30,20 +30,21 @@ const PORTFOLIO_ITEMS: {
         project: 'threshold-elgamal',
         technologies: ['typescript', 'npm', 'typedoc'],
     },
-    // {
-    //     projectPreview: 'YYYYYYYYY',
-    //     project: 'sealed.vote',
-    //     repoName: 'sealed-vote-web',
-    //     technologies: [
-    //         'typescript',
-    //         'fastify',
-    //         'postgresql',
-    //         'react',
-    //         'redux',
-    //         'mui',
-    //         'jest',
-    //     ],
-    // },
+    {
+        projectPreview: 'sealed.vote.mp4',
+        project: 'sealed.vote',
+        repoName: 'sealed-vote-web',
+        technologies: [
+            'typescript',
+            'fastify',
+            'postgresql',
+            'react',
+            'redux',
+            'mui',
+            'netlify',
+            'sentry',
+        ],
+    },
     // {
     //     projectPreview: 'YYYYYYYYY',
     //     project: 'bob',
@@ -104,10 +105,9 @@ const Portfolio = (): React.JSX.Element => {
             <div className={styles.portfolioItemsContainer}>
                 {PORTFOLIO_ITEMS.map(
                     ({ projectPreview, project, technologies }, index) => (
-                        <>
+                        <React.Fragment key={project}>
                             <PortfolioCard
                                 imageOnRight={index % 2 === 1}
-                                key={project}
                                 project={project}
                                 projectPreview={projectPreview}
                                 technologies={technologies}
@@ -119,7 +119,7 @@ const Portfolio = (): React.JSX.Element => {
                                     : {})}
                             />
                             <div className="divider" />
-                        </>
+                        </React.Fragment>
                     ),
                 )}
             </div>

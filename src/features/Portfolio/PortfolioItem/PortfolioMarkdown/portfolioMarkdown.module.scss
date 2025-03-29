@@ -84,14 +84,8 @@
     }
 }
 
-.videoContainer {
-    width: 100%;
-    margin: 1rem 0;
-    display: flex;
-    justify-content: center;
-}
-
 .videoPlayer {
+    width: 100%;
     max-width: 100%;
     border-radius: 4px;
     background-color: rgba(0, 0, 0, 0.2);

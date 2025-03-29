@@ -96,22 +96,20 @@ const PortfolioMarkdown = ({
         a({ href, children, ...props }) {
             if (href && GITHUB_USER_ATTACHMENT_PATTERN.test(href)) {
                 return (
-                    <div className={styles.videoContainer}>
-                        <video
-                            autoPlay
-                            className={styles.videoPlayer}
-                            controls
-                            loop
-                            muted
-                            playsInline
-                            src={href}
-                            title={
-                                typeof children === 'string'
-                                    ? children
-                                    : 'Video attachment'
-                            }
-                        />
-                    </div>
+                    <video
+                        autoPlay
+                        className={styles.videoPlayer}
+                        controls
+                        loop
+                        muted
+                        playsInline
+                        src={href}
+                        title={
+                            typeof children === 'string'
+                                ? children
+                                : 'Video attachment'
+                        }
+                    />
                 );
             }
             return (

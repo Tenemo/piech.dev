@@ -7,14 +7,12 @@
  */
 
 const markdownContainer: string;
-const videoContainer: string;
 const videoPlayer: string;
 const codeBlock: string;
 const inlineCode: string;
 
 export {
 	markdownContainer,
-	videoContainer,
 	videoPlayer,
 	codeBlock,
 	inlineCode
@@ -22,7 +20,6 @@ export {
 
 export default {
 	markdownContainer,
-	videoContainer,
 	videoPlayer,
 	codeBlock,
 	inlineCode

@@ -70,7 +70,6 @@
         "@types/react-router": "^5.1.20",
         "@types/react-router-dom": "^5.3.3",
         "@types/react-syntax-highlighter": "^15.5.13",
-        "@typescript-eslint/parser": "^8.26.1",
         "@vitejs/plugin-react": "^4.3.4",
         "@vitest/coverage-v8": "^3.0.8",
         "@vitest/eslint-plugin": "^1.1.37",
@@ -107,7 +106,6 @@
         "typescript-eslint": "^8.26.1",
         "vite": "^6.2.1",
         "vite-css-modules": "^1.8.4",
-        "vite-plugin-static-copy": "^2.3.0",
         "vite-tsconfig-paths": "^5.1.4",
         "vitest": "^3.0.8"
     },

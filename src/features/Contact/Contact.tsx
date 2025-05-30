@@ -1,5 +1,6 @@
 import { Helmet } from '@dr.pogodin/react-helmet';
 import EmailIcon from '@mui/icons-material/AlternateEmail';
+import GitHubIcon from '@mui/icons-material/GitHub';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import React from 'react';
 
@@ -26,6 +27,17 @@ const Contact = (): React.JSX.Element => {
                         <EmailIcon />
                         email:
                         <a href="mailto:piotr@piech.dev">piotr@piech.dev</a>
+                    </div>
+                    <div className={styles.contactItem}>
+                        <GitHubIcon />
+                        github:
+                        <a
+                            href="https://github.com/Tenemo"
+                            rel="noopener noreferrer"
+                            target="_blank"
+                        >
+                            /Tenemo
+                        </a>
                     </div>
                     <div className={styles.contactItem}>
                         <TelegramIcon />

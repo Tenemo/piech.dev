@@ -88,24 +88,24 @@ const PortfolioCard = ({
     }, [githubRepository, setRepositoryInfo, getRepositoryInfo, project]);
 
     const renderPreview = (): React.ReactNode => {
-        if (isVideo) {
-            return (
-                <video autoPlay className={styles.image} loop muted playsInline>
-                    <source
-                        src={`/images/projects/${projectPreview}`}
-                        type={`video/${projectPreview.split('.').pop() ?? ''}`}
-                    />
-                    Your browser does not support the video tag.
-                </video>
-            );
-        }
-
-        return (
+        const previewContent = isVideo ? (
+            <video autoPlay className={styles.image} loop muted playsInline>
+                <source
+                    src={`/images/projects/${projectPreview}`}
+                    type={`video/${projectPreview.split('.').pop() ?? ''}`}
+                />
+                Your browser does not support the video tag.
+            </video>
+        ) : (
             <img
                 alt={`${project} preview`}
                 className={styles.image}
                 src={`/images/projects/${projectPreview}`}
             />
+        );
+
+        return (
+            <Link to={`/portfolio/${githubRepository}`}>{previewContent}</Link>
         );
     };
 

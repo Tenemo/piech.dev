@@ -12,6 +12,19 @@ const PORTFOLIO_ITEMS: {
     technologies: (keyof typeof TECHNOLOGIES)[];
 }[] = [
     {
+        project: 'bob',
+        projectPreview: 'bob-demo-movement.mp4',
+        technologies: [
+            'cpp',
+            'platformio',
+            'openai',
+            'esp32',
+            'esp32-s3',
+            'typescript',
+            'react',
+        ],
+    },
+    {
         project: 'reactplate',
         projectPreview: 'reactplate_lighthouse.webp',
         technologies: [
@@ -46,19 +59,6 @@ const PORTFOLIO_ITEMS: {
             'sentry',
         ],
     },
-    // {
-    //     project: 'bob',
-    //     projectPreview: 'YYYYYYYYY',
-    //     technologies: [
-    //         'cpp',
-    //         'platformio',
-    //         'openai',
-    //         'esp32',
-    //         'esp32-s3',
-    //         'typescript',
-    //         'react',
-    //     ],
-    // },
     {
         project: 'expressplate',
         projectPreview: 'expressplate.webp',

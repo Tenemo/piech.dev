@@ -7,16 +7,16 @@ import React, {
     useCallback,
 } from 'react';
 
-export type PackageInfo = {
+export type RepositoryInfo = {
     name: string;
     description: string;
 };
 
 type PortfolioContextType = {
-    packageInfoCache: Record<string, PackageInfo>;
+    repositoryInfoCache: Record<string, RepositoryInfo>;
     readmeContentCache: Record<string, string>;
-    setPackageInfo: (project: string, info: PackageInfo) => void;
-    getPackageInfo: (project: string) => PackageInfo | undefined;
+    setRepositoryInfo: (project: string, info: RepositoryInfo) => void;
+    getRepositoryInfo: (project: string) => RepositoryInfo | undefined;
     setReadmeContent: (project: string, content: string) => void;
     getReadmeContent: (project: string) => string | undefined;
 };
@@ -28,23 +28,24 @@ const PortfolioContext = createContext<PortfolioContextType | undefined>(
 export const PortfolioProvider: React.FC<{ children: ReactNode }> = ({
     children,
 }) => {
-    const [packageInfoCache, setPackageInfoCache] = useState<
-        Record<string, PackageInfo>
+    const [repositoryInfoCache, setRepositoryInfoCache] = useState<
+        Record<string, RepositoryInfo>
     >({});
     const [readmeContentCache, setReadmeContentCache] = useState<
         Record<string, string>
     >({});
 
-    const setPackageInfo = (project: string, info: PackageInfo): void => {
-        setPackageInfoCache((prev) => ({
+    const setRepositoryInfo = (project: string, info: RepositoryInfo): void => {
+        setRepositoryInfoCache((prev) => ({
             ...prev,
             [project]: info,
         }));
     };
 
-    const getPackageInfo = useCallback(
-        (project: string): PackageInfo | undefined => packageInfoCache[project],
-        [packageInfoCache],
+    const getRepositoryInfo = useCallback(
+        (project: string): RepositoryInfo | undefined =>
+            repositoryInfoCache[project],
+        [repositoryInfoCache],
     );
 
     const setReadmeContent = (project: string, content: string): void => {
@@ -61,17 +62,17 @@ export const PortfolioProvider: React.FC<{ children: ReactNode }> = ({
 
     const contextValue = useMemo(
         () => ({
-            packageInfoCache,
+            repositoryInfoCache,
             readmeContentCache,
-            setPackageInfo,
-            getPackageInfo,
+            setRepositoryInfo,
+            getRepositoryInfo,
             setReadmeContent,
             getReadmeContent,
         }),
         [
-            getPackageInfo,
+            getRepositoryInfo,
             getReadmeContent,
-            packageInfoCache,
+            repositoryInfoCache,
             readmeContentCache,
         ],
     );

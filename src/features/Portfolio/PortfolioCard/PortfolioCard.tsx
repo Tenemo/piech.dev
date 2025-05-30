@@ -2,7 +2,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 
-import { usePortfolio, PackageInfo } from '../PortfolioContext';
+import { usePortfolio, RepositoryInfo } from '../PortfolioContext';
 import { TECHNOLOGIES } from '../technologies';
 
 import styles from './portfolioCard.module.scss';
@@ -17,7 +17,6 @@ type PortfolioCardProps = {
 };
 
 const OWNER = 'tenemo';
-const BRANCH = 'master';
 
 const PortfolioCard = ({
     projectPreview,
@@ -29,64 +28,64 @@ const PortfolioCard = ({
     const githubRepository = repoName ?? project;
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const { getPackageInfo, setPackageInfo } = usePortfolio();
-    const [packageInfo, setLocalPackageInfo] = useState<PackageInfo | null>(
-        null,
-    );
+    const { getRepositoryInfo, setRepositoryInfo } = usePortfolio();
+    const [repositoryInfo, setLocalRepositoryInfo] =
+        useState<RepositoryInfo | null>(null);
 
     const isVideo = /\.(mp4|webm|ogg)$/i.test(projectPreview.toLowerCase());
 
     useEffect(() => {
-        const cachedInfo = getPackageInfo(githubRepository);
+        const cachedInfo = getRepositoryInfo(githubRepository);
 
         if (cachedInfo) {
-            setLocalPackageInfo(cachedInfo);
+            setLocalRepositoryInfo(cachedInfo);
             setIsLoading(false);
             return;
         }
 
-        const fetchPackageInfo = async (): Promise<void> => {
+        const fetchRepositoryInfo = async (): Promise<void> => {
             try {
                 setIsLoading(true);
                 setError(null);
 
-                const packageJsonResponse = await fetch(
-                    `https://raw.githubusercontent.com/${OWNER}/${githubRepository}/${BRANCH}/package.json`,
+                const repositoryResponse = await fetch(
+                    `https://api.github.com/repos/${OWNER}/${githubRepository}`,
                 );
 
-                if (!packageJsonResponse.ok) {
+                if (!repositoryResponse.ok) {
                     throw new Error(
-                        `Failed to fetch package.json: ${packageJsonResponse.statusText}`,
+                        `Failed to fetch repository info: ${repositoryResponse.statusText}`,
                     );
                 }
 
-                const packageJsonData = (await packageJsonResponse.json()) as
-                    | PackageInfo
-                    | undefined;
+                const repositoryData = (await repositoryResponse.json()) as {
+                    name?: string;
+                    description?: string;
+                };
 
-                const newPackageInfo = {
-                    name: packageJsonData?.name ?? project,
+                const newRepositoryInfo = {
+                    name: repositoryData.name ?? project,
                     description:
-                        packageJsonData?.description ??
+                        repositoryData.description ??
                         'No description available',
                 };
 
-                setLocalPackageInfo(newPackageInfo);
-                setPackageInfo(githubRepository, newPackageInfo);
+                setLocalRepositoryInfo(newRepositoryInfo);
+                setRepositoryInfo(githubRepository, newRepositoryInfo);
             } catch (err) {
                 setError(
                     err instanceof Error
                         ? err.message
                         : 'An unknown error occurred',
                 );
-                console.error('Error fetching package info:', err);
+                console.error('Error fetching repository info:', err);
             } finally {
                 setIsLoading(false);
             }
         };
 
-        void fetchPackageInfo();
-    }, [githubRepository, setPackageInfo, getPackageInfo, project]);
+        void fetchRepositoryInfo();
+    }, [githubRepository, setRepositoryInfo, getRepositoryInfo, project]);
 
     const renderPreview = (): React.ReactNode => {
         if (isVideo) {
@@ -127,7 +126,9 @@ const PortfolioCard = ({
             );
         }
 
-        return <p>{packageInfo?.description ?? 'No description available'}</p>;
+        return (
+            <p>{repositoryInfo?.description ?? 'No description available'}</p>
+        );
     };
 
     return (

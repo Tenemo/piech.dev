@@ -225,7 +225,7 @@ describe('PortfolioCard', () => {
         expect(errorElement).toHaveClass(styles.errorMessage);
 
         expect(console.error).toHaveBeenCalledWith(
-            'Error fetching package info:',
+            'Error fetching repository info:',
             expect.any(Error),
         );
 

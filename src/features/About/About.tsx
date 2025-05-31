@@ -38,10 +38,9 @@ const About = (): React.JSX.Element => {
                     I worked on.
                 </p>
                 <p>
-                    As of today, I have over {managementExperienceYears} years
-                    of management experience, leading teams and managing
-                    projects since 2018. My entire career has been spent working
-                    remotely.
+                    I have over {managementExperienceYears} years of management
+                    experience, leading teams and managing projects since 2018.
+                    My entire career has been spent working remotely.
                 </p>
                 <div className={styles.buttonsContainer}>
                     <Link className={styles.mainButton} to="/portfolio">

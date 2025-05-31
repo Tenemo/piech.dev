@@ -99,4 +99,19 @@ export const TECHNOLOGIES = {
         fullName: 'TypeDoc',
         url: 'https://typedoc.org/',
     },
+    threejs: {
+        fullName: 'Three.js',
+        url: 'https://threejs.org/',
+        wideLogo: true,
+    },
+    webgl: {
+        fullName: 'WebGL',
+        url: 'https://www.khronos.org/webgl/',
+        wideLogo: true,
+    },
+    mathjs: {
+        fullName: 'Math.js',
+        url: 'https://mathjs.org/',
+        wideLogo: true,
+    },
 } as const;

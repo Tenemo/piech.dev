@@ -91,7 +91,7 @@ const PortfolioCard = ({
         const previewContent = isVideo ? (
             <video autoPlay className={styles.image} loop muted playsInline>
                 <source
-                    src={`/images/projects/${projectPreview}`}
+                    src={`/media/projects/${projectPreview}`}
                     type={`video/${projectPreview.split('.').pop() ?? ''}`}
                 />
                 Your browser does not support the video tag.
@@ -100,7 +100,7 @@ const PortfolioCard = ({
             <img
                 alt={`${project} preview`}
                 className={styles.image}
-                src={`/images/projects/${projectPreview}`}
+                src={`/media/projects/${projectPreview}`}
             />
         );
 

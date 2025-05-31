@@ -109,7 +109,7 @@ describe('PortfolioCard', () => {
         });
 
         const imgElement = container.querySelector(
-            `img[src="/images/projects/test.webp"]`,
+            `img[src="/media/projects/test.webp"]`,
         );
         expect(imgElement).toBeInTheDocument();
         expect(
@@ -147,7 +147,7 @@ describe('PortfolioCard', () => {
         expect(sourceElement).toBeInTheDocument();
         expect(sourceElement).toHaveAttribute(
             'src',
-            '/images/projects/test.mp4',
+            '/media/projects/test.mp4',
         );
     });
 

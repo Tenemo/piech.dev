@@ -35,7 +35,7 @@ const PortfolioTechnologies = ({
                         <img
                             alt={`${technologyName} logo`}
                             className={`${styles.logo} ${isWideLogo ? styles.wideLogo : ''}`}
-                            src={`images/logos/${technologyName}_logo.webp`}
+                            src={`media/logos/${technologyName}_logo.webp`}
                         />
                     </a>
                 );

@@ -12,19 +12,6 @@ const PORTFOLIO_ITEMS: {
     technologies: (keyof typeof TECHNOLOGIES)[];
 }[] = [
     {
-        project: 'bob',
-        projectPreview: 'bob-demo-movement.mp4',
-        technologies: [
-            'cpp',
-            'platformio',
-            'openai',
-            'esp32',
-            'esp32-s3',
-            'typescript',
-            'react',
-        ],
-    },
-    {
         project: 'threshold-elgamal',
         projectPreview: 'threshold-elgamal.webp',
         technologies: ['typescript', 'npm', 'typedoc'],
@@ -42,6 +29,19 @@ const PORTFOLIO_ITEMS: {
             'mui',
             'netlify',
             'sentry',
+        ],
+    },
+    {
+        project: 'bob',
+        projectPreview: 'bob-demo-movement.mp4',
+        technologies: [
+            'cpp',
+            'platformio',
+            'openai',
+            'esp32',
+            'esp32-s3',
+            'typescript',
+            'react',
         ],
     },
     {
@@ -77,21 +77,29 @@ const PORTFOLIO_ITEMS: {
         projectPreview: 'aliases.sh.webp',
         technologies: ['bash'],
     },
+    {
+        project: 'tiles.town',
+        repoName: 'tiles-town',
+        projectPreview: 'tiles-town_full-game_dark-mode.mp4',
+        technologies: ['typescript', 'react', 'redux', 'netlify', 'sentry'],
+    },
+    {
+        project: 'particle.golf',
+        repoName: 'particle-golf',
+        projectPreview: 'particle-golf_demo.mp4',
+        technologies: [
+            'typescript',
+            'react',
+            'sentry',
+            'threejs',
+            'webgl',
+            'mathjs',
+        ],
+    },
+    // Probably not worth showing, both mods should be in one repo then, too
     // {
     //     project: 'stellaris_mods',
     //     repoName: 'stellaris-mod-slow-play',
-    //     projectPreview: 'YYYYYYYYYY',
-    //     technologies: [],
-    // },
-    // {
-    //     project: 'tiles.town',
-    //     repoName: 'tiles-town',
-    //     projectPreview: 'YYYYYYYYY',
-    //     technologies: ['typescript', 'react', 'redux', 'netlify', 'sentry'],
-    // },
-    // {
-    //     project: 'particle.golf',
-    //     repoName: 'particle-golf',
     //     projectPreview: 'YYYYYYYYYY',
     //     technologies: [],
     // },

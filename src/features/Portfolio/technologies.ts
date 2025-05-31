@@ -114,4 +114,9 @@ export const TECHNOLOGIES = {
         url: 'https://mathjs.org/',
         wideLogo: true,
     },
+    docker: {
+        fullName: 'Docker',
+        url: 'https://www.docker.com/',
+        wideLogo: true,
+    },
 } as const;

@@ -1,10 +1,21 @@
 import { Helmet } from '@dr.pogodin/react-helmet';
+import { differenceInYears } from 'date-fns';
 import React from 'react';
 import { Link } from 'react-router';
 
 import styles from './about.module.scss';
 
 const About = (): React.JSX.Element => {
+    const workStartDate = new Date('2012-08-01');
+    const managementStartDate = new Date('2018-06-01');
+    const currentDate = new Date();
+
+    const totalExperienceYears = differenceInYears(currentDate, workStartDate);
+    const managementExperienceYears = differenceInYears(
+        currentDate,
+        managementStartDate,
+    );
+
     return (
         <main className={styles.main}>
             <Helmet>
@@ -21,14 +32,15 @@ const About = (): React.JSX.Element => {
             <div className={styles.aboutMeDescription}>
                 <p>
                     Welcome to my personal website - my name is Piotr and
-                    I&apos;m an IT specialist with over 12 years of experience.
-                    I created this site so that I have an easy way of sharing
-                    some of my non-commercial projects that I worked on.
+                    I&apos;m an IT specialist with over {totalExperienceYears}{' '}
+                    years of experience. I created this site so that I have an
+                    easy way of sharing some of my non-commercial projects that
+                    I worked on.
                 </p>
                 <p>
-                    When it comes to my track record, I have over 6 years of
-                    management experience, leading teams and managing projects
-                    since 2018. My entire career has been spent working
+                    As of today, I have over {managementExperienceYears} years
+                    of management experience, leading teams and managing
+                    projects since 2018. My entire career has been spent working
                     remotely.
                 </p>
                 <div className={styles.buttonsContainer}>

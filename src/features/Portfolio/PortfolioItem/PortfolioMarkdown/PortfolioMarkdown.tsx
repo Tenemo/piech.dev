@@ -70,20 +70,6 @@ const PortfolioMarkdown = ({
             );
         },
         img({ src, alt, ...props }) {
-            if (src && GITHUB_USER_ATTACHMENT_PATTERN.test(src)) {
-                return (
-                    <video
-                        autoPlay
-                        className={styles.videoPlayer}
-                        controls
-                        loop
-                        muted
-                        playsInline
-                        src={src}
-                        title={alt ?? 'Video attachment'}
-                    />
-                );
-            }
             return (
                 <img
                     alt={alt}

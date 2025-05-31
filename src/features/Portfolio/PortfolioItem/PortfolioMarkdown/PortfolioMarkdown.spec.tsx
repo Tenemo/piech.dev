@@ -101,17 +101,17 @@ describe('PortfolioMarkdown', () => {
         expect(video).toHaveClass(styles.videoPlayer);
     });
 
-    it('should render GitHub user attachment images as videos', () => {
+    it('should render GitHub user attachment images as images', () => {
         const attachmentUrl =
             'https://github.com/user-attachments/assets/12345678-1234-5678-9abc-123456789abc';
-        const markdown = `![Video](${attachmentUrl})`;
+        const markdown = `![Image](${attachmentUrl})`;
 
         render(<PortfolioMarkdown markdown={markdown} repo="test-repo" />);
 
-        const video = screen.getByTitle('Video');
-        expect(video.tagName).toBe('VIDEO');
-        expect(video).toHaveAttribute('src', attachmentUrl);
-        expect(video).toHaveClass(styles.videoPlayer);
+        const image = screen.getByAltText('Image');
+        expect(image.tagName).toBe('IMG');
+        expect(image).toHaveAttribute('src', attachmentUrl);
+        expect(image).toHaveStyle('max-width: 100%');
     });
 
     it('should apply custom styling to headings', () => {

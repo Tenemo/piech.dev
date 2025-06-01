@@ -5,6 +5,7 @@ import { Navigate, Route, Routes } from 'react-router';
 
 import styles from './app.module.scss';
 
+import ExternalRedirect from 'components/ExternalRedirect/ExternalRedirect';
 import Footer from 'components/Footer/Footer';
 import Header from 'components/Header/Header';
 import NotFound from 'components/NotFound/NotFound';
@@ -31,6 +32,22 @@ const App = (): React.JSX.Element => {
                     <Route
                         element={<Navigate replace to="/about" />}
                         path="/"
+                    />
+                    <Route
+                        element={
+                            <ExternalRedirect url="https://www.linkedin.com/in/ppiech/" />
+                        }
+                        path="/linkedin"
+                    />
+                    <Route
+                        element={
+                            <ExternalRedirect url="https://github.com/Tenemo" />
+                        }
+                        path="/github"
+                    />
+                    <Route
+                        element={<ExternalRedirect url="https://t.me/tenemo" />}
+                        path="/telegram"
                     />
                     <Route
                         element={<PortfolioItem />}

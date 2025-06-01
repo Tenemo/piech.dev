@@ -36,11 +36,10 @@
         display: flex;
         align-items: center;
         color: var(--link-color);
-        text-decoration: none;
+        text-decoration: underline;
 
         &:hover {
             color: var(--link-hover-color);
-            text-decoration: underline;
         }
     }
 

@@ -21,7 +21,9 @@ const Contact = (): React.JSX.Element => {
                     mine, I look like a good candidate for an open position, or
                     you would like to get in touch for other reasons, please
                     feel free to reach out via email or Telegram. I provide my
-                    resume upon request.
+                    resume upon request. I speak fluent English, Polish, and
+                    Russian: I&apos;m comfortable working in any of these three
+                    languages.
                 </p>
                 <div className={styles.contactItemsContainer}>
                     <div className={styles.contactItem}>

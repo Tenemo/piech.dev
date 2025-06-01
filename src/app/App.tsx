@@ -1,7 +1,7 @@
 import 'normalize.css';
 import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { Navigate, Route, Routes } from 'react-router';
+import { Route, Routes } from 'react-router';
 
 import styles from './app.module.scss';
 
@@ -29,10 +29,7 @@ const App = (): React.JSX.Element => {
             >
                 <Header />
                 <Routes>
-                    <Route
-                        element={<Navigate replace to="/about" />}
-                        path="/"
-                    />
+                    <Route element={<About />} path="/" />
                     <Route
                         element={
                             <ExternalRedirect url="https://www.linkedin.com/in/ppiech/" />
@@ -54,7 +51,6 @@ const App = (): React.JSX.Element => {
                         path="/portfolio/:repo"
                     />
                     <Route element={<Portfolio />} path="/portfolio" />
-                    <Route element={<About />} path="/about" />
                     <Route element={<Contact />} path="/contact" />
                     <Route element={<NotFound />} path="*" />
                 </Routes>

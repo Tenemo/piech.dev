@@ -17,7 +17,7 @@ const Header = (): React.JSX.Element => {
                             ? `${styles.navLink} ${styles.activeLink}`
                             : styles.navLink
                     }
-                    to="/about"
+                    to="/"
                 >
                     About me
                 </NavLink>

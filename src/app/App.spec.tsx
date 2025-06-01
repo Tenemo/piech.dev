@@ -17,7 +17,7 @@ describe('App', () => {
 
     it('should render header and footer on all routes', () => {
         renderWithProviders(
-            <MemoryRouter initialEntries={['/about']}>
+            <MemoryRouter initialEntries={['/']}>
                 <App />
             </MemoryRouter>,
             { withRouter: false },

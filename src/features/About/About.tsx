@@ -19,7 +19,7 @@ const About = (): React.JSX.Element => {
     return (
         <main className={styles.main}>
             <Helmet>
-                <title>About me | piech.dev</title>
+                <title>piech.dev</title>
             </Helmet>
             <h2>About me</h2>
             <div className={'divider'} />

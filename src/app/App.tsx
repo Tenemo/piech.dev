@@ -47,6 +47,12 @@ const App = (): React.JSX.Element => {
                         path="/telegram"
                     />
                     <Route
+                        element={
+                            <ExternalRedirect url="https://discord.com/users/297930621760831488" />
+                        }
+                        path="/discord"
+                    />
+                    <Route
                         element={<PortfolioItem />}
                         path="/portfolio/:repo"
                     />

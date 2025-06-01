@@ -11,7 +11,7 @@ const ExternalRedirect = ({
         window.location.href = url;
     }, [url]);
 
-    return null;
+    return <main>Redirecting to {url}...</main>;
 };
 
 export default ExternalRedirect;

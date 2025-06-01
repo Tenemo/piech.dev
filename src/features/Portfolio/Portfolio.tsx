@@ -3,116 +3,7 @@ import React from 'react';
 
 import styles from './portfolio.module.scss';
 import PortfolioCard from './PortfolioCard/PortfolioCard';
-import { TECHNOLOGIES } from './technologies';
-
-const PORTFOLIO_ITEMS: {
-    projectPreview: string;
-    project: string;
-    repoName?: string;
-    technologies: (keyof typeof TECHNOLOGIES)[];
-}[] = [
-    {
-        project: 'threshold-elgamal',
-        projectPreview: 'threshold-elgamal.webp',
-        technologies: ['typescript', 'npm', 'typedoc'],
-    },
-    {
-        project: 'sealed.vote',
-        repoName: 'sealed-vote-web',
-        projectPreview: 'sealed.vote.mp4',
-        technologies: [
-            'typescript',
-            'fastify',
-            'postgresql',
-            'docker',
-            'react',
-            'redux',
-            'mui',
-            'netlify',
-            'sentry',
-        ],
-    },
-    {
-        project: 'bob',
-        projectPreview: 'bob-demo-movement.mp4',
-        technologies: [
-            'cpp',
-            'platformio',
-            'openai',
-            'esp32',
-            'esp32-s3',
-            'typescript',
-            'react',
-        ],
-    },
-    {
-        project: 'reactplate',
-        projectPreview: 'reactplate_lighthouse.webp',
-        technologies: [
-            'typescript',
-            'react',
-            'redux',
-            'sass',
-            'vitejs',
-            'eslint',
-            'prettier',
-            'netlify',
-            'sentry',
-        ],
-    },
-    {
-        project: 'expressplate',
-        projectPreview: 'expressplate.webp',
-        technologies: [
-            'typescript',
-            'nodejs',
-            'express',
-            'vitejs',
-            'eslint',
-            'prettier',
-            'sentry',
-        ],
-    },
-    {
-        project: 'aliases.sh',
-        projectPreview: 'aliases.sh.webp',
-        technologies: ['bash'],
-    },
-    {
-        project: 'tiles.town',
-        repoName: 'tiles-town',
-        projectPreview: 'tiles-town_full-game_dark-mode.mp4',
-        technologies: [
-            'typescript',
-            'express',
-            'postgresql',
-            'react',
-            'redux',
-            'netlify',
-            'sentry',
-        ],
-    },
-    {
-        project: 'particle.golf',
-        repoName: 'particle-golf',
-        projectPreview: 'particle-golf_demo.mp4',
-        technologies: [
-            'typescript',
-            'react',
-            'sentry',
-            'threejs',
-            'webgl',
-            'mathjs',
-        ],
-    },
-    // Probably not worth showing, both mods should be in one repo then, too
-    // {
-    //     project: 'stellaris_mods',
-    //     repoName: 'stellaris-mod-slow-play',
-    //     projectPreview: 'YYYYYYYYYY',
-    //     technologies: [],
-    // },
-];
+import { PROJECTS } from './projects';
 
 const Portfolio = (): React.JSX.Element => {
     return (
@@ -122,9 +13,13 @@ const Portfolio = (): React.JSX.Element => {
             </Helmet>
             <h2>Portfolio</h2>
             <div className={'divider'} />
+            <p className={'smallHeadline'}>
+                Non-commercial projects I did in my free time.
+            </p>
+            <div className={'divider'} />
 
             <div className={styles.portfolioItemsContainer}>
-                {PORTFOLIO_ITEMS.map(
+                {PROJECTS.map(
                     ({ projectPreview, project, technologies }, index) => (
                         <React.Fragment key={project}>
                             <PortfolioCard
@@ -132,10 +27,9 @@ const Portfolio = (): React.JSX.Element => {
                                 project={project}
                                 projectPreview={projectPreview}
                                 technologies={technologies}
-                                {...(PORTFOLIO_ITEMS[index].repoName
+                                {...(PROJECTS[index].repoName
                                     ? {
-                                          repoName:
-                                              PORTFOLIO_ITEMS[index].repoName,
+                                          repoName: PROJECTS[index].repoName,
                                       }
                                     : {})}
                             />

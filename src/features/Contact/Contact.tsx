@@ -20,8 +20,8 @@ const Contact = (): React.JSX.Element => {
                     If you have a project idea, questions about a project of
                     mine, I look like a good candidate for an open position, or
                     you would like to get in touch for other reasons, please
-                    feel free to reach out via email or Telegram. I provide my
-                    resume upon request.
+                    feel free to reach out via any of the platforms listed
+                    below. I provide my resume upon request.
                 </p>
                 <p>
                     I speak fluent English, Polish, and Russian: I&apos;m

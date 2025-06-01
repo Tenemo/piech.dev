@@ -1,6 +1,7 @@
 import { Helmet } from '@dr.pogodin/react-helmet';
 import EmailIcon from '@mui/icons-material/AlternateEmail';
 import GitHubIcon from '@mui/icons-material/GitHub';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import React from 'react';
 
@@ -27,6 +28,17 @@ const Contact = (): React.JSX.Element => {
                         <EmailIcon />
                         email:
                         <a href="mailto:piotr@piech.dev">piotr@piech.dev</a>
+                    </div>
+                    <div className={styles.contactItem}>
+                        <LinkedInIcon />
+                        linkedin:
+                        <a
+                            href="https://www.linkedin.com/in/ppiech"
+                            rel="noopener noreferrer"
+                            target="_blank"
+                        >
+                            /ppiech
+                        </a>
                     </div>
                     <div className={styles.contactItem}>
                         <GitHubIcon />

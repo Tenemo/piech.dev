@@ -4,6 +4,7 @@ import React from 'react';
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
 
 import { PortfolioProvider } from 'features/Portfolio/PortfolioContext';
+import 'normalize.css';
 import 'styles/global.scss';
 
 declare const __BUILD_DATE__: string;
@@ -105,7 +106,6 @@ export const Layout = ({
 };
 
 const Root = (): React.JSX.Element => {
-    // Your small client behavior moved from main.tsx:
     React.useEffect(() => {
         document.body.addEventListener('mousedown', () => {
             document.body.classList.add('using-mouse');
@@ -114,8 +114,6 @@ const Root = (): React.JSX.Element => {
             if (event.key === 'Tab')
                 document.body.classList.remove('using-mouse');
         });
-        // __BUILD_DATE__ is still defined in Vite config
-
         console.log(`Build date: ${__BUILD_DATE__}`);
     }, []);
 

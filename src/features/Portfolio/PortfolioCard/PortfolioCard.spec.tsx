@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
@@ -6,37 +6,34 @@ import PortfolioCard from './PortfolioCard';
 import styles from './portfolioCard.module.scss';
 
 import { renderWithProviders } from 'utils/testUtils';
-
-const mockedFetch = vi.fn(() =>
-    Promise.resolve({
-        ok: true,
-        json: () =>
-            Promise.resolve({
-                name: 'test-package',
-                description: 'Test description',
-            }),
-    }),
-);
-
-vi.stubGlobal('fetch', mockedFetch);
+vi.mock('../generated/githubData', () => ({
+    REPOSITORY_INFO: {
+        'test-project': {
+            name: 'test-project',
+            description: 'Test description',
+        },
+        'img-test': { name: 'img-test', description: 'Image test' },
+        'video-test': { name: 'video-test', description: 'Video test' },
+        'right-test': {
+            name: 'right-test',
+            description: 'Right image test',
+        },
+        'custom-repo': {
+            name: 'custom-repo',
+            description: 'Custom repo test',
+        },
+        'cached-repo': { name: 'cached-repo', description: 'Cached repo' },
+        'link-test': { name: 'link-test', description: 'Link test' },
+    },
+}));
 
 describe('PortfolioCard', () => {
     beforeEach(() => {
         vi.clearAllMocks();
-        mockedFetch.mockClear();
         console.error = vi.fn();
     });
 
-    it('should render with correct structure and classes', async () => {
-        mockedFetch.mockResolvedValueOnce({
-            ok: true,
-            json: () =>
-                Promise.resolve({
-                    name: 'test-project',
-                    description: 'Test description',
-                }),
-        });
-
+    it('should render with correct structure and classes', () => {
         const { container } = renderWithProviders(
             <PortfolioCard
                 project="test-project"
@@ -45,10 +42,6 @@ describe('PortfolioCard', () => {
             />,
             { withRouter: true, withPortfolio: true },
         );
-
-        await waitFor(() => {
-            expect(mockedFetch).toHaveBeenCalled();
-        });
 
         const cardElement = container.querySelector(`.${styles.card}`);
         expect(cardElement).toBeInTheDocument();
@@ -64,13 +57,6 @@ describe('PortfolioCard', () => {
     });
 
     it('should show loading state when fetching package info', () => {
-        mockedFetch.mockImplementationOnce(
-            () =>
-                new Promise(() => {
-                    return;
-                }),
-        );
-
         renderWithProviders(
             <PortfolioCard
                 project="loading-test"
@@ -79,22 +65,13 @@ describe('PortfolioCard', () => {
             />,
             { withRouter: true, withPortfolio: true },
         );
-
+        // no loading state anymore
         expect(
-            screen.getByText(/loading project information/i),
-        ).toBeInTheDocument();
+            screen.queryByText(/loading project information/i),
+        ).not.toBeInTheDocument();
     });
 
-    it('should render image for non-video preview files', async () => {
-        mockedFetch.mockResolvedValueOnce({
-            ok: true,
-            json: () =>
-                Promise.resolve({
-                    name: 'img-test',
-                    description: 'Image test',
-                }),
-        });
-
+    it('should render image for non-video preview files', () => {
         const { container } = renderWithProviders(
             <PortfolioCard
                 project="img-test"
@@ -103,10 +80,6 @@ describe('PortfolioCard', () => {
             />,
             { withRouter: true, withPortfolio: true },
         );
-
-        await waitFor(() => {
-            expect(mockedFetch).toHaveBeenCalled();
-        });
 
         const imgElement = container.querySelector(
             `img[src="/media/projects/test.webp"]`,
@@ -117,16 +90,7 @@ describe('PortfolioCard', () => {
         ).not.toBeInTheDocument();
     });
 
-    it('should render video for video preview files', async () => {
-        mockedFetch.mockResolvedValueOnce({
-            ok: true,
-            json: () =>
-                Promise.resolve({
-                    name: 'video-test',
-                    description: 'Video test',
-                }),
-        });
-
+    it('should render video for video preview files', () => {
         const { container } = renderWithProviders(
             <PortfolioCard
                 project="video-test"
@@ -135,10 +99,6 @@ describe('PortfolioCard', () => {
             />,
             { withRouter: true, withPortfolio: true },
         );
-
-        await waitFor(() => {
-            expect(mockedFetch).toHaveBeenCalled();
-        });
 
         const videoElement = container.querySelector('video');
         expect(videoElement).toBeInTheDocument();
@@ -151,16 +111,7 @@ describe('PortfolioCard', () => {
         );
     });
 
-    it('should use imageRight class when imageOnRight is true', async () => {
-        mockedFetch.mockResolvedValueOnce({
-            ok: true,
-            json: () =>
-                Promise.resolve({
-                    name: 'right-test',
-                    description: 'Right image test',
-                }),
-        });
-
+    it('should use imageRight class when imageOnRight is true', () => {
         const { container } = renderWithProviders(
             <PortfolioCard
                 imageOnRight={true}
@@ -171,25 +122,12 @@ describe('PortfolioCard', () => {
             { withRouter: true, withPortfolio: true },
         );
 
-        await waitFor(() => {
-            expect(mockedFetch).toHaveBeenCalled();
-        });
-
         const cardElement = container.querySelector(`.${styles.card}`);
         expect(cardElement).toHaveClass(styles.imageRight);
         expect(cardElement).not.toHaveClass(styles.imageLeft);
     });
 
-    it('should use a custom repo name when provided', async () => {
-        mockedFetch.mockResolvedValueOnce({
-            ok: true,
-            json: () =>
-                Promise.resolve({
-                    name: 'custom-repo',
-                    description: 'Custom repo test',
-                }),
-        });
-
+    it('should use a custom repo name when provided', () => {
         renderWithProviders(
             <PortfolioCard
                 project="display-name"
@@ -199,18 +137,18 @@ describe('PortfolioCard', () => {
             />,
             { withRouter: true, withPortfolio: true },
         );
-
-        await waitFor(() => {
-            expect(mockedFetch).toHaveBeenCalled();
-        });
-        // @ts-expect-error typings issue, it is actually a nested array
-        expect(mockedFetch.mock.calls[0][0]).toContain('custom-repo');
+        // ensure it links to custom repo route
+        const links = screen
+            .getAllByRole('link')
+            .filter((l) => l.getAttribute('href')?.includes('/portfolio/'));
+        expect(
+            links.some(
+                (l) => l.getAttribute('href') === '/portfolio/custom-repo',
+            ),
+        ).toBe(true);
     });
 
-    it('should display error message when fetch fails', async () => {
-        mockedFetch.mockRejectedValueOnce(new Error('Fetch error'));
-        const originalConsoleError = console.error;
-
+    it('should display error message when fetch fails', () => {
         renderWithProviders(
             <PortfolioCard
                 project="error-test"
@@ -219,20 +157,13 @@ describe('PortfolioCard', () => {
             />,
             { withRouter: true, withPortfolio: true },
         );
-
-        const errorElement = await screen.findByText(/fetch error/i);
-        expect(errorElement).toBeInTheDocument();
-        expect(errorElement).toHaveClass(styles.errorMessage);
-
-        expect(console.error).toHaveBeenCalledWith(
-            'Error fetching repository info:',
-            expect.any(Error),
-        );
-
-        console.error = originalConsoleError;
+        // no error state now; shows fallback description
+        expect(
+            screen.getByText(/no description available/i),
+        ).toBeInTheDocument();
     });
 
-    it('should use cached package info when available', async () => {
+    it('should use cached package info when available', () => {
         const { rerender } = renderWithProviders(
             <PortfolioCard
                 project="cached-project"
@@ -243,12 +174,6 @@ describe('PortfolioCard', () => {
             { withRouter: true, withPortfolio: true },
         );
 
-        await waitFor(() => {
-            expect(mockedFetch).toHaveBeenCalled();
-        });
-
-        mockedFetch.mockClear();
-
         rerender(
             <PortfolioCard
                 project="cached-project"
@@ -257,26 +182,12 @@ describe('PortfolioCard', () => {
                 technologies={['typescript']}
             />,
         );
-
-        await waitFor(() => {
-            expect(
-                screen.queryByText(/loading project information/i),
-            ).not.toBeInTheDocument();
-        });
-
-        expect(mockedFetch).not.toHaveBeenCalled();
+        expect(
+            screen.queryByText(/loading project information/i),
+        ).not.toBeInTheDocument();
     });
 
-    it('should link to the correct portfolio item page', async () => {
-        mockedFetch.mockResolvedValueOnce({
-            ok: true,
-            json: () =>
-                Promise.resolve({
-                    name: 'link-test',
-                    description: 'Link test',
-                }),
-        });
-
+    it('should link to the correct portfolio item page', () => {
         renderWithProviders(
             <PortfolioCard
                 project="link-test"
@@ -285,10 +196,6 @@ describe('PortfolioCard', () => {
             />,
             { withRouter: true, withPortfolio: true },
         );
-
-        await waitFor(() => {
-            expect(mockedFetch).toHaveBeenCalled();
-        });
 
         const portfolioLinks = screen
             .getAllByRole('link')

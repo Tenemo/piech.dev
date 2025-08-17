@@ -56,11 +56,14 @@ describe('Portfolio', () => {
     it('should render all portfolio items', () => {
         renderWithProviders(<Portfolio />, { withPortfolio: true });
 
-        expect(screen.getByText(/reactplate/i)).toBeInTheDocument();
-        expect(screen.getByText(/threshold-elgamal/i)).toBeInTheDocument();
-        expect(screen.getByText(/sealed\.vote/i)).toBeInTheDocument();
-        expect(screen.getByText(/expressplate/i)).toBeInTheDocument();
-        expect(screen.getByText(/aliases\.sh/i)).toBeInTheDocument();
+        const getHeading = (name: RegExp): HTMLElement =>
+            screen.getByRole('heading', { level: 3, name });
+
+        expect(getHeading(/reactplate/i)).toBeInTheDocument();
+        expect(getHeading(/threshold-elgamal/i)).toBeInTheDocument();
+        expect(getHeading(/sealed\.vote/i)).toBeInTheDocument();
+        expect(getHeading(/expressplate/i)).toBeInTheDocument();
+        expect(getHeading(/aliases\.sh/i)).toBeInTheDocument();
     });
 
     it('should include a divider between portfolio items', () => {

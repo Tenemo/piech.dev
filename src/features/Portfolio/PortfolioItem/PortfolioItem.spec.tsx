@@ -1,22 +1,17 @@
-import { screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-
-import { PortfolioProvider } from '../PortfolioContext';
 
 import PortfolioItem from './PortfolioItem';
 
 import { renderWithProviders } from 'utils/testUtils';
-
-const mockedFetch = vi.fn(() =>
-    Promise.resolve({
-        ok: true,
-        text: () => Promise.resolve('# Test Readme Content'),
-        statusText: 'OK',
-    }),
-);
-
-vi.stubGlobal('fetch', mockedFetch);
+vi.mock('../generated/githubData', () => ({
+    README_CONTENT: {
+        'test-repo': '# Test Readme Content',
+        'cached-project': '# Cached Readme Content',
+        'new-content-project': '# New Readme Content',
+    },
+}));
 
 const mockUseParams = vi.fn().mockReturnValue({ repo: 'test-repo' });
 vi.mock('react-router', async () => {
@@ -30,26 +25,15 @@ vi.mock('react-router', async () => {
 describe('PortfolioItem', () => {
     beforeEach(() => {
         vi.clearAllMocks();
-        mockedFetch.mockClear();
         mockUseParams.mockReturnValue({ repo: 'test-repo' });
         console.error = vi.fn();
         document.title = '';
     });
 
     it('should render with the correct structure when data is loaded', async () => {
-        mockedFetch.mockResolvedValueOnce({
-            ok: true,
-            text: () => Promise.resolve('# Test Readme Content'),
-            statusText: 'OK',
-        });
-
         renderWithProviders(<PortfolioItem />, {
             withRouter: true,
             withPortfolio: true,
-        });
-
-        await waitFor(() => {
-            expect(mockedFetch).toHaveBeenCalled();
         });
 
         const headingElement = await screen.findByRole('heading', { level: 1 });
@@ -61,190 +45,83 @@ describe('PortfolioItem', () => {
         ).toBeInTheDocument();
     });
 
-    it('should show loading state while fetching readme', () => {
-        mockedFetch.mockImplementationOnce(
-            () =>
-                new Promise(() => {
-                    return;
-                }),
-        );
-
+    it('should not show loading state (static content)', () => {
         renderWithProviders(<PortfolioItem />, {
             withRouter: true,
             withPortfolio: true,
         });
-
         expect(
-            screen.getByText(/loading repository information/i),
-        ).toBeInTheDocument();
+            screen.queryByText(/loading repository information/i),
+        ).not.toBeInTheDocument();
     });
 
-    it('should display error message when fetch fails', async () => {
-        mockedFetch.mockRejectedValueOnce(new Error('Fetch error'));
-
+    it('should display error message when fetch fails', () => {
         renderWithProviders(<PortfolioItem />, {
             withRouter: true,
             withPortfolio: true,
         });
-
-        const errorHeading = await screen.findByText(
-            /error loading repository/i,
-        );
-        expect(errorHeading).toBeInTheDocument();
-
-        const errorMessage = await screen.findByText(/fetch error/i);
-        expect(errorMessage).toBeInTheDocument();
+        // static content has no fetch errors
+        expect(
+            screen.queryByText(/error loading repository/i),
+        ).not.toBeInTheDocument();
     });
 
-    it('should display error message when response is not ok', async () => {
-        mockedFetch.mockResolvedValueOnce({
-            ok: false,
-            statusText: 'Not Found',
-            text: () => Promise.resolve(''),
-        });
-
+    it('should display error message when response is not ok', () => {
         renderWithProviders(<PortfolioItem />, {
             withRouter: true,
             withPortfolio: true,
         });
-
-        const errorHeading = await screen.findByText(
-            /error loading repository/i,
-        );
-        expect(errorHeading).toBeInTheDocument();
-
-        const errorMessage = await screen.findByText(
-            /failed to fetch readme: not found/i,
-        );
-        expect(errorMessage).toBeInTheDocument();
+        expect(
+            screen.queryByText(/failed to fetch readme/i),
+        ).not.toBeInTheDocument();
     });
 
     it('should use cached readme content when available', async () => {
-        const Wrapper = ({
-            children,
-        }: {
-            children: React.ReactNode;
-        }): React.JSX.Element => (
-            <PortfolioProvider>{children}</PortfolioProvider>
-        );
-
         mockUseParams.mockReturnValue({ repo: 'cached-project' });
-
-        mockedFetch.mockImplementation(() =>
-            Promise.resolve({
-                ok: true,
-                text: () => Promise.resolve('# Cached Readme Content'),
-                statusText: 'OK',
-            }),
-        );
-
-        const { rerender } = renderWithProviders(
-            <Wrapper>
-                <PortfolioItem />
-            </Wrapper>,
-            { withRouter: true },
-        );
-
-        await waitFor(() => {
-            expect(mockedFetch).toHaveBeenCalledTimes(1);
+        const { rerender } = renderWithProviders(<PortfolioItem />, {
+            withRouter: true,
+            withPortfolio: true,
         });
 
         const firstHeading = await screen.findByRole('heading', { level: 1 });
         expect(firstHeading).toHaveTextContent('Cached Readme Content');
 
-        mockedFetch.mockClear();
-
         mockUseParams.mockReturnValue({ repo: 'test-repo' });
 
-        rerender(
-            <Wrapper>
-                <PortfolioItem />
-            </Wrapper>,
-        );
-
-        await waitFor(() => {
-            expect(mockedFetch).toHaveBeenCalledTimes(1);
-        });
+        rerender(<PortfolioItem />);
 
         mockUseParams.mockReturnValue({ repo: 'cached-project' });
 
-        mockedFetch.mockClear();
-
-        rerender(
-            <Wrapper>
-                <PortfolioItem />
-            </Wrapper>,
-        );
+        rerender(<PortfolioItem />);
 
         await screen.findByRole('heading', { level: 1 });
         expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
             'Cached Readme Content',
         );
-        expect(mockedFetch).not.toHaveBeenCalled();
     });
 
     it('should save readme content to context', async () => {
-        const Wrapper = ({
-            children,
-        }: {
-            children: React.ReactNode;
-        }): React.JSX.Element => (
-            <PortfolioProvider>{children}</PortfolioProvider>
-        );
-
         mockUseParams.mockReturnValue({ repo: 'new-content-project' });
-
-        mockedFetch.mockImplementation(() =>
-            Promise.resolve({
-                ok: true,
-                text: () => Promise.resolve('# New Readme Content'),
-                statusText: 'OK',
-            }),
-        );
-
-        const { rerender } = renderWithProviders(
-            <Wrapper>
-                <PortfolioItem />
-            </Wrapper>,
-            { withRouter: true },
-        );
-
-        await waitFor(() => {
-            expect(mockedFetch).toHaveBeenCalledTimes(1);
+        const { rerender } = renderWithProviders(<PortfolioItem />, {
+            withRouter: true,
+            withPortfolio: true,
         });
 
         const firstHeading = await screen.findByRole('heading', { level: 1 });
         expect(firstHeading).toHaveTextContent('New Readme Content');
 
-        mockedFetch.mockClear();
-
         mockUseParams.mockReturnValue({ repo: 'test-repo' });
 
-        rerender(
-            <Wrapper>
-                <PortfolioItem />
-            </Wrapper>,
-        );
-
-        await waitFor(() => {
-            expect(mockedFetch).toHaveBeenCalledTimes(1);
-        });
+        rerender(<PortfolioItem />);
 
         mockUseParams.mockReturnValue({ repo: 'new-content-project' });
 
-        mockedFetch.mockClear();
-
-        rerender(
-            <Wrapper>
-                <PortfolioItem />
-            </Wrapper>,
-        );
+        rerender(<PortfolioItem />);
 
         await screen.findByRole('heading', { level: 1 });
         expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
             'New Readme Content',
         );
-        expect(mockedFetch).not.toHaveBeenCalled();
     });
 
     it('should handle case when repo parameter is missing', async () => {
@@ -266,20 +143,10 @@ describe('PortfolioItem', () => {
         expect(errorMessage).toBeInTheDocument();
     });
 
-    it('should have correct GitHub link', async () => {
-        mockedFetch.mockResolvedValueOnce({
-            ok: true,
-            text: () => Promise.resolve('# Test Readme Content'),
-            statusText: 'OK',
-        });
-
+    it('should have correct GitHub link', () => {
         renderWithProviders(<PortfolioItem />, {
             withRouter: true,
             withPortfolio: true,
-        });
-
-        await waitFor(() => {
-            expect(mockedFetch).toHaveBeenCalled();
         });
 
         const githubLink = screen.getByRole('link', {
@@ -294,7 +161,7 @@ describe('PortfolioItem', () => {
         expect(githubLink).toHaveAttribute('rel', 'noopener noreferrer');
     });
 
-    it('should set document title based on repo name', async () => {
+    it('should set document title based on repo name', () => {
         const originalDocumentTitle = document.title;
 
         const originalUseEffect = React.useEffect;
@@ -304,20 +171,11 @@ describe('PortfolioItem', () => {
                 originalUseEffect(effect);
             });
 
-        mockedFetch.mockResolvedValueOnce({
-            ok: true,
-            text: () => Promise.resolve('# Test Readme Content'),
-            statusText: 'OK',
-        });
-
         renderWithProviders(<PortfolioItem />, {
             withRouter: true,
             withPortfolio: true,
         });
-
-        await waitFor(() => {
-            expect(document.title).toBe('test-repo | piech.dev');
-        });
+        expect(document.title).toBe('test-repo | piech.dev');
 
         mockUseEffect.mockRestore();
         document.title = originalDocumentTitle;

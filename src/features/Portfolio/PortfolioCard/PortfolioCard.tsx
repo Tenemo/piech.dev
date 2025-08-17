@@ -1,8 +1,8 @@
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router';
 
-import { usePortfolio, RepositoryInfo } from '../PortfolioContext';
+import { REPOSITORY_INFO } from '../generated/githubData';
 import { TECHNOLOGIES } from '../technologies';
 
 import styles from './portfolioCard.module.scss';
@@ -16,8 +16,6 @@ type PortfolioCardProps = {
     repoName?: string;
 };
 
-const OWNER = 'tenemo';
-
 const PortfolioCard = ({
     projectPreview,
     imageOnRight = false,
@@ -26,66 +24,9 @@ const PortfolioCard = ({
     repoName,
 }: PortfolioCardProps): React.JSX.Element => {
     const githubRepository = repoName ?? project;
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const { getRepositoryInfo, setRepositoryInfo } = usePortfolio();
-    const [repositoryInfo, setLocalRepositoryInfo] =
-        useState<RepositoryInfo | null>(null);
+    const repositoryInfo = REPOSITORY_INFO[githubRepository];
 
     const isVideo = /\.(mp4|webm|ogg)$/i.test(projectPreview.toLowerCase());
-
-    useEffect(() => {
-        const cachedInfo = getRepositoryInfo(githubRepository);
-
-        if (cachedInfo) {
-            setLocalRepositoryInfo(cachedInfo);
-            setIsLoading(false);
-            return;
-        }
-
-        const fetchRepositoryInfo = async (): Promise<void> => {
-            try {
-                setIsLoading(true);
-                setError(null);
-
-                const repositoryResponse = await fetch(
-                    `https://api.github.com/repos/${OWNER}/${githubRepository}`,
-                );
-
-                if (!repositoryResponse.ok) {
-                    throw new Error(
-                        `Failed to fetch repository info: ${repositoryResponse.statusText}`,
-                    );
-                }
-
-                const repositoryData = (await repositoryResponse.json()) as {
-                    name?: string;
-                    description?: string;
-                };
-
-                const newRepositoryInfo = {
-                    name: repositoryData.name ?? project,
-                    description:
-                        repositoryData.description ??
-                        'No description available',
-                };
-
-                setLocalRepositoryInfo(newRepositoryInfo);
-                setRepositoryInfo(githubRepository, newRepositoryInfo);
-            } catch (err) {
-                setError(
-                    err instanceof Error
-                        ? err.message
-                        : 'An unknown error occurred',
-                );
-                console.error('Error fetching repository info:', err);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        void fetchRepositoryInfo();
-    }, [githubRepository, setRepositoryInfo, getRepositoryInfo, project]);
 
     const renderPreview = (): React.ReactNode => {
         const previewContent = isVideo ? (
@@ -110,25 +51,9 @@ const PortfolioCard = ({
     };
 
     const renderContent = (): React.ReactNode => {
-        if (isLoading) {
-            return (
-                <div className={styles.loadingContainer}>
-                    <p>Loading project information...</p>
-                </div>
-            );
-        }
-
-        if (error) {
-            return (
-                <div className={styles.errorContainer}>
-                    <p className={styles.errorMessage}>{error}</p>
-                </div>
-            );
-        }
-
-        return (
-            <p>{repositoryInfo?.description ?? 'No description available'}</p>
-        );
+        const description =
+            repositoryInfo?.description ?? 'No description available';
+        return <p>{description}</p>;
     };
 
     return (

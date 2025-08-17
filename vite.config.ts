@@ -55,9 +55,7 @@ export default defineConfig(({ mode }) => {
         css: {
             devSourcemap: true,
             preprocessorOptions: {
-                scss: {
-                    api: 'modern-compiler',
-                },
+                scss: {},
             },
             modules: {
                 localsConvention: 'camelCase',
@@ -73,7 +71,6 @@ export default defineConfig(({ mode }) => {
         server: {
             port: 3000,
             strictPort: true,
-            historyApiFallback: true,
             open: true,
         },
         build: {

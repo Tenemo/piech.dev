@@ -5,7 +5,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import PortfolioItem from './PortfolioItem';
 
 import { renderWithProviders } from 'utils/testUtils';
-vi.mock('../generated/githubData', () => ({
+vi.mock('../../../../temp/githubData', () => ({
     README_CONTENT: {
         'test-repo': '# Test Readme Content',
         'cached-project': '# Cached Readme Content',

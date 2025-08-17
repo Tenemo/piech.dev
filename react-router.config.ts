@@ -77,13 +77,7 @@ async function generateGithubData(): Promise<void> {
         }
     }
 
-    const outDir = path.join(
-        process.cwd(),
-        'src',
-        'features',
-        'Portfolio',
-        'generated',
-    );
+    const outDir = path.join(process.cwd(), 'temp');
     await fs.mkdir(outDir, { recursive: true });
     const outPath = path.join(outDir, 'githubData.ts');
     const file =
@@ -110,15 +104,7 @@ export default {
     async prerender() {
         // Generate GitHub data module for static rendering.
         await generateGithubData();
-        const staticPaths = [
-            '/',
-            '/portfolio',
-            '/contact',
-            '/linkedin',
-            '/github',
-            '/telegram',
-            '/discord',
-        ];
+        const staticPaths = ['/', '/portfolio', '/contact'];
         const itemPaths = PROJECTS.map(
             (p) => `/portfolio/${p.repoName ?? p.project}`,
         );

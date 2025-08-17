@@ -2,7 +2,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import React from 'react';
 import { Link } from 'react-router';
 
-import { REPOSITORY_INFO } from '../generated/githubData';
+import { REPOSITORY_INFO } from '../../../../temp/githubData';
 import { TECHNOLOGIES } from '../technologies';
 
 import styles from './portfolioCard.module.scss';

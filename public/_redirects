@@ -1,2 +1,8 @@
 /robots.txt    /robots.txt    200
+
+/linkedin    https://www.linkedin.com/in/ppiech/    301
+/github      https://github.com/Tenemo                301
+/telegram    https://t.me/tenemo                      301
+/discord     https://discord.com/users/297930621760831488    301
+
 /*    /__spa-fallback.html    200

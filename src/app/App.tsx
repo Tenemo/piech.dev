@@ -4,7 +4,6 @@ import { Route, Routes } from 'react-router';
 
 import styles from './app.module.scss';
 
-import ExternalRedirect from 'components/ExternalRedirect/ExternalRedirect';
 import Footer from 'components/Footer/Footer';
 import Header from 'components/Header/Header';
 import NotFound from 'components/NotFound/NotFound';
@@ -29,28 +28,6 @@ const App = (): React.JSX.Element => {
                 <Header />
                 <Routes>
                     <Route element={<About />} path="/" />
-                    <Route
-                        element={
-                            <ExternalRedirect url="https://www.linkedin.com/in/ppiech/" />
-                        }
-                        path="/linkedin"
-                    />
-                    <Route
-                        element={
-                            <ExternalRedirect url="https://github.com/Tenemo" />
-                        }
-                        path="/github"
-                    />
-                    <Route
-                        element={<ExternalRedirect url="https://t.me/tenemo" />}
-                        path="/telegram"
-                    />
-                    <Route
-                        element={
-                            <ExternalRedirect url="https://discord.com/users/297930621760831488" />
-                        }
-                        path="/discord"
-                    />
                     <Route
                         element={<PortfolioItem />}
                         path="/portfolio/:repo"

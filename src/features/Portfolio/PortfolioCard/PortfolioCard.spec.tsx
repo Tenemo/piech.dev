@@ -6,7 +6,7 @@ import PortfolioCard from './PortfolioCard';
 import styles from './portfolioCard.module.scss';
 
 import { renderWithProviders } from 'utils/testUtils';
-vi.mock('../generated/githubData', () => ({
+vi.mock('../../../../temp/githubData', () => ({
     REPOSITORY_INFO: {
         'test-project': {
             name: 'test-project',

@@ -19,7 +19,6 @@ export default function handleRequest(
     return new Promise<Response>((resolve, reject) => {
         let shellRendered = false;
 
-        // During SPA mode prerender, wait for all content to load; otherwise shell is fine
         const readyOption: keyof RenderToPipeableStreamOptions =
             routerContext.isSpaMode ? 'onAllReady' : 'onShellReady';
 
@@ -54,7 +53,7 @@ export default function handleRequest(
             },
         );
 
-        // Abort the rendering stream after the timeout so it has time to flush down rejected boundaries
+        // abort the rendering stream after the timeout so it has time to flush down rejected boundaries
         setTimeout(abort, streamTimeout + 1000);
     });
 }

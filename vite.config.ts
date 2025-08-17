@@ -2,7 +2,7 @@ import { readdirSync } from 'fs';
 import path from 'path';
 
 import { Schema, ValidateEnv } from '@julr/vite-plugin-validate-env';
-import react from '@vitejs/plugin-react';
+import { reactRouter } from '@react-router/dev/vite';
 import browserslistToEsbuild from 'browserslist-to-esbuild';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, loadEnv } from 'vite';
@@ -33,7 +33,7 @@ export default defineConfig(({ mode }) => {
     return {
         base: './',
         plugins: [
-            react(),
+            reactRouter(),
             tsconfigPaths(),
             ValidateEnv({
                 VITE_SENTRY_DSN: Schema.string.optional(),

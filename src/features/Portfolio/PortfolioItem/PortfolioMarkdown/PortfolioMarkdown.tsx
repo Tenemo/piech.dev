@@ -2,7 +2,8 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import type { Components } from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+// eslint-disable-next-line import/extensions
+import vscDarkPlus from 'react-syntax-highlighter/dist/esm/styles/prism/vsc-dark-plus.js';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 
@@ -54,7 +55,7 @@ const PortfolioMarkdown = ({
                 <SyntaxHighlighter
                     className={styles.codeBlock}
                     language={match[1]}
-                    // @ts-expect-error broken @type/ typings
+                    // @ts-expect-error react-syntax-highlighter style typings are inaccurate
                     style={vscDarkPlus}
                     wrapLines={true}
                     wrapLongLines={true}

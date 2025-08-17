@@ -1,4 +1,3 @@
-import 'normalize.css';
 import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Route, Routes } from 'react-router';

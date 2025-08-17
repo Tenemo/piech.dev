@@ -218,6 +218,7 @@ export default tseslint.config(
             'coverage/*',
             'dist/*',
             '**/*.html',
+            '.react-router/*',
         ],
     },
 );

@@ -13,16 +13,16 @@
     },
     "homepage": "https://github.com/Tenemo/piech.dev#readme",
     "scripts": {
-        "dev": "vite",
+        "dev": "react-router dev",
         "prebuild": "npm run eslint:fix && npm run stylelint && npm run tsc && npm test",
-        "build": "vite build",
-        "build:skip": "vite build",
-        "build:analyze": "cross-env ANALYZE=true vite build",
+        "build": "react-router build",
+        "build:skip": "react-router build",
+        "build:analyze": "cross-env ANALYZE=true react-router build",
         "eslint": "eslint . -c eslint.config.js",
         "eslint:fix": "eslint . --fix -c eslint.config.js",
         "stylelint": "stylelint **/*.scss **/*.css",
         "lint": "npm run eslint && npm run stylelint",
-        "preview": "vite preview",
+        "preview": "vite preview --outDir dist/client",
         "tsc": "tsc",
         "test": "vitest run",
         "test:watch": "vitest",
@@ -35,7 +35,7 @@
         "not op_mini all"
     ],
     "engines": {
-        "node": ">=20.11.0"
+        "node": ">=22.18.0"
     },
     "type": "module",
     "dependencies": {
@@ -61,6 +61,9 @@
         "@eslint/eslintrc": "^3.3.1",
         "@eslint/js": "^9.33.0",
         "@julr/vite-plugin-validate-env": "^2.2.0",
+        "@react-router/dev": "^7.8.1",
+        "@react-router/node": "^7.8.1",
+        "@react-router/serve": "^7.8.1",
         "@testing-library/jest-dom": "^6.7.0",
         "@testing-library/react": "^16.3.0",
         "@testing-library/user-event": "^14.6.1",

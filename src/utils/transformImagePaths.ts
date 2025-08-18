@@ -19,7 +19,7 @@ async function findHtmlFiles(dir: string): Promise<string[]> {
             return res.endsWith('.html') ? res : null;
         }),
     );
-    return (Array.prototype.concat(...files) as (string | null)[]).filter(
+    return (files.flat() as (string | null)[]).filter(
         (file): file is string => file !== null,
     );
 }

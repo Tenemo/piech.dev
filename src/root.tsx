@@ -78,10 +78,11 @@ export const Layout = ({
                 />
                 <meta content="piech.dev" name="apple-mobile-web-app-title" />
                 <link href="/favicon/site.webmanifest" rel="manifest" />
+                {/* LCP image */}
                 <link
                     as="image"
                     fetchPriority="high"
-                    href="/media/projects/reactplate_lighthouse.webp"
+                    href="/media/projects/threshold-elgamal.webp"
                     rel="preload"
                     type="image/webp"
                 />

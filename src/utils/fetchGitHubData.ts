@@ -74,6 +74,15 @@ async function fetchText(url: string): Promise<string> {
     return await res.text();
 }
 
+function stringifyReason(reason: unknown): string {
+    if (reason instanceof Error) return reason.message;
+    try {
+        return JSON.stringify(reason);
+    } catch {
+        return String(reason);
+    }
+}
+
 async function getReadme(owner: string, repo: string): Promise<string> {
     for (const branch of BRANCHES) {
         try {
@@ -118,26 +127,62 @@ export async function fetchGitHubData(options?: {
     const infoObject: Record<string, RepoInfo> = {};
     const readmeObject: Record<string, string> = {};
 
-    for (const repo of repos) {
-        try {
-            const repoData = await fetchJson<{
-                name?: string;
-                description?: string;
-            }>(`https://api.github.com/repos/${OWNER}/${repo}`, token);
+    const MAX_CONCURRENCY = Number(process.env.GH_CONCURRENCY ?? 8);
+
+    const worker = async (repo: string): Promise<void> => {
+        // Fetch repo info and README concurrently; handle failures independently
+        const [infoRes, readmeRes] = await Promise.allSettled([
+            fetchJson<{ name?: string; description?: string }>(
+                `https://api.github.com/repos/${OWNER}/${repo}`,
+                token,
+            ),
+            getReadme(OWNER, repo),
+        ]);
+
+        if (infoRes.status === 'fulfilled') {
+            const repoData = infoRes.value;
             infoObject[repo] = {
                 name: repoData.name ?? repo,
                 description: repoData.description ?? 'No description available',
             };
-            readmeObject[repo] = await getReadme(OWNER, repo);
-            console.log('[githubData] Fetched', repo);
-        } catch (err) {
+        } else {
             infoObject[repo] = {
                 name: repo,
                 description: 'No description available',
             };
-            readmeObject[repo] = '# README unavailable\n';
-            console.warn('[githubData] Fetch failed for', repo, err);
+            // infoRes is rejected here; log a safe stringified reason
+            console.warn(
+                '[githubData] Repo info failed for',
+                repo,
+                stringifyReason(infoRes.reason),
+            );
         }
+
+        if (readmeRes.status === 'fulfilled') {
+            readmeObject[repo] = readmeRes.value;
+        } else {
+            readmeObject[repo] = '# README unavailable\n';
+            console.warn(
+                '[githubData] README fetch failed for',
+                repo,
+                stringifyReason(readmeRes.reason),
+            );
+        }
+    };
+
+    if (repos.length <= MAX_CONCURRENCY) {
+        await Promise.all(repos.map((r) => worker(r)));
+    } else {
+        // Simple concurrency pool
+        let index = 0;
+        const runners = Array.from({ length: MAX_CONCURRENCY }, async () => {
+            while (index < repos.length) {
+                const current = index++;
+                const repo = repos[current];
+                await worker(repo);
+            }
+        });
+        await Promise.all(runners);
     }
 
     await fs.mkdir(OUT_DIR, { recursive: true });

@@ -17,6 +17,7 @@
         "dev": "react-router dev",
         "prebuild": "node --experimental-strip-types src/utils/fetchGitHubData.ts && npm run lint && npm run tsc && npm test",
         "build": "react-router build",
+        "prebuild:skip": "node --experimental-strip-types src/utils/fetchGitHubData.ts",
         "build:skip": "react-router build",
         "build:analyze": "cross-env ANALYZE=true react-router build",
         "eslint": "eslint . -c eslint.config.js",

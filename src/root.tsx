@@ -93,9 +93,6 @@ export const Layout = ({
                 </FrameworkReady>
             </head>
             <body>
-                <noscript>
-                    You need to enable JavaScript to run this app.
-                </noscript>
                 {children}
                 <FrameworkReady>
                     <ScrollRestoration />

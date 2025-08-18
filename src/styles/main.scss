@@ -2,8 +2,8 @@
 
 @import "normalize.css";
 
-@import "global";
+@use "global";
 
-@import "../app/app.module";
-@import "../components/Header/header.module";
-@import "../components/Footer/footer.module";
+@use "../app/app.module";
+@use "../components/Header/header.module";
+@use "../components/Footer/footer.module";

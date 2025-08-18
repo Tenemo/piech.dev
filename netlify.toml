@@ -47,9 +47,3 @@ status = 301
 from = "/discord"
 to = "https://discord.com/users/297930621760831488"
 status = 301
-
-[[redirects]]
-from = "/*"
-to = "/"
-status = 200
-force = true

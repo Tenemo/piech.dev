@@ -48,17 +48,10 @@ export const Layout = ({
                     content="width=device-width, initial-scale=1, shrink-to-fit=no"
                     name="viewport"
                 />
+                <meta content="same-origin" name="view-transition" />
+                <meta content="#383838" name="theme-color" />
                 <base href="/" />
-                <link href="https://github.com" rel="preconnect" />
-                <link href="https://github.com" rel="dns-prefetch" />
-                <link
-                    href="https://raw.githubusercontent.com"
-                    rel="preconnect"
-                />
-                <link
-                    href="https://raw.githubusercontent.com"
-                    rel="dns-prefetch"
-                />
+
                 <link
                     href="/favicon/favicon-96x96.png"
                     rel="icon"
@@ -86,7 +79,6 @@ export const Layout = ({
                     rel="preload"
                     type="image/webp"
                 />
-                <meta content="#383838" name="theme-color" />
 
                 <link as="document" href="/" rel="prefetch" />
                 <link as="document" href="/portfolio" rel="prefetch" />

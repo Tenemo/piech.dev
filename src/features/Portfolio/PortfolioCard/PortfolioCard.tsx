@@ -46,7 +46,12 @@ const PortfolioCard = ({
         );
 
         return (
-            <Link to={`/portfolio/${githubRepository}`}>{previewContent}</Link>
+            <Link
+                aria-label={`View ${project} project details`}
+                to={`/portfolio/${githubRepository}`}
+            >
+                {previewContent}
+            </Link>
         );
     };
 

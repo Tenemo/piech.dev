@@ -86,6 +86,9 @@ export const Layout = ({
                     rel="preload"
                     type="image/webp"
                 />
+                <link as="document" href="/" rel="prefetch" />
+                <link as="document" href="/portfolio" rel="prefetch" />
+                <link as="document" href="/contact" rel="prefetch" />
                 <title>piech.dev</title>
                 <FrameworkReady>
                     <Meta />

@@ -65,6 +65,7 @@
         "Pipeable",
         "pmmmwh",
         "pogodin",
+        "postbuild",
         "prerender",
         "sourcemap",
         "spaceflightnewsapi",

@@ -53,6 +53,7 @@ export default defineConfig(({ mode }) => {
             preprocessorOptions: {
                 scss: {},
             },
+            cssMinify: 'lightningcss',
             modules: {
                 localsConvention: 'camelCase',
                 generateScopedName:

@@ -2,8 +2,10 @@ import { promises as fs } from 'fs';
 import path from 'path';
 
 const outDir = path.resolve(process.cwd(), 'dist/client');
-const imageSrcRegex = /src="(\/media\/(?:logos|projects)\/[^"]+)"/g;
-const preloadHrefRegex = /href="(\/media\/(?:logos|projects)\/[^"]+)"/g;
+const imageSrcRegex =
+    /<img\b[^>]*\bsrc="(\/media\/(?:logos|projects)\/(?![^"]+\.(?:mp4|webm|ogg))[^"]+)"/g;
+const preloadHrefRegex =
+    /<link\b[^>]*\brel=("|')preload\1[^>]*\bas=("|')image\2[^>]*\bhref="(\/media\/(?:logos|projects)\/(?![^"]+\.(?:mp4|webm|ogg))[^"]+)"/g;
 
 async function findHtmlFiles(dir: string): Promise<string[]> {
     // eslint-disable-next-line security/detect-non-literal-fs-filename

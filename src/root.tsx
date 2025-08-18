@@ -1,10 +1,8 @@
-// src/root.tsx
 import { HelmetProvider } from '@dr.pogodin/react-helmet';
 import React from 'react';
 import { Links, Meta, Outlet, Scripts } from 'react-router';
 
 import { PortfolioProvider } from 'features/Portfolio/PortfolioContext';
-
 import 'styles/main.scss';
 
 declare const __BUILD_DATE__: string;
@@ -48,7 +46,6 @@ export const Layout = ({
                     content="width=device-width, initial-scale=1, shrink-to-fit=no"
                     name="viewport"
                 />
-                <meta content="same-origin" name="view-transition" />
                 <meta content="#383838" name="theme-color" />
                 <base href="/" />
 
@@ -81,8 +78,8 @@ export const Layout = ({
                 />
 
                 <link as="document" href="/" rel="prefetch" />
-                <link as="document" href="/portfolio" rel="prefetch" />
-                <link as="document" href="/contact" rel="prefetch" />
+                <link as="document" href="/portfolio/" rel="prefetch" />
+                <link as="document" href="/contact/" rel="prefetch" />
                 <title>piech.dev</title>
                 <FrameworkReady>
                     <Meta />

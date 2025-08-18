@@ -1,9 +1,9 @@
 @use "variables";
 
-@import "normalize.css";
-
 @use "global";
 
 @use "../app/app.module";
 @use "../components/Header/header.module";
 @use "../components/Footer/footer.module";
+
+@import "normalize.css";

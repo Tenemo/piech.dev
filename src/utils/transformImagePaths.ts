@@ -2,11 +2,10 @@ import { promises as fs } from 'fs';
 import path from 'path';
 
 const outDir = path.resolve(process.cwd(), 'dist/client');
-const imageSrcRegex =
-    /<img\b[^>]*\bsrc="(\/media\/(?:logos|projects)\/(?![^"]+\.(?:mp4|webm|ogg))[^"]+)"/g;
-const preloadHrefRegex =
-    /<link\b[^>]*\brel=("|')preload\1[^>]*\bas=("|')image\2[^>]*\bhref="(\/media\/(?:logos|projects)\/(?![^"]+\.(?:mp4|webm|ogg))[^"]+)"/g;
+const imageSrcRegex = /src="(\/media\/(?:logos|projects)\/[^"]+)"/g;
+const preloadHrefRegex = /href="(\/media\/(?:logos|projects)\/[^"]+)"/g;
 
+const EXCLUDED_EXTENSIONS: string[] = ['.mp4'];
 async function findHtmlFiles(dir: string): Promise<string[]> {
     // eslint-disable-next-line security/detect-non-literal-fs-filename
     const dirents = await fs.readdir(dir, { withFileTypes: true });
@@ -19,7 +18,9 @@ async function findHtmlFiles(dir: string): Promise<string[]> {
             return res.endsWith('.html') ? res : null;
         }),
     );
-    return files.flat().filter((file): file is string => file !== null);
+    return (Array.prototype.concat(...files) as (string | null)[]).filter(
+        (file): file is string => file !== null,
+    );
 }
 
 async function transformImagePaths(): Promise<void> {
@@ -41,6 +42,13 @@ async function transformImagePaths(): Promise<void> {
             content = content.replace(
                 imageSrcRegex,
                 (_match, originalUrl: string) => {
+                    const urlNoParams = originalUrl.split(/[?#]/, 1)[0];
+                    const ext = path.extname(urlNoParams).toLowerCase();
+                    if (EXCLUDED_EXTENSIONS.includes(ext)) {
+                        // Skip transformation for excluded extensions
+                        return `src="${originalUrl}"`;
+                    }
+
                     const isLogo = originalUrl.startsWith('/media/logos/');
                     // Width rules:
                     // - Default: 600px
@@ -71,6 +79,13 @@ async function transformImagePaths(): Promise<void> {
                     const hasAsImage = /\bas=("|')image\1/i.test(tag);
                     if (!isLinkTag || !hasPreload || !hasAsImage) return match;
 
+                    const urlNoParams = originalUrl.split(/[?#]/, 1)[0];
+                    const ext = path.extname(urlNoParams).toLowerCase();
+                    if (EXCLUDED_EXTENSIONS.includes(ext)) {
+                        // Skip transformation for excluded extensions
+                        return `href="${originalUrl}"`;
+                    }
+
                     const isLogo = originalUrl.startsWith('/media/logos/');
                     const width = isLogo ? 96 : 600;
 
@@ -90,7 +105,7 @@ async function transformImagePaths(): Promise<void> {
             `Netlify CDN: Transformed ${transformedCount.toString()} image paths in ${htmlFiles.length.toString()} HTML files.\n`,
         );
     } catch (error) {
-        console.error('Netlify CDN: An error occurred:', error);
+        console.error('Netlify CDN: An error occurred:', String(error));
         process.exit(1);
     }
 }

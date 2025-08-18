@@ -6,7 +6,6 @@ import styles from './app.module.scss';
 
 import Footer from 'components/Footer/Footer';
 import Header from 'components/Header/Header';
-import NotFound from 'components/NotFound/NotFound';
 import About from 'features/About/About';
 import Contact from 'features/Contact/Contact';
 import Portfolio from 'features/Portfolio/Portfolio';
@@ -34,7 +33,6 @@ const App = (): React.JSX.Element => {
                     />
                     <Route element={<Portfolio />} path="/portfolio" />
                     <Route element={<Contact />} path="/contact" />
-                    <Route element={<NotFound />} path="*" />
                 </Routes>
                 <Footer />
             </ErrorBoundary>

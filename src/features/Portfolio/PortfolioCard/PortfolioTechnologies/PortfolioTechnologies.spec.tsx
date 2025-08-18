@@ -87,7 +87,10 @@ describe('PortfolioTechnologies', () => {
 
         const reactLogo = container.querySelector('img[alt="react logo"]');
 
-        expect(reactLogo).toHaveAttribute('src', 'media/logos/react_logo.webp');
+        expect(reactLogo).toHaveAttribute(
+            'src',
+            '/media/logos/react_logo.webp',
+        );
         expect(reactLogo).toHaveAttribute('alt', 'react logo');
     });
 });

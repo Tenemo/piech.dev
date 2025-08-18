@@ -41,12 +41,18 @@ const PortfolioCard = ({
             <img
                 alt={`${project} preview`}
                 className={styles.image}
+                fetchPriority="high"
                 src={`/media/projects/${projectPreview}`}
             />
         );
 
         return (
-            <Link to={`/portfolio/${githubRepository}`}>{previewContent}</Link>
+            <Link
+                aria-label={`View ${project} project details`}
+                to={`/portfolio/${githubRepository}`}
+            >
+                {previewContent}
+            </Link>
         );
     };
 

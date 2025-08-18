@@ -1,11 +1,11 @@
 // src/root.tsx
 import { HelmetProvider } from '@dr.pogodin/react-helmet';
 import React from 'react';
-import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
+import { Links, Meta, Outlet, Scripts } from 'react-router';
 
 import { PortfolioProvider } from 'features/Portfolio/PortfolioContext';
-import 'normalize.css';
-import 'styles/global.scss';
+
+import 'styles/main.scss';
 
 declare const __BUILD_DATE__: string;
 
@@ -48,17 +48,10 @@ export const Layout = ({
                     content="width=device-width, initial-scale=1, shrink-to-fit=no"
                     name="viewport"
                 />
+                <meta content="same-origin" name="view-transition" />
+                <meta content="#383838" name="theme-color" />
                 <base href="/" />
-                <link href="https://github.com" rel="preconnect" />
-                <link href="https://github.com" rel="dns-prefetch" />
-                <link
-                    href="https://raw.githubusercontent.com"
-                    rel="preconnect"
-                />
-                <link
-                    href="https://raw.githubusercontent.com"
-                    rel="dns-prefetch"
-                />
+
                 <link
                     href="/favicon/favicon-96x96.png"
                     rel="icon"
@@ -86,6 +79,10 @@ export const Layout = ({
                     rel="preload"
                     type="image/webp"
                 />
+
+                <link as="document" href="/" rel="prefetch" />
+                <link as="document" href="/portfolio" rel="prefetch" />
+                <link as="document" href="/contact" rel="prefetch" />
                 <title>piech.dev</title>
                 <FrameworkReady>
                     <Meta />
@@ -94,10 +91,7 @@ export const Layout = ({
             </head>
             <body>
                 {children}
-                <FrameworkReady>
-                    <ScrollRestoration />
-                    <Scripts />
-                </FrameworkReady>
+                {import.meta.env.DEV ? <Scripts /> : null}
             </body>
         </html>
     );

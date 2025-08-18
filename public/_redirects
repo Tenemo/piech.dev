@@ -1,8 +1,13 @@
 /robots.txt    /robots.txt    200
 
+# Netlify image CDN
+# tiny logos
+/media/logos/:file.webp    /.netlify/images?url=/media/logos/:file.webp&width=128    200
+/media/projects/:file.webp  /.netlify/images?url=/media/projects/:file.webp   200
+
 /linkedin    https://www.linkedin.com/in/ppiech/    301
 /github      https://github.com/Tenemo                301
 /telegram    https://t.me/tenemo                      301
 /discord     https://discord.com/users/297930621760831488    301
 
-/*    /__spa-fallback.html    200
+/*    /    301!

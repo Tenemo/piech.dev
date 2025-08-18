@@ -8,7 +8,7 @@ import { fetchGitHubData } from './src/utils/fetchGitHubData';
 export default {
     appDirectory: 'src',
     buildDirectory: 'dist',
-    ssr: false,
+    ssr: true,
     async prerender() {
         await fetchGitHubData({ refetch: false });
         const staticPaths = ['/', '/portfolio', '/contact'];

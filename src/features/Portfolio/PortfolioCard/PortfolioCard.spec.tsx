@@ -91,6 +91,12 @@ describe('PortfolioCard', () => {
         expect(
             screen.queryByText(/your browser does not support the video tag/i),
         ).not.toBeInTheDocument();
+
+        // Accessible name on the wrapping link
+        const previewLink = screen.getByRole('link', {
+            name: /view img-test project details/i,
+        });
+        expect(previewLink).toBeInTheDocument();
     });
 
     it('should render video for video preview files', () => {
@@ -112,6 +118,12 @@ describe('PortfolioCard', () => {
             'src',
             '/media/projects/test.mp4',
         );
+
+        // Accessible name on the wrapping link
+        const previewLink = screen.getByRole('link', {
+            name: /view video-test project details/i,
+        });
+        expect(previewLink).toBeInTheDocument();
     });
 
     it('should use imageRight class when imageOnRight is true', () => {

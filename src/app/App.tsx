@@ -2,7 +2,7 @@ import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Route, Routes } from 'react-router';
 
-import styles from './app.module.scss';
+// All app styles are in styles/critical.css and inlined in <head>
 
 import Footer from 'components/Footer/Footer';
 import Header from 'components/Header/Header';
@@ -13,7 +13,7 @@ import PortfolioItem from 'features/Portfolio/PortfolioItem/PortfolioItem';
 
 const App = (): React.JSX.Element => {
     return (
-        <div className={styles.app}>
+        <div data-critical-css="app">
             <ErrorBoundary
                 fallback={
                     <div>

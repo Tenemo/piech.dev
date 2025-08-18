@@ -1,14 +1,14 @@
 import GitHubIcon from '@mui/icons-material/GitHub';
 import React from 'react';
 
-import styles from './footer.module.scss';
+// All footer styles are in styles/critical.css and inlined in <head>
 
 const Footer = (): React.JSX.Element => {
     return (
-        <footer className={styles.footer}>
+        <footer data-critical-css="footer">
             <a
                 aria-label="GitHub repository"
-                className={styles.gitHubLink}
+                data-critical-css="github-link"
                 href="https://github.com/Tenemo/piech.dev"
                 rel="noopener noreferrer"
                 target="_blank"

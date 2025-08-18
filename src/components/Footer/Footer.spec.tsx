@@ -3,7 +3,6 @@ import React from 'react';
 import { describe, it, expect } from 'vitest';
 
 import Footer from './Footer';
-import styles from './footer.module.scss';
 
 import { renderWithProviders } from 'utils/testUtils';
 
@@ -13,7 +12,6 @@ describe('Footer', () => {
         const footerElement = container.querySelector('footer');
 
         expect(footerElement).toBeInTheDocument();
-        expect(footerElement).toHaveClass(styles.footer);
     });
 
     it('should render GitHub link with correct attributes', () => {
@@ -29,7 +27,6 @@ describe('Footer', () => {
         );
         expect(githubLink).toHaveAttribute('target', '_blank');
         expect(githubLink).toHaveAttribute('rel', 'noopener noreferrer');
-        expect(githubLink).toHaveClass(styles.gitHubLink);
     });
 
     it('should render GitHub icon', () => {

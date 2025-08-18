@@ -1,44 +1,23 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router';
 
-import styles from './header.module.scss';
+// All header styles are in styles/critical.css and inlined in <head>
 
 const Header = (): React.JSX.Element => {
     return (
-        <header className={styles.header}>
-            <Link className={styles.logo} to="/">
+        <header data-critical-css="header">
+            <Link data-critical-css="logo" to="/">
                 <h1>piech.dev</h1>
             </Link>
 
-            <nav className={styles.navigation}>
-                <NavLink
-                    className={({ isActive }) =>
-                        isActive
-                            ? `${styles.navLink} ${styles.activeLink}`
-                            : styles.navLink
-                    }
-                    to="/"
-                >
+            <nav data-critical-css="nav">
+                <NavLink data-critical-css="nav-link" to="/">
                     About me
                 </NavLink>
-                <NavLink
-                    className={({ isActive }) =>
-                        isActive
-                            ? `${styles.navLink} ${styles.activeLink}`
-                            : styles.navLink
-                    }
-                    to="/portfolio"
-                >
+                <NavLink data-critical-css="nav-link" to="/portfolio">
                     Portfolio
                 </NavLink>
-                <NavLink
-                    className={({ isActive }) =>
-                        isActive
-                            ? `${styles.navLink} ${styles.activeLink}`
-                            : styles.navLink
-                    }
-                    to="/contact"
-                >
+                <NavLink data-critical-css="nav-link" to="/contact">
                     Contact
                 </NavLink>
             </nav>

@@ -4,8 +4,9 @@ import React from 'react';
 import { Links, Meta, Outlet, Scripts } from 'react-router';
 
 import { PortfolioProvider } from 'features/Portfolio/PortfolioContext';
-
 import 'styles/main.scss';
+// Inline critical CSS (variables, global, and header essentials)
+import criticalCss from 'styles/critical.css?raw';
 
 declare const __BUILD_DATE__: string;
 
@@ -51,6 +52,9 @@ export const Layout = ({
                 <meta content="same-origin" name="view-transition" />
                 <meta content="#383838" name="theme-color" />
                 <base href="/" />
+
+                {/* Critical inline CSS to prevent FOUC: variables, global, and header essentials */}
+                <style id="critical-inline-css">{criticalCss}</style>
 
                 <link
                     href="/favicon/favicon-96x96.png"

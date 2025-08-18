@@ -48,7 +48,6 @@ export const Layout = ({
                     content="width=device-width, initial-scale=1, shrink-to-fit=no"
                     name="viewport"
                 />
-                <meta content="same-origin" name="view-transition" />
                 <meta content="#383838" name="theme-color" />
                 <base href="/" />
 

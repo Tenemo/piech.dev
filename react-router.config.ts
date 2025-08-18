@@ -1,10 +1,16 @@
 import 'dotenv/config';
 import fs from 'node:fs/promises';
+import { createRequire } from 'node:module';
 import path from 'node:path';
 
 import type { Config } from '@react-router/dev/config';
 
 import { PROJECTS } from './src/features/Portfolio/projects';
+// Using createRequire to import a CJS helper from ESM config file
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+const { buildGithubDataFile } = createRequire(import.meta.url)(
+    './src/utils/githubDataCommon.cjs',
+);
 
 const OWNER = 'tenemo';
 const BRANCHES = ['master', 'main'];
@@ -81,20 +87,11 @@ async function generateGithubData(): Promise<void> {
     const outDir = path.join(process.cwd(), 'temp');
     await fs.mkdir(outDir, { recursive: true });
     const outPath = path.join(outDir, 'githubData.ts');
-    const file =
-        `// AUTO-GENERATED at build time. Do not edit by hand.\n` +
-        `// Source: react-router.config.ts -> generateGithubData()\n` +
-        `export type RepositoryInfo = { name: string; description: string };\n` +
-        `export const REPOSITORY_INFO: Partial<Record<string, RepositoryInfo>> = ${JSON.stringify(
-            infoObject,
-            null,
-            2,
-        )} as Partial<Record<string, RepositoryInfo>>;\n` +
-        `export const README_CONTENT: Partial<Record<string, string>> = ${JSON.stringify(
-            readmeObject,
-            null,
-            2,
-        )} as Partial<Record<string, string>>;\n`;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    const file: string = buildGithubDataFile(
+        infoObject,
+        readmeObject,
+    ) as string;
     await fs.writeFile(outPath, file, 'utf8');
 }
 

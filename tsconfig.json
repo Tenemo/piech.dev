@@ -23,6 +23,7 @@
     "include": [
         "src/**/*",
         "temp/**/*",
+    "scripts/**/*",
         "eslint.config.js",
         "vite.config.ts",
         "vitest.config.ts",

@@ -217,6 +217,7 @@ export default tseslint.config(
             '.tmp/*',
             'coverage/*',
             'dist/*',
+            'temp/*',
             '**/*.html',
             '.react-router/*',
         ],

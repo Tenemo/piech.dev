@@ -19,7 +19,7 @@ async function findHtmlFiles(dir: string): Promise<string[]> {
             return res.endsWith('.html') ? res : null;
         }),
     );
-    return (Array.prototype.concat(...files) as (string | null)[]).filter(
+    return (files.flat() as (string | null)[]).filter(
         (file): file is string => file !== null,
     );
 }
@@ -50,7 +50,7 @@ async function transformImagePaths(): Promise<void> {
                     const width = isLogo ? 96 : 600;
 
                     replacementsInFile += 1;
-                    const netlifyUrl = `/.netlify/images?url=${originalUrl}&w=${width.toString()}`;
+                    const netlifyUrl = `/.netlify/images?url=${encodeURIComponent(originalUrl)}&w=${width.toString()}`;
                     return `src="${netlifyUrl}"`;
                 },
             );
@@ -77,7 +77,7 @@ async function transformImagePaths(): Promise<void> {
                     const width = isLogo ? 96 : 600;
 
                     replacementsInFile += 1;
-                    const netlifyUrl = `/.netlify/images?url=${originalUrl}&w=${width.toString()}`;
+                    const netlifyUrl = `/.netlify/images?url=${encodeURIComponent(originalUrl)}&w=${width.toString()}`;
                     return `href="${netlifyUrl}"`;
                 },
             );
@@ -92,7 +92,7 @@ async function transformImagePaths(): Promise<void> {
             `Netlify CDN: Transformed ${transformedCount.toString()} image paths in ${htmlFiles.length.toString()} HTML files.\n`,
         );
     } catch (error) {
-        console.error('Netlify CDN: An error occurred:', String(error));
+        console.error('Netlify CDN: An error occurred:', error);
         process.exit(1);
     }
 }

@@ -21,10 +21,9 @@ status = 200
 
 [[redirects]]
 from = "/media/logos/:file"
-to = "/.netlify/images"
+to = "/.netlify/images?url=/media/logos/:file&w=128"
 status = 200
 force = true
-query = { url = "/media/logos/:file", w = "128" }
 
 [[redirects]]
 from = "/linkedin"

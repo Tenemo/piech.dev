@@ -1,7 +1,7 @@
 /robots.txt    /robots.txt    200
 
 # tiny logos
-/media/logos/:file.webp    /.netlify/images?url=/media/logos/:file.webp&width=64    200
+/media/logos/:file.webp    /.netlify/images?url=/media/logos/:file.webp&width=128    200
 
 # Other images in media/projects through the Image CDN
 /media/projects/:file.webp  /.netlify/images?url=/media/projects/:file.webp   200

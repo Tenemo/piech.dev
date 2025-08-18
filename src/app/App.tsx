@@ -2,8 +2,6 @@ import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Route, Routes } from 'react-router';
 
-import styles from './app.module.scss';
-
 import Footer from 'components/Footer/Footer';
 import Header from 'components/Header/Header';
 import About from 'features/About/About';
@@ -13,7 +11,7 @@ import PortfolioItem from 'features/Portfolio/PortfolioItem/PortfolioItem';
 
 const App = (): React.JSX.Element => {
     return (
-        <div className={styles.app}>
+        <div className="app">
             <ErrorBoundary
                 fallback={
                     <div>

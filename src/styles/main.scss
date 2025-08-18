@@ -2,7 +2,7 @@
 
 @use "global";
 
-@use "../app/app.module";
+// App styles moved to styles/critical.css and inlined; module import removed
 @use "../components/Header/header.module";
 @use "../components/Footer/footer.module";
 

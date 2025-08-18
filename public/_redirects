@@ -1,11 +1,10 @@
-/robots.txt    /robots.txt    200
+/robots.txt              /robots.txt                                                  200
 
-/media/logos/:file       /.netlify/images?url=/media/logos/:file&w=128       200!
-/media/projects/:file    /.netlify/images?url=/media/projects/:file          200!
+/media/logos/:file       /.netlify/images?url=/media/logos/:file&w=128                200
 
-/linkedin    https://www.linkedin.com/in/ppiech/                301
-/github      https://github.com/Tenemo                          301
-/telegram    https://t.me/tenemo                                301
-/discord     https://discord.com/users/297930621760831488       301
+/linkedin                 https://www.linkedin.com/in/ppiech/                         301
+/github                   https://github.com/Tenemo                                   301
+/telegram                 https://t.me/tenemo                                         301
+/discord                  https://discord.com/users/297930621760831488                301
 
-/*    /    301!
+/*                       /                                                            301!

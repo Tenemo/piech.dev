@@ -18,6 +18,10 @@
     --error-info-color: #ff6b6b;
 }
 
+@view-transition {
+    navigation: auto;
+}
+
 ::view-transition-old(root),
 ::view-transition-new(root) {
     animation: none;

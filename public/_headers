@@ -1,0 +1,8 @@
+/index.html
+  cache-control: public, max-age=300, stale-while-revalidate=3600
+
+/*/index.html
+  cache-control: public, max-age=300, stale-while-revalidate=3600
+
+/*/*/index.html
+  cache-control: public, max-age=300, stale-while-revalidate=3600

@@ -37,20 +37,20 @@ body.using-mouse [class$="-is-focused"] {
     outline: none;
     box-shadow: initial;
 }
-h1,
+body h1,
 h2,
 h3 {
     margin: 0;
     padding: 0;
 }
-h1 {
+body h1 {
     font-size: 1.6rem;
 }
-h2 {
+body h2 {
     font-size: 1.4rem;
     margin-bottom: 0.5rem;
 }
-h3 {
+body h3 {
     font-size: 1.2rem;
 }
 a {
@@ -73,6 +73,7 @@ a:hover {
     margin-top: 1rem;
 }
 
+/* Header */
 [data-critical-css="header"] {
     display: flex;
     align-items: center;
@@ -130,7 +131,7 @@ a:hover {
     width: 100%;
 }
 
-/* App container critical styles (from app/app.module.scss) */
+/* App */
 [data-critical-css="app"] {
     font-family: "Open Sans", sans-serif;
     height: 100%;
@@ -143,7 +144,7 @@ a:hover {
     padding: 1rem;
 }
 
-/* Footer critical styles (from components/Footer/footer.module.scss) */
+/* Footer */
 [data-critical-css="footer"] {
     margin-top: auto;
     padding: 1rem;

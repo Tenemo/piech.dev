@@ -27,7 +27,7 @@ const Header = (): React.JSX.Element => {
                             ? `${styles.navLink} ${styles.activeLink}`
                             : styles.navLink
                     }
-                    to="/portfolio"
+                    to="/portfolio/"
                 >
                     Portfolio
                 </NavLink>
@@ -37,7 +37,7 @@ const Header = (): React.JSX.Element => {
                             ? `${styles.navLink} ${styles.activeLink}`
                             : styles.navLink
                     }
-                    to="/contact"
+                    to="/contact/"
                 >
                     Contact
                 </NavLink>

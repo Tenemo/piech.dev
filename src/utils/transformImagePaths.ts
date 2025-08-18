@@ -48,7 +48,7 @@ async function transformImagePaths(): Promise<void> {
                     const width = isLogo ? 96 : 600;
 
                     replacementsInFile += 1;
-                    const netlifyUrl = `/.netlify/images?url=${encodeURIComponent(originalUrl)}&w=${width.toString()}`;
+                    const netlifyUrl = `/.netlify/images?url=${originalUrl}&w=${width.toString()}`;
                     return `src="${netlifyUrl}"`;
                 },
             );
@@ -75,7 +75,7 @@ async function transformImagePaths(): Promise<void> {
                     const width = isLogo ? 96 : 600;
 
                     replacementsInFile += 1;
-                    const netlifyUrl = `/.netlify/images?url=${encodeURIComponent(originalUrl)}&w=${width.toString()}`;
+                    const netlifyUrl = `/.netlify/images?url=${originalUrl}&w=${width.toString()}`;
                     return `href="${netlifyUrl}"`;
                 },
             );

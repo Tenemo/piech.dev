@@ -92,7 +92,7 @@ async function transformImagePaths(): Promise<void> {
             `Netlify CDN: Transformed ${transformedCount.toString()} image paths in ${htmlFiles.length.toString()} HTML files.\n`,
         );
     } catch (error) {
-        console.error('Netlify CDN: An error occurred:', String(error));
+        console.error('Netlify CDN: An error occurred:', error);
         process.exit(1);
     }
 }

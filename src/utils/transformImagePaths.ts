@@ -19,9 +19,7 @@ async function findHtmlFiles(dir: string): Promise<string[]> {
             return res.endsWith('.html') ? res : null;
         }),
     );
-    return (files.flat() as (string | null)[]).filter(
-        (file): file is string => file !== null,
-    );
+    return files.flat().filter((file): file is string => file !== null);
 }
 
 async function transformImagePaths(): Promise<void> {

@@ -41,6 +41,7 @@ const PortfolioCard = ({
             <img
                 alt={`${project} preview`}
                 className={styles.image}
+                fetchPriority="high"
                 src={`/media/projects/${projectPreview}`}
             />
         );

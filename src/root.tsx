@@ -1,7 +1,7 @@
 // src/root.tsx
 import { HelmetProvider } from '@dr.pogodin/react-helmet';
 import React from 'react';
-import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
+import { Links, Meta, Outlet } from 'react-router';
 
 import { PortfolioProvider } from 'features/Portfolio/PortfolioContext';
 import 'normalize.css';
@@ -92,13 +92,7 @@ export const Layout = ({
                     <Links />
                 </FrameworkReady>
             </head>
-            <body>
-                {children}
-                <FrameworkReady>
-                    <ScrollRestoration />
-                    <Scripts />
-                </FrameworkReady>
-            </body>
+            <body>{children}</body>
         </html>
     );
 };

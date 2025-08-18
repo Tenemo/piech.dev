@@ -1,47 +1,38 @@
 import { screen } from '@testing-library/react';
 import React from 'react';
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { MemoryRouter } from 'react-router';
+import { describe, it, expect } from 'vitest';
 
 import NotFound from './NotFound';
 
 import { renderWithProviders } from 'utils/testUtils';
 
 describe('NotFound', () => {
-    const originalPathname = window.location.pathname;
-
-    beforeEach(() => {
-        Object.defineProperty(window, 'location', {
-            value: {
-                pathname: '/invalid-path',
-            },
-            writable: true,
-        });
-    });
-
-    afterEach(() => {
-        Object.defineProperty(window, 'location', {
-            value: {
-                pathname: originalPathname,
-            },
-            writable: true,
-        });
-    });
+    const route = '/invalid-path';
 
     it('should render the not found message with the current path', () => {
-        const { container } = renderWithProviders(<NotFound />);
-
-        expect(container.textContent).toContain(
-            'Path /invalid-path not found.',
+        const { container } = renderWithProviders(
+            <MemoryRouter initialEntries={[route]}>
+                <NotFound />
+            </MemoryRouter>,
+            { withRouter: false },
         );
 
-        const strongElement = screen.getByText('/invalid-path');
+        expect(container.textContent).toContain(`Path ${route} not found.`);
+
+        const strongElement = screen.getByText(route);
         expect(strongElement).toBeInTheDocument();
     });
 
     it('should display the pathname in a strong element', () => {
-        renderWithProviders(<NotFound />);
+        renderWithProviders(
+            <MemoryRouter initialEntries={[route]}>
+                <NotFound />
+            </MemoryRouter>,
+            { withRouter: false },
+        );
 
-        const strongElement = screen.getByText('/invalid-path');
+        const strongElement = screen.getByText(route);
         expect(strongElement.tagName).toBe('STRONG');
     });
 });

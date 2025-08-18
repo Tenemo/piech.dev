@@ -1,7 +1,6 @@
 import { readdirSync } from 'fs';
 import path from 'path';
 
-import { Schema, ValidateEnv } from '@julr/vite-plugin-validate-env';
 import { reactRouter } from '@react-router/dev/vite';
 import browserslistToEsbuild from 'browserslist-to-esbuild';
 import { visualizer } from 'rollup-plugin-visualizer';
@@ -35,9 +34,6 @@ export default defineConfig(({ mode }) => {
         plugins: [
             reactRouter(),
             tsconfigPaths(),
-            ValidateEnv({
-                VITE_SENTRY_DSN: Schema.string.optional(),
-            }),
             patchCssModules({
                 generateSourceTypes: true,
             }),
@@ -57,6 +53,7 @@ export default defineConfig(({ mode }) => {
             preprocessorOptions: {
                 scss: {},
             },
+            cssMinify: 'lightningcss',
             modules: {
                 localsConvention: 'camelCase',
                 generateScopedName:

@@ -13,6 +13,16 @@ for = "/*/*/index.html"
 [headers.values]
 Cache-Control = "public, max-age=300, stale-while-revalidate=3600"
 
+[[headers]]
+for = "/media/projects/*.mp4"
+[headers.values]
+Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+for = "/media/projects/*.webm"
+[headers.values]
+Cache-Control = "public, max-age=31536000, immutable"
+
 [[redirects]]
 from = "/robots.txt"
 to = "/robots.txt"

@@ -48,9 +48,6 @@
         "@dr.pogodin/react-helmet": "^3.0.2",
         "@emotion/styled": "^11.14.1",
         "@mui/icons-material": "^7.3.1",
-        "@sentry/browser": "^10.5.0",
-        "@sentry/react": "^10.5.0",
-        "@sentry/react-router": "^10.5.0",
         "date-fns": "^4.1.0",
         "history": "^5.3.0",
         "normalize.css": "^8.0.1",
@@ -118,7 +115,6 @@
         "typescript-eslint": "^8.39.1",
         "vite": "^7.1.2",
         "vite-css-modules": "^1.10.0",
-        "vite-plugin-css-injected-by-js": "^3.5.2",
         "vite-tsconfig-paths": "^5.1.4",
         "vitest": "^3.2.4"
     },

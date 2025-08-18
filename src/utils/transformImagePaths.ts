@@ -3,6 +3,7 @@ import path from 'path';
 
 const outDir = path.resolve(process.cwd(), 'dist/client');
 const imageSrcRegex = /src="(\/media\/(?:logos|projects)\/[^"]+)"/g;
+const preloadHrefRegex = /href="(\/media\/(?:logos|projects)\/[^"]+)"/g;
 
 async function findHtmlFiles(dir: string): Promise<string[]> {
     // eslint-disable-next-line security/detect-non-literal-fs-filename
@@ -35,19 +36,54 @@ async function transformImagePaths(): Promise<void> {
         for (const file of htmlFiles) {
             // eslint-disable-next-line security/detect-non-literal-fs-filename
             let content = await fs.readFile(file, 'utf-8');
-            const matches = content.match(imageSrcRegex);
+            let replacementsInFile = 0;
 
-            if (matches) {
-                content = content.replace(
-                    imageSrcRegex,
-                    (_match, originalUrl) => {
-                        const netlifyUrl = `/.netlify/images?url=${originalUrl as string}&w=128`;
-                        return `src="${netlifyUrl}"`;
-                    },
-                );
+            content = content.replace(
+                imageSrcRegex,
+                (_match, originalUrl: string) => {
+                    const isLogo = originalUrl.startsWith('/media/logos/');
+                    // Width rules:
+                    // - Default: 600px
+                    // - Logos: 96px
+                    const width = isLogo ? 96 : 600;
+
+                    replacementsInFile += 1;
+                    const netlifyUrl = `/.netlify/images?url=${originalUrl}&w=${width.toString()}`;
+                    return `src="${netlifyUrl}"`;
+                },
+            );
+
+            content = content.replace(
+                preloadHrefRegex,
+                (
+                    match: string,
+                    originalUrl: string,
+                    offset: number,
+                    full: string,
+                ) => {
+                    const tagStart = full.lastIndexOf('<', offset);
+                    const tagEnd = full.indexOf('>', offset);
+                    if (tagStart === -1 || tagEnd === -1) return match;
+                    const tag = full.slice(tagStart, tagEnd + 1);
+
+                    const isLinkTag = /^<\s*link\b/i.test(tag);
+                    const hasPreload = /\brel=("|')preload\1/i.test(tag);
+                    const hasAsImage = /\bas=("|')image\1/i.test(tag);
+                    if (!isLinkTag || !hasPreload || !hasAsImage) return match;
+
+                    const isLogo = originalUrl.startsWith('/media/logos/');
+                    const width = isLogo ? 96 : 600;
+
+                    replacementsInFile += 1;
+                    const netlifyUrl = `/.netlify/images?url=${originalUrl}&w=${width.toString()}`;
+                    return `href="${netlifyUrl}"`;
+                },
+            );
+
+            if (replacementsInFile > 0) {
                 // eslint-disable-next-line security/detect-non-literal-fs-filename
                 await fs.writeFile(file, content, 'utf-8');
-                transformedCount += matches.length;
+                transformedCount += replacementsInFile;
             }
         }
         console.log(

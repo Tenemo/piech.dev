@@ -6,24 +6,27 @@ import PortfolioCard from './PortfolioCard';
 import styles from './portfolioCard.module.scss';
 
 import { renderWithProviders } from 'utils/testUtils';
+// Provide a default export to align with JSON default import usage in code
 vi.mock('../../../../temp/githubData', () => ({
-    REPOSITORY_INFO: {
-        'test-project': {
-            name: 'test-project',
-            description: 'Test description',
+    default: {
+        REPOSITORY_INFO: {
+            'test-project': {
+                name: 'test-project',
+                description: 'Test description',
+            },
+            'img-test': { name: 'img-test', description: 'Image test' },
+            'video-test': { name: 'video-test', description: 'Video test' },
+            'right-test': {
+                name: 'right-test',
+                description: 'Right image test',
+            },
+            'custom-repo': {
+                name: 'custom-repo',
+                description: 'Custom repo test',
+            },
+            'cached-repo': { name: 'cached-repo', description: 'Cached repo' },
+            'link-test': { name: 'link-test', description: 'Link test' },
         },
-        'img-test': { name: 'img-test', description: 'Image test' },
-        'video-test': { name: 'video-test', description: 'Video test' },
-        'right-test': {
-            name: 'right-test',
-            description: 'Right image test',
-        },
-        'custom-repo': {
-            name: 'custom-repo',
-            description: 'Custom repo test',
-        },
-        'cached-repo': { name: 'cached-repo', description: 'Cached repo' },
-        'link-test': { name: 'link-test', description: 'Link test' },
     },
 }));
 

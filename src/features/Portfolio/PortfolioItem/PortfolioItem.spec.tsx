@@ -5,11 +5,14 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import PortfolioItem from './PortfolioItem';
 
 import { renderWithProviders } from 'utils/testUtils';
+// The app imports JSON via default import, so the mock must provide a default export
 vi.mock('../../../../temp/githubData', () => ({
-    README_CONTENT: {
-        'test-repo': '# Test Readme Content',
-        'cached-project': '# Cached Readme Content',
-        'new-content-project': '# New Readme Content',
+    default: {
+        README_CONTENT: {
+            'test-repo': '# Test Readme Content',
+            'cached-project': '# Cached Readme Content',
+            'new-content-project': '# New Readme Content',
+        },
     },
 }));
 

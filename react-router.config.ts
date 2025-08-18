@@ -8,7 +8,7 @@ import type { Config } from '@react-router/dev/config';
 import { PROJECTS } from './src/features/Portfolio/projects';
 // Using createRequire to import a CJS helper from ESM config file
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-const { buildGithubDataFile } = createRequire(import.meta.url)(
+const { buildGithubDataJson } = createRequire(import.meta.url)(
     './src/utils/githubDataCommon.cjs',
 );
 
@@ -86,13 +86,10 @@ async function generateGithubData(): Promise<void> {
 
     const outDir = path.join(process.cwd(), 'temp');
     await fs.mkdir(outDir, { recursive: true });
-    const outPath = path.join(outDir, 'githubData.ts');
+    const outPath = path.join(outDir, 'githubData.json');
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    const file: string = buildGithubDataFile(
-        infoObject,
-        readmeObject,
-    ) as string;
-    await fs.writeFile(outPath, file, 'utf8');
+    const payload = buildGithubDataJson(infoObject, readmeObject) as unknown;
+    await fs.writeFile(outPath, JSON.stringify(payload, null, 2), 'utf8');
 }
 
 export default {

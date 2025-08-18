@@ -4,7 +4,7 @@ import GitHub from '@mui/icons-material/GitHub';
 import React from 'react';
 import { Link, useParams } from 'react-router';
 
-import { README_CONTENT } from '../../../../temp/githubData';
+import { README_CONTENT } from '../../../utils/githubData';
 
 import styles from './portfolioItem.module.scss';
 import PortfolioMarkdown from './PortfolioMarkdown/PortfolioMarkdown';

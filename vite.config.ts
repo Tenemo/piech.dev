@@ -7,6 +7,7 @@ import browserslistToEsbuild from 'browserslist-to-esbuild';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, loadEnv } from 'vite';
 import { patchCssModules } from 'vite-css-modules';
+import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 // Automatically pick up all directories in the src/ directory and add them as aliases later
@@ -35,6 +36,7 @@ export default defineConfig(({ mode }) => {
         plugins: [
             reactRouter(),
             tsconfigPaths(),
+            cssInjectedByJsPlugin(),
             ValidateEnv({
                 VITE_SENTRY_DSN: Schema.string.optional(),
             }),

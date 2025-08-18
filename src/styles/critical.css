@@ -38,8 +38,8 @@ body.using-mouse [class$="-is-focused"] {
     box-shadow: initial;
 }
 body h1,
-h2,
-h3 {
+body h2,
+body h3 {
     margin: 0;
     padding: 0;
 }
@@ -164,5 +164,5 @@ a:hover {
     fill: var(--link-hover-color) !important;
 }
 [data-critical-css="footer"] [data-critical-css="github-link"]:visited path {
-    fill: var(--color-text);
+    fill: var(--text-color);
 }

@@ -1,0 +1,9 @@
+@use "variables";
+
+@import "normalize.css";
+
+@import "global";
+
+@import "../app/app.module";
+@import "../components/Header/header.module";
+@import "../components/Footer/footer.module";

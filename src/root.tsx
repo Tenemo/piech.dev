@@ -4,8 +4,8 @@ import React from 'react';
 import { Links, Meta, Outlet, Scripts } from 'react-router';
 
 import { PortfolioProvider } from 'features/Portfolio/PortfolioContext';
-import 'normalize.css';
-import 'styles/global.scss';
+
+import 'styles/main.scss';
 
 declare const __BUILD_DATE__: string;
 
@@ -86,6 +86,8 @@ export const Layout = ({
                     rel="preload"
                     type="image/webp"
                 />
+                <meta content="#383838" name="theme-color" />
+
                 <link as="document" href="/" rel="prefetch" />
                 <link as="document" href="/portfolio" rel="prefetch" />
                 <link as="document" href="/contact" rel="prefetch" />

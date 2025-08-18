@@ -4,7 +4,6 @@ import path from 'path';
 
 const outDir = path.resolve(process.cwd(), 'dist/client');
 
-// --- Stats ---
 let warningsCount = 0;
 let totalHtmlScanned = 0;
 let totalHtmlChanged = 0;

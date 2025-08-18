@@ -17,7 +17,7 @@
         "dev": "react-router dev",
         "prebuild": "node --experimental-strip-types src/utils/fetchGitHubData.ts && npm run lint && npm run tsc && npm test",
         "build": "react-router build",
-        "postbuild": "node --experimental-strip-types src/utils/transformImagePaths.ts && rimraf dist/server && rimraf dist/assets && rimraf --glob \"dist/client/**/*.js\"",
+        "postbuild": "node --experimental-strip-types src/utils/transformImagePaths.ts && node --experimental-strip-types src/utils/inlineCss.ts && rimraf dist/server && rimraf dist/client/assets && rimraf --glob \"dist/client/**/*.js\"",
         "prebuild:skip": "node --experimental-strip-types src/utils/fetchGitHubData.ts",
         "build:skip": "react-router build",
         "postbuild:skip": "npm run postbuild",

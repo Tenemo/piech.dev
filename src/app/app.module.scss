@@ -1,3 +1,5 @@
+@use "styles/variables";
+
 .app {
     font-family: "Open Sans", sans-serif;
     height: 100%;
@@ -5,8 +7,7 @@
     flex-direction: column;
     color: var(--text-color);
     background-color: var(--background-color);
-}
-
-.app main {
-    padding: 1rem;
+    main {
+        padding: 1rem;
+    }
 }

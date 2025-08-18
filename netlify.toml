@@ -1,29 +1,22 @@
 [[headers]]
 for = "/index.html"
 [headers.values]
-cache-control = "public, max-age=300, stale-while-revalidate=3600"
+Cache-Control = "public, max-age=300, stale-while-revalidate=3600"
 
 [[headers]]
 for = "/*/index.html"
 [headers.values]
-cache-control = "public, max-age=300, stale-while-revalidate=3600"
+Cache-Control = "public, max-age=300, stale-while-revalidate=3600"
 
 [[headers]]
 for = "/*/*/index.html"
 [headers.values]
-cache-control = "public, max-age=300, stale-while-revalidate=3600"
-
+Cache-Control = "public, max-age=300, stale-while-revalidate=3600"
 
 [[redirects]]
 from = "/robots.txt"
 to = "/robots.txt"
 status = 200
-
-[[redirects]]
-from = "/media/logos/:file"
-to = "/.netlify/images?url=/media/logos/:file&w=128"
-status = 200
-force = true
 
 [[redirects]]
 from = "/linkedin"

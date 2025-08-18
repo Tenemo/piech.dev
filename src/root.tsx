@@ -4,7 +4,6 @@ import { Links, Meta, Outlet, Scripts } from 'react-router';
 
 import { PortfolioProvider } from 'features/Portfolio/PortfolioContext';
 import 'styles/main.scss';
-import criticalCss from 'styles/critical.css?raw';
 
 declare const __BUILD_DATE__: string;
 
@@ -86,7 +85,6 @@ export const Layout = ({
                     <Meta />
                     <Links />
                 </FrameworkReady>
-                <style dangerouslySetInnerHTML={{ __html: criticalCss }} />
             </head>
             <body>
                 {children}

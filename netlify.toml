@@ -23,7 +23,7 @@ status = 200
 from = "/media/logos/:file"
 to = "/.netlify/images"
 status = 200
-force = false
+force = true
 query = { url = "/media/logos/:file", w = "128" }
 
 [[redirects]]

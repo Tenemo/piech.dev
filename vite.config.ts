@@ -30,7 +30,7 @@ export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), '');
     const analyze = env.ANALYZE === 'true';
     return {
-        base: './',
+        base: '/',
         plugins: [
             reactRouter(),
             tsconfigPaths(),

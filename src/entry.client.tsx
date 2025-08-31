@@ -1,9 +1,10 @@
 import React from 'react';
-import { hydrateRoot } from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
 import { HydratedRouter } from 'react-router/dom';
 
-hydrateRoot(
-    document,
+// Not hydrating anything, just creating - but it does not matter,
+// as there is no JS included at all.
+createRoot(document).render(
     <React.StrictMode>
         <HydratedRouter />
     </React.StrictMode>,

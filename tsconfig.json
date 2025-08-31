@@ -23,12 +23,11 @@
     "include": [
         "src/**/*",
         "temp/**/*",
-    "scripts/**/*",
         "eslint.config.js",
         "vite.config.ts",
         "vitest.config.ts",
         "postcss.config.js",
         "react-router.config.ts"
     ],
-    "exclude": ["**/*.snap"]
+    "exclude": []
 }

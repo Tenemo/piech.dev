@@ -2,7 +2,6 @@ import { HelmetProvider } from '@dr.pogodin/react-helmet';
 import React from 'react';
 import { Links, Meta, Outlet, Scripts } from 'react-router';
 
-import { PortfolioProvider } from 'features/Portfolio/PortfolioContext';
 import 'styles/main.scss';
 
 declare const __BUILD_DATE__: string;
@@ -108,9 +107,7 @@ const Root = (): React.JSX.Element => {
 
     return (
         <HelmetProvider>
-            <PortfolioProvider>
-                <Outlet />
-            </PortfolioProvider>
+            <Outlet />
         </HelmetProvider>
     );
 };

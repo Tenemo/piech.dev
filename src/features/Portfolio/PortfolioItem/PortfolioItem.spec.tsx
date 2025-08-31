@@ -34,10 +34,7 @@ describe('PortfolioItem', () => {
     });
 
     it('should render with the correct structure when data is loaded', async () => {
-        renderWithProviders(<PortfolioItem />, {
-            withRouter: true,
-            withPortfolio: true,
-        });
+        renderWithProviders(<PortfolioItem />, { withRouter: true });
 
         const headingElement = await screen.findByRole('heading', { level: 1 });
         expect(headingElement).toHaveTextContent('Test Readme Content');
@@ -49,20 +46,14 @@ describe('PortfolioItem', () => {
     });
 
     it('should not show loading state (static content)', () => {
-        renderWithProviders(<PortfolioItem />, {
-            withRouter: true,
-            withPortfolio: true,
-        });
+        renderWithProviders(<PortfolioItem />, { withRouter: true });
         expect(
             screen.queryByText(/loading repository information/i),
         ).not.toBeInTheDocument();
     });
 
     it('should display error message when fetch fails', () => {
-        renderWithProviders(<PortfolioItem />, {
-            withRouter: true,
-            withPortfolio: true,
-        });
+        renderWithProviders(<PortfolioItem />, { withRouter: true });
         // static content has no fetch errors
         expect(
             screen.queryByText(/error loading repository/i),
@@ -70,10 +61,7 @@ describe('PortfolioItem', () => {
     });
 
     it('should display error message when response is not ok', () => {
-        renderWithProviders(<PortfolioItem />, {
-            withRouter: true,
-            withPortfolio: true,
-        });
+        renderWithProviders(<PortfolioItem />, { withRouter: true });
         expect(
             screen.queryByText(/failed to fetch readme/i),
         ).not.toBeInTheDocument();
@@ -83,7 +71,6 @@ describe('PortfolioItem', () => {
         mockUseParams.mockReturnValue({ repo: 'cached-project' });
         const { rerender } = renderWithProviders(<PortfolioItem />, {
             withRouter: true,
-            withPortfolio: true,
         });
 
         const firstHeading = await screen.findByRole('heading', { level: 1 });
@@ -107,7 +94,6 @@ describe('PortfolioItem', () => {
         mockUseParams.mockReturnValue({ repo: 'new-content-project' });
         const { rerender } = renderWithProviders(<PortfolioItem />, {
             withRouter: true,
-            withPortfolio: true,
         });
 
         const firstHeading = await screen.findByRole('heading', { level: 1 });
@@ -130,10 +116,7 @@ describe('PortfolioItem', () => {
     it('should handle case when repo parameter is missing', async () => {
         mockUseParams.mockReturnValue({});
 
-        renderWithProviders(<PortfolioItem />, {
-            withRouter: true,
-            withPortfolio: true,
-        });
+        renderWithProviders(<PortfolioItem />, { withRouter: true });
 
         const errorHeading = await screen.findByText(
             /error loading repository/i,
@@ -147,10 +130,7 @@ describe('PortfolioItem', () => {
     });
 
     it('should have correct GitHub link', () => {
-        renderWithProviders(<PortfolioItem />, {
-            withRouter: true,
-            withPortfolio: true,
-        });
+        renderWithProviders(<PortfolioItem />, { withRouter: true });
 
         const githubLink = screen.getByRole('link', {
             name: /github\.com\/tenemo\/test-repo/i,
@@ -174,10 +154,7 @@ describe('PortfolioItem', () => {
                 originalUseEffect(effect);
             });
 
-        renderWithProviders(<PortfolioItem />, {
-            withRouter: true,
-            withPortfolio: true,
-        });
+        renderWithProviders(<PortfolioItem />, { withRouter: true });
         expect(document.title).toBe('test-repo | piech.dev');
 
         mockUseEffect.mockRestore();

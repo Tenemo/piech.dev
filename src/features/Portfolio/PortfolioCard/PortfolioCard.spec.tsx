@@ -43,7 +43,7 @@ describe('PortfolioCard', () => {
                 projectPreview="test.webp"
                 technologies={['typescript', 'react']}
             />,
-            { withRouter: true, withPortfolio: true },
+            { withRouter: true },
         );
 
         const cardElement = container.querySelector(`.${styles.card}`);
@@ -66,7 +66,7 @@ describe('PortfolioCard', () => {
                 projectPreview="test.webp"
                 technologies={['typescript']}
             />,
-            { withRouter: true, withPortfolio: true },
+            { withRouter: true },
         );
         // no loading state anymore
         expect(
@@ -81,7 +81,7 @@ describe('PortfolioCard', () => {
                 projectPreview="test.webp"
                 technologies={['typescript']}
             />,
-            { withRouter: true, withPortfolio: true },
+            { withRouter: true },
         );
 
         const imgElement = container.querySelector(
@@ -106,7 +106,7 @@ describe('PortfolioCard', () => {
                 projectPreview="test.mp4"
                 technologies={['typescript']}
             />,
-            { withRouter: true, withPortfolio: true },
+            { withRouter: true },
         );
 
         const videoElement = container.querySelector('video');
@@ -134,7 +134,7 @@ describe('PortfolioCard', () => {
                 projectPreview="test.webp"
                 technologies={['typescript']}
             />,
-            { withRouter: true, withPortfolio: true },
+            { withRouter: true },
         );
 
         const cardElement = container.querySelector(`.${styles.card}`);
@@ -150,7 +150,7 @@ describe('PortfolioCard', () => {
                 repoName="custom-repo"
                 technologies={['typescript']}
             />,
-            { withRouter: true, withPortfolio: true },
+            { withRouter: true },
         );
         // ensure it links to custom repo route
         const links = screen
@@ -170,7 +170,7 @@ describe('PortfolioCard', () => {
                 projectPreview="test.webp"
                 technologies={['typescript']}
             />,
-            { withRouter: true, withPortfolio: true },
+            { withRouter: true },
         );
         // no error state now; shows fallback description
         expect(
@@ -186,7 +186,7 @@ describe('PortfolioCard', () => {
                 repoName="cached-repo"
                 technologies={['typescript']}
             />,
-            { withRouter: true, withPortfolio: true },
+            { withRouter: true },
         );
 
         rerender(
@@ -209,7 +209,7 @@ describe('PortfolioCard', () => {
                 projectPreview="test.webp"
                 technologies={['typescript']}
             />,
-            { withRouter: true, withPortfolio: true },
+            { withRouter: true },
         );
 
         const portfolioLinks = screen

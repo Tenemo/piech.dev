@@ -30,7 +30,7 @@ describe('Portfolio', () => {
     });
 
     it('should render portfolio heading and divider', () => {
-        renderWithProviders(<Portfolio />, { withPortfolio: true });
+        renderWithProviders(<Portfolio />);
 
         expect(
             screen.getByRole('heading', { name: /portfolio/i }),
@@ -39,9 +39,7 @@ describe('Portfolio', () => {
     });
 
     it('should render the main portfolio container with correct class', () => {
-        const { container } = renderWithProviders(<Portfolio />, {
-            withPortfolio: true,
-        });
+        const { container } = renderWithProviders(<Portfolio />);
 
         const mainElement = container.querySelector('main');
         expect(mainElement).toBeInTheDocument();
@@ -54,7 +52,7 @@ describe('Portfolio', () => {
     });
 
     it('should render all portfolio items', () => {
-        renderWithProviders(<Portfolio />, { withPortfolio: true });
+        renderWithProviders(<Portfolio />);
 
         const getHeading = (name: RegExp): HTMLElement =>
             screen.getByRole('heading', { level: 3, name });
@@ -67,9 +65,7 @@ describe('Portfolio', () => {
     });
 
     it('should include a divider between portfolio items', () => {
-        const { container } = renderWithProviders(<Portfolio />, {
-            withPortfolio: true,
-        });
+        const { container } = renderWithProviders(<Portfolio />);
 
         const dividers = container.querySelectorAll('.divider');
 

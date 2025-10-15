@@ -29,7 +29,7 @@ describe('Footer', () => {
         );
         expect(githubLink).toHaveAttribute('target', '_blank');
         expect(githubLink).toHaveAttribute('rel', 'noopener noreferrer');
-        expect(githubLink).toHaveClass(styles.gitHubLink);
+        expect(githubLink).toHaveClass(styles.githubLink);
     });
 
     it('should render GitHub icon', () => {

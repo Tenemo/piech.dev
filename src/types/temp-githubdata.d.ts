@@ -1,6 +1,6 @@
 import type { GithubData } from './github-data';
 
-declare module '../../temp/gitHubData.json' {
+declare module '../../temp/githubData.json' {
     const value: GithubData;
     export default value;
 }

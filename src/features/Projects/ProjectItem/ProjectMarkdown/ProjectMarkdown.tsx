@@ -7,22 +7,22 @@ import vscDarkPlus from 'react-syntax-highlighter/dist/esm/styles/prism/vsc-dark
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 
-import styles from './portfolioMarkdown.module.scss';
+import styles from './projectMarkdown.module.scss';
 
 const OWNER = 'tenemo';
 const BRANCH = 'master';
 const GITHUB_USER_ATTACHMENT_PATTERN =
     /^https:\/\/github\.com\/user-attachments\/assets\/[a-f0-9-]+$/;
 
-type PortfolioMarkdownProps = {
+type ProjectMarkdownProps = {
     markdown: string;
     repo: string;
 };
 
-const PortfolioMarkdown = ({
+const ProjectMarkdown = ({
     markdown,
     repo,
-}: PortfolioMarkdownProps): React.JSX.Element => {
+}: ProjectMarkdownProps): React.JSX.Element => {
     const urlTransform = (url: string, key: string, _node: unknown): string => {
         if (url.startsWith('http')) {
             // Don't transform GitHub user-attachment URLs in urlTransform
@@ -146,4 +146,4 @@ const PortfolioMarkdown = ({
     );
 };
 
-export default PortfolioMarkdown;
+export default ProjectMarkdown;

@@ -5,10 +5,10 @@ import { Link } from 'react-router';
 import { REPOSITORY_INFO } from '../../../utils/githubData';
 import { TECHNOLOGIES } from '../technologies';
 
-import styles from './portfolioCard.module.scss';
-import PortfolioTechnologies from './PortfolioTechnologies/PortfolioTechnologies';
+import styles from './projectCard.module.scss';
+import ProjectTechnologies from './ProjectTechnologies/ProjectTechnologies';
 
-type PortfolioCardProps = {
+type ProjectCardProps = {
     projectPreview: string;
     imageOnRight?: boolean;
     technologies: (keyof typeof TECHNOLOGIES)[];
@@ -16,13 +16,13 @@ type PortfolioCardProps = {
     repoName?: string;
 };
 
-const PortfolioCard = ({
+const ProjectCard = ({
     projectPreview,
     imageOnRight = false,
     technologies,
     project,
     repoName,
-}: PortfolioCardProps): React.JSX.Element => {
+}: ProjectCardProps): React.JSX.Element => {
     const githubRepository = repoName ?? project;
     const repositoryInfo = REPOSITORY_INFO[githubRepository];
 
@@ -78,10 +78,10 @@ const PortfolioCard = ({
                     </h3>
                     {renderContent()}
                 </Link>
-                <PortfolioTechnologies technologies={technologies} />
+                <ProjectTechnologies technologies={technologies} />
             </div>
         </div>
     );
 };
 
-export default PortfolioCard;
+export default ProjectCard;

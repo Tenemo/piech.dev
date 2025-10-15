@@ -6,10 +6,10 @@ import { Link, useParams } from 'react-router';
 
 import { README_CONTENT } from '../../../utils/githubData';
 
-import styles from './portfolioItem.module.scss';
-import PortfolioMarkdown from './PortfolioMarkdown/PortfolioMarkdown';
+import styles from './projectItem.module.scss';
+import ProjectMarkdown from './ProjectMarkdown/ProjectMarkdown';
 
-const PortfolioItemDetails: React.FC = (): React.JSX.Element => {
+const ProjectItemDetails: React.FC = (): React.JSX.Element => {
     const { repo } = useParams<{ repo: string }>();
     if (!repo) {
         return (
@@ -41,9 +41,9 @@ const PortfolioItemDetails: React.FC = (): React.JSX.Element => {
                     <GitHub /> github.com/tenemo/{repo}
                 </a>
             </div>
-            <PortfolioMarkdown markdown={markdown} repo={repo} />
+            <ProjectMarkdown markdown={markdown} repo={repo} />
         </main>
     );
 };
 
-export default PortfolioItemDetails;
+export default ProjectItemDetails;

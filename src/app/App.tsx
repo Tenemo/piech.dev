@@ -8,8 +8,8 @@ import Footer from 'components/Footer/Footer';
 import Header from 'components/Header/Header';
 import About from 'features/About/About';
 import Contact from 'features/Contact/Contact';
-import Portfolio from 'features/Portfolio/Portfolio';
-import PortfolioItem from 'features/Portfolio/PortfolioItem/PortfolioItem';
+import Project from 'features/Projects/Project';
+import ProjectItem from 'features/Projects/ProjectItem/ProjectItem';
 
 const App = (): React.JSX.Element => {
     return (
@@ -27,8 +27,8 @@ const App = (): React.JSX.Element => {
                 <Header />
                 <Routes>
                     <Route element={<About />} path="/" />
-                    <Route element={<PortfolioItem />} path="/projects/:repo" />
-                    <Route element={<Portfolio />} path="/projects" />
+                    <Route element={<ProjectItem />} path="/projects/:repo" />
+                    <Route element={<Project />} path="/projects" />
                     <Route element={<Contact />} path="/contact" />
                 </Routes>
                 <Footer />

@@ -2,8 +2,8 @@ import { screen } from '@testing-library/react';
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-import Portfolio from './Portfolio';
-import styles from './portfolio.module.scss';
+import ProjectPage from './Project';
+import styles from './project.module.scss';
 
 import { renderWithProviders } from 'utils/testUtils';
 
@@ -24,33 +24,35 @@ vi.mock('global', async () => {
     };
 });
 
-describe('Portfolio', () => {
+describe('Projects page', () => {
     beforeEach(() => {
         vi.clearAllMocks();
     });
 
     it('should render projects heading and divider', () => {
-        renderWithProviders(<Portfolio />);
+        renderWithProviders(<ProjectPage />);
 
-        expect(screen.getByRole('heading', { name: /projects/i })).toBeInTheDocument();
+        expect(
+            screen.getByRole('heading', { name: /projects/i }),
+        ).toBeInTheDocument();
         expect(document.querySelector('.divider')).toBeInTheDocument();
     });
 
-    it('should render the main portfolio container with correct class', () => {
-        const { container } = renderWithProviders(<Portfolio />);
+    it('should render the main projects container with correct class', () => {
+        const { container } = renderWithProviders(<ProjectPage />);
 
         const mainElement = container.querySelector('main');
         expect(mainElement).toBeInTheDocument();
-        expect(mainElement).toHaveClass(styles.portfolio);
+        expect(mainElement).toHaveClass(styles.projects);
 
-        const portfolioItemsContainer = container.querySelector(
-            `.${styles.portfolioItemsContainer}`,
+        const projectsItemsContainer = container.querySelector(
+            `.${styles.projectsItemsContainer}`,
         );
-        expect(portfolioItemsContainer).toBeInTheDocument();
+        expect(projectsItemsContainer).toBeInTheDocument();
     });
 
-    it('should render all portfolio items', () => {
-        renderWithProviders(<Portfolio />);
+    it('should render all project items', () => {
+        renderWithProviders(<ProjectPage />);
 
         const getHeading = (name: RegExp): HTMLElement =>
             screen.getByRole('heading', { level: 3, name });
@@ -62,8 +64,8 @@ describe('Portfolio', () => {
         expect(getHeading(/aliases\.sh/i)).toBeInTheDocument();
     });
 
-    it('should include a divider between portfolio items', () => {
-        const { container } = renderWithProviders(<Portfolio />);
+    it('should include a divider between project items', () => {
+        const { container } = renderWithProviders(<ProjectPage />);
 
         const dividers = container.querySelectorAll('.divider');
 

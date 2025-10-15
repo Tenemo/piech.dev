@@ -22,10 +22,10 @@ describe('About', () => {
     it('should render navigation buttons', () => {
         renderWithProviders(<About />);
 
-    const portfolioLink = screen.getByRole('link', { name: /projects/i });
-        expect(portfolioLink).toBeInTheDocument();
-    expect(portfolioLink).toHaveAttribute('href', '/projects');
-        expect(portfolioLink).toHaveClass(styles.mainButton);
+    const projectsLink = screen.getByRole('link', { name: /projects/i });
+    expect(projectsLink).toBeInTheDocument();
+    expect(projectsLink).toHaveAttribute('href', '/projects');
+    expect(projectsLink).toHaveClass(styles.mainButton);
 
         const contactLink = screen.getByRole('link', { name: /contact/i });
         expect(contactLink).toBeInTheDocument();

@@ -2,8 +2,8 @@ import { screen } from '@testing-library/react';
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-import PortfolioCard from './PortfolioCard';
-import styles from './portfolioCard.module.scss';
+import ProjectCard from './ProjectCard';
+import styles from './projectCard.module.scss';
 
 import { renderWithProviders } from 'utils/testUtils';
 // Provide a default export to align with JSON default import usage in code
@@ -30,7 +30,7 @@ vi.mock('../../../../temp/githubData', () => ({
     },
 }));
 
-describe('PortfolioCard', () => {
+describe('ProjectCard', () => {
     beforeEach(() => {
         vi.clearAllMocks();
         console.error = vi.fn();
@@ -38,7 +38,7 @@ describe('PortfolioCard', () => {
 
     it('should render with correct structure and classes', () => {
         const { container } = renderWithProviders(
-            <PortfolioCard
+            <ProjectCard
                 project="test-project"
                 projectPreview="test.webp"
                 technologies={['typescript', 'react']}
@@ -61,7 +61,7 @@ describe('PortfolioCard', () => {
 
     it('should show loading state when fetching package info', () => {
         renderWithProviders(
-            <PortfolioCard
+            <ProjectCard
                 project="loading-test"
                 projectPreview="test.webp"
                 technologies={['typescript']}
@@ -76,7 +76,7 @@ describe('PortfolioCard', () => {
 
     it('should render image for non-video preview files', () => {
         const { container } = renderWithProviders(
-            <PortfolioCard
+            <ProjectCard
                 project="img-test"
                 projectPreview="test.webp"
                 technologies={['typescript']}
@@ -101,7 +101,7 @@ describe('PortfolioCard', () => {
 
     it('should render video for video preview files', () => {
         const { container } = renderWithProviders(
-            <PortfolioCard
+            <ProjectCard
                 project="video-test"
                 projectPreview="test.mp4"
                 technologies={['typescript']}
@@ -128,7 +128,7 @@ describe('PortfolioCard', () => {
 
     it('should use imageRight class when imageOnRight is true', () => {
         const { container } = renderWithProviders(
-            <PortfolioCard
+            <ProjectCard
                 imageOnRight={true}
                 project="right-test"
                 projectPreview="test.webp"
@@ -144,7 +144,7 @@ describe('PortfolioCard', () => {
 
     it('should use a custom repo name when provided', () => {
         renderWithProviders(
-            <PortfolioCard
+            <ProjectCard
                 project="display-name"
                 projectPreview="test.webp"
                 repoName="custom-repo"
@@ -165,7 +165,7 @@ describe('PortfolioCard', () => {
 
     it('should display error message when fetch fails', () => {
         renderWithProviders(
-            <PortfolioCard
+            <ProjectCard
                 project="error-test"
                 projectPreview="test.webp"
                 technologies={['typescript']}
@@ -180,7 +180,7 @@ describe('PortfolioCard', () => {
 
     it('should use cached package info when available', () => {
         const { rerender } = renderWithProviders(
-            <PortfolioCard
+            <ProjectCard
                 project="cached-project"
                 projectPreview="test.webp"
                 repoName="cached-repo"
@@ -190,7 +190,7 @@ describe('PortfolioCard', () => {
         );
 
         rerender(
-            <PortfolioCard
+            <ProjectCard
                 project="cached-project"
                 projectPreview="test.webp"
                 repoName="cached-repo"
@@ -202,9 +202,9 @@ describe('PortfolioCard', () => {
         ).not.toBeInTheDocument();
     });
 
-    it('should link to the correct portfolio item page', () => {
+    it('should link to the correct project item page', () => {
         renderWithProviders(
-            <PortfolioCard
+            <ProjectCard
                 project="link-test"
                 projectPreview="test.webp"
                 technologies={['typescript']}
@@ -212,15 +212,15 @@ describe('PortfolioCard', () => {
             { withRouter: true },
         );
 
-        const portfolioLinks = screen
+        const projectLinks = screen
             .getAllByRole('link')
             .filter((link) =>
                 link.getAttribute('href')?.startsWith('/projects'),
             );
 
-        expect(portfolioLinks.length).toBeGreaterThan(0);
+        expect(projectLinks.length).toBeGreaterThan(0);
 
-        portfolioLinks.forEach((link) => {
+        projectLinks.forEach((link) => {
             expect(link).toHaveAttribute('href', '/projects/link-test');
         });
     });

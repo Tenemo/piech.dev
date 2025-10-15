@@ -71,4 +71,22 @@ describe('Projects page', () => {
 
         expect(dividers.length).toBeGreaterThan(1);
     });
+
+    it('sets a single, correct meta description and title', () => {
+        renderWithProviders(<ProjectPage />);
+        const title = document.querySelector('title');
+        expect(title?.textContent).toBe('Projects | piech.dev');
+
+        const descriptions = document.querySelectorAll(
+            'meta[name="description"]',
+        );
+        expect(descriptions.length).toBeGreaterThanOrEqual(1);
+        // The page-level one should be present
+        const pageDesc = Array.from(descriptions).find((m) =>
+            (m.getAttribute('content') ?? '').startsWith(
+                'Non-commercial projects I built',
+            ),
+        );
+        expect(pageDesc).toBeTruthy();
+    });
 });

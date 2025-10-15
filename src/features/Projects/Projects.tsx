@@ -10,14 +10,23 @@ const Project = (): React.JSX.Element => {
         <main className={styles.projects}>
             <Helmet>
                 <title>Projects | piech.dev</title>
+                <meta
+                    content="Non-commercial projects I built in my free time: small tools, libraries, and experiments in React, TypeScript, cryptography, and more."
+                    name="description"
+                />
+                <meta content="Projects | piech.dev" property="og:title" />
+                <meta
+                    content="Non-commercial projects I built in my free time: small tools, libraries, and experiments in React, TypeScript, cryptography, and more."
+                    property="og:description"
+                />
+                <link href="https://piech.dev/projects/" rel="canonical" />
             </Helmet>
             <h2>Projects</h2>
             <div className={'divider'} />
             <p className={'smallHeadline'}>
-                Non-commercial projects I did in my free time.
+                Non-commercial projects I built in my free time.
             </p>
             <div className={'divider'} />
-
             <div className={styles.projectsItemsContainer}>
                 {PROJECTS.map(
                     ({ projectPreview, project, technologies }, index) => (

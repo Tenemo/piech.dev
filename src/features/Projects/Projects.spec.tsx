@@ -2,8 +2,8 @@ import { screen } from '@testing-library/react';
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-import ProjectPage from './Project';
-import styles from './project.module.scss';
+import ProjectPage from './Projects';
+import styles from './projects.module.scss';
 
 import { renderWithProviders } from 'utils/testUtils';
 

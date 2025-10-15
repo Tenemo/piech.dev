@@ -22,7 +22,7 @@ const PROJECTS_FILE = path.join(
     'src',
     'features',
     'Projects',
-    'projects.ts',
+    'projectsList.ts',
 );
 
 type RepoInfo = { name: string; description: string };

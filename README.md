@@ -8,7 +8,7 @@ My personal page, [visit it](https://piech.dev) to find out more.
 
 ## How it works - dynamic, GitHub-based projects
 
-- Projects are defined in `src/features/Projects/projects.ts` (name, optional `repoName`, technologies, and a local preview image/video).
+- Projects are defined in `src/features/Projects/projectsList.ts` (name, optional `repoName`, technologies, and a local preview image/video).
 - During build or locally, `src/utils/fetchGitHubData.ts` fetches metadata and READMEs for those repos from GitHub and writes `temp/githubData.json`.
 - At runtime, `src/utils/githubData.ts` imports that JSON and exposes:
     - `REPOSITORY_INFO[repo]` → repo name/description for cards

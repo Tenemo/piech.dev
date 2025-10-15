@@ -29,7 +29,7 @@ describe('App', () => {
 
         const footerElement = screen.getByRole('contentinfo');
         expect(footerElement).toBeInTheDocument();
-        const gitHubLink = screen.getByLabelText('GitHub repository');
-        expect(gitHubLink).toBeInTheDocument();
+        const githubLink = screen.getByLabelText('GitHub repository');
+        expect(githubLink).toBeInTheDocument();
     });
 });

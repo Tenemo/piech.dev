@@ -7,15 +7,15 @@
  */
 
 declare const footer: string;
-declare const gitHubLink: string;
+declare const githubLink: string;
 
 export {
 	footer,
-	gitHubLink
+	githubLink
 };
 
 declare const __default_export__: {
 	footer: typeof footer;
-	gitHubLink: typeof gitHubLink;
+	githubLink: typeof githubLink;
 };
 export default __default_export__;

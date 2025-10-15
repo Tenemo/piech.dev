@@ -8,7 +8,7 @@ const Footer = (): React.JSX.Element => {
         <footer className={styles.footer}>
             <a
                 aria-label="GitHub repository"
-                className={styles.gitHubLink}
+                className={styles.githubLink}
                 href="https://github.com/Tenemo/piech.dev"
                 rel="noopener noreferrer"
                 target="_blank"

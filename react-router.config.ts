@@ -3,7 +3,7 @@ import 'dotenv/config';
 import type { Config } from '@react-router/dev/config';
 
 import { PROJECTS } from './src/features/Projects/projectsList';
-import { fetchGitHubData } from './src/utils/fetchGitHubData';
+import { fetchGitHubData } from './src/utils/fetchGithubData';
 
 export default {
     appDirectory: 'src',

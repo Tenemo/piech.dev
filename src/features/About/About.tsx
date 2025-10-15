@@ -43,8 +43,8 @@ const About = (): React.JSX.Element => {
                     My entire career has been spent working remotely.
                 </p>
                 <div className={styles.buttonsContainer}>
-                    <Link className={styles.mainButton} to="/portfolio">
-                        Check out my portfolio
+                    <Link className={styles.mainButton} to="/projects">
+                        Check out my projects
                     </Link>
 
                     <div className={styles.dividerText}>OR</div>

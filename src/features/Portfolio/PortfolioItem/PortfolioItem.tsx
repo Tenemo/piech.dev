@@ -28,8 +28,8 @@ const PortfolioItemDetails: React.FC = (): React.JSX.Element => {
                 <title>{`${repo} | piech.dev`}</title>
             </Helmet>
             <div className={styles.topBar}>
-                <Link to="/portfolio">
-                    <ArrowBack /> Back to Portfolio
+                <Link to="/projects">
+                    <ArrowBack /> Back to Projects
                 </Link>
                 <a
                     className={styles.githubLink}

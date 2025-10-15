@@ -21,7 +21,7 @@ describe('Header', () => {
     it('should render navigation links', () => {
         renderWithProviders(<Header />);
 
-        const portfolioLink = screen.getByText(/portfolio/i);
+    const portfolioLink = screen.getByText(/projects/i);
         const aboutLink = screen.getByText(/about me/i);
         const contactLink = screen.getByText(/contact/i);
 

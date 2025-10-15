@@ -77,7 +77,7 @@ export const Layout = ({
                 />
 
                 <link as="document" href="/" rel="prefetch" />
-                <link as="document" href="/portfolio/" rel="prefetch" />
+                <link as="document" href="/projects/" rel="prefetch" />
                 <link as="document" href="/contact/" rel="prefetch" />
                 <title>piech.dev</title>
                 <FrameworkReady>

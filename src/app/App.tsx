@@ -27,11 +27,8 @@ const App = (): React.JSX.Element => {
                 <Header />
                 <Routes>
                     <Route element={<About />} path="/" />
-                    <Route
-                        element={<PortfolioItem />}
-                        path="/portfolio/:repo"
-                    />
-                    <Route element={<Portfolio />} path="/portfolio" />
+                    <Route element={<PortfolioItem />} path="/projects/:repo" />
+                    <Route element={<Portfolio />} path="/projects" />
                     <Route element={<Contact />} path="/contact" />
                 </Routes>
                 <Footer />

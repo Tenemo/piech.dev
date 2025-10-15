@@ -1,15 +1,11 @@
 import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { Route, Routes } from 'react-router';
+import { Outlet } from 'react-router';
 
 import styles from './app.module.scss';
 
 import Footer from 'components/Footer/Footer';
 import Header from 'components/Header/Header';
-import About from 'features/About/About';
-import Contact from 'features/Contact/Contact';
-import ProjectItem from 'features/Projects/ProjectItem/ProjectItem';
-import Projects from 'features/Projects/Projects';
 
 const App = (): React.JSX.Element => {
     return (
@@ -25,12 +21,8 @@ const App = (): React.JSX.Element => {
                 }}
             >
                 <Header />
-                <Routes>
-                    <Route element={<About />} path="/" />
-                    <Route element={<ProjectItem />} path="/projects/:repo" />
-                    <Route element={<Projects />} path="/projects" />
-                    <Route element={<Contact />} path="/contact" />
-                </Routes>
+                {/* Child routes will render here via the framework router */}
+                <Outlet />
                 <Footer />
             </ErrorBoundary>
         </div>

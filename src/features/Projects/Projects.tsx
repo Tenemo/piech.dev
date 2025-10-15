@@ -7,17 +7,6 @@ import { PROJECTS } from './projectsList';
 const Project = (): React.JSX.Element => {
     return (
         <main className={styles.projects}>
-            <title>Projects | piech.dev</title>
-            <meta
-                content="Non-commercial projects I built in my free time: small tools, libraries, and experiments in React, TypeScript, cryptography, and more."
-                name="description"
-            />
-            <meta content="Projects | piech.dev" property="og:title" />
-            <meta
-                content="Non-commercial projects I built in my free time: small tools, libraries, and experiments in React, TypeScript, cryptography, and more."
-                property="og:description"
-            />
-            <link href="https://piech.dev/projects/" rel="canonical" />
             <h2>Projects</h2>
             <div className={'divider'} />
             <p className={'smallHeadline'}>

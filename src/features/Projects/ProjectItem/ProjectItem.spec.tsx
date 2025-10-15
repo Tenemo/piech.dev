@@ -144,20 +144,5 @@ describe('ProjectItem', () => {
         expect(githubLink).toHaveAttribute('rel', 'noopener noreferrer');
     });
 
-    it('should set document title based on repo name', () => {
-        const originalDocumentTitle = document.title;
-
-        const originalUseEffect = React.useEffect;
-        const mockUseEffect = vi
-            .spyOn(React, 'useEffect')
-            .mockImplementation((effect) => {
-                originalUseEffect(effect);
-            });
-
-        renderWithProviders(<ProjectItem />, { withRouter: true });
-        expect(document.title).toBe('test-repo | piech.dev');
-
-        mockUseEffect.mockRestore();
-        document.title = originalDocumentTitle;
-    });
+    // Title/meta are provided by route module meta() in framework mode; component doesn't set them.
 });

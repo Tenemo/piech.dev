@@ -23,7 +23,6 @@ const ProjectItemDetails: React.FC = (): React.JSX.Element => {
 
     return (
         <main className={styles.container}>
-            <title>{`${repo} | piech.dev`}</title>
             <div className={styles.topBar}>
                 <Link to="/projects">
                     <ArrowBack /> Back to Projects

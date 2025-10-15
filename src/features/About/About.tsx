@@ -17,7 +17,6 @@ const About = (): React.JSX.Element => {
 
     return (
         <main className={styles.main}>
-            <title>piech.dev</title>
             <h2>About me</h2>
             <div className={'divider'} />
             <p className={'smallHeadline'}>

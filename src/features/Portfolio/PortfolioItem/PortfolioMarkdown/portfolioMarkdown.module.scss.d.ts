@@ -6,10 +6,10 @@
  * https://npmjs.com/vite-css-modules
  */
 
-const markdownContainer: string;
-const videoPlayer: string;
-const codeBlock: string;
-const inlineCode: string;
+declare const markdownContainer: string;
+declare const videoPlayer: string;
+declare const codeBlock: string;
+declare const inlineCode: string;
 
 export {
 	markdownContainer,
@@ -18,9 +18,10 @@ export {
 	inlineCode
 };
 
-export default {
-	markdownContainer,
-	videoPlayer,
-	codeBlock,
-	inlineCode
+declare const __default_export__: {
+	markdownContainer: typeof markdownContainer;
+	videoPlayer: typeof videoPlayer;
+	codeBlock: typeof codeBlock;
+	inlineCode: typeof inlineCode;
 };
+export default __default_export__;

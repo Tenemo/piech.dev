@@ -2,7 +2,11 @@
  - CLI usage: node --experimental-strip-types src/utils/fetchGitHubData.ts [--refetch]
  - Programmatic usage: await fetchGitHubData({ refetch?: boolean })
  - Writes temp/githubData.json with shape:
-   { REPOSITORY_INFO: { [repo]: { name, description } }, README_CONTENT: { [repo]: markdown } }
+     {
+         METADATA: { datetimeFetched: string },
+         REPOSITORY_INFO: { [repo]: { name, description } },
+         README_CONTENT: { [repo]: markdown }
+     }
 */
 
 import fssync from 'node:fs';
@@ -23,6 +27,7 @@ const PROJECTS_FILE = path.join(
 
 type RepoInfo = { name: string; description: string };
 export type GithubData = {
+    METADATA: { datetimeFetched: string };
     REPOSITORY_INFO: Record<string, RepoInfo>;
     README_CONTENT: Record<string, string>;
 };
@@ -105,19 +110,32 @@ export async function fetchGitHubData(options?: {
     const projectsText = await fs.readFile(PROJECTS_FILE, 'utf8');
     const repos = parseReposFromProjectsFile(projectsText);
 
-    if (!refetch && fssync.existsSync(OUT_PATH)) {
+    if (fssync.existsSync(OUT_PATH)) {
         try {
-            const current = JSON.parse(
-                fssync.readFileSync(OUT_PATH, 'utf8'),
-            ) as Partial<GithubData>;
+            const raw = fssync.readFileSync(OUT_PATH, 'utf8');
+            const current = JSON.parse(raw) as Partial<GithubData>;
+
+            // Determine if the file is older than one day
+            const metaStr = current.METADATA?.datetimeFetched;
+            const metaDate = metaStr ? new Date(metaStr) : undefined;
+            const fileMtimeMs = fssync.statSync(OUT_PATH).mtime.getTime();
+            const effectiveTimeMs = metaDate && !isNaN(metaDate.getTime())
+                ? metaDate.getTime()
+                : fileMtimeMs;
+            const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+            const olderThanOneDay = Date.now() - effectiveTimeMs > ONE_DAY_MS;
+
             const infoKeys = Object.keys(current.REPOSITORY_INFO ?? {});
             const readmeKeys = Object.keys(current.README_CONTENT ?? {});
             const complete = repos.every(
                 (r) => infoKeys.includes(r) && readmeKeys.includes(r),
             );
-            if (complete) {
-                console.log('[githubData] Up-to-date file found, skipping.');
+            if (!refetch && complete && !olderThanOneDay) {
+                console.log('[githubData] Up-to-date and fresh file found, skipping.');
                 return;
+            }
+            if (olderThanOneDay) {
+                console.log('[githubData] Existing file is older than a day; refetching.');
             }
         } catch {
             // fall-through to regenerate
@@ -187,6 +205,7 @@ export async function fetchGitHubData(options?: {
 
     await fs.mkdir(OUT_DIR, { recursive: true });
     const payload: GithubData = {
+        METADATA: { datetimeFetched: new Date().toISOString() },
         REPOSITORY_INFO: infoObject,
         README_CONTENT: readmeObject,
     };

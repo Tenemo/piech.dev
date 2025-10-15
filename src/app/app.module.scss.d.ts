@@ -6,12 +6,13 @@
  * https://npmjs.com/vite-css-modules
  */
 
-const app: string;
+declare const app: string;
 
 export {
 	app
 };
 
-export default {
-	app
+declare const __default_export__: {
+	app: typeof app;
 };
+export default __default_export__;

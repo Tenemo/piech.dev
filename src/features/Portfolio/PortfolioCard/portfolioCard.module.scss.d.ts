@@ -6,17 +6,17 @@
  * https://npmjs.com/vite-css-modules
  */
 
-const card: string;
-const previewContainer: string;
-const image: string;
-const content: string;
-const description: string;
-const projectTitle: string;
-const imageRight: string;
-const imageLeft: string;
-const loadingContainer: string;
-const errorContainer: string;
-const errorMessage: string;
+declare const card: string;
+declare const previewContainer: string;
+declare const image: string;
+declare const content: string;
+declare const description: string;
+declare const projectTitle: string;
+declare const imageRight: string;
+declare const imageLeft: string;
+declare const loadingContainer: string;
+declare const errorContainer: string;
+declare const errorMessage: string;
 
 export {
 	card,
@@ -32,16 +32,17 @@ export {
 	errorMessage
 };
 
-export default {
-	card,
-	previewContainer,
-	image,
-	content,
-	description,
-	projectTitle,
-	imageRight,
-	imageLeft,
-	loadingContainer,
-	errorContainer,
-	errorMessage
+declare const __default_export__: {
+	card: typeof card;
+	previewContainer: typeof previewContainer;
+	image: typeof image;
+	content: typeof content;
+	description: typeof description;
+	projectTitle: typeof projectTitle;
+	imageRight: typeof imageRight;
+	imageLeft: typeof imageLeft;
+	loadingContainer: typeof loadingContainer;
+	errorContainer: typeof errorContainer;
+	errorMessage: typeof errorMessage;
 };
+export default __default_export__;

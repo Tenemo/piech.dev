@@ -6,10 +6,10 @@
  * https://npmjs.com/vite-css-modules
  */
 
-const main: string;
-const contactInfoContainer: string;
-const contactItemsContainer: string;
-const contactItem: string;
+declare const main: string;
+declare const contactInfoContainer: string;
+declare const contactItemsContainer: string;
+declare const contactItem: string;
 
 export {
 	main,
@@ -18,9 +18,10 @@ export {
 	contactItem
 };
 
-export default {
-	main,
-	contactInfoContainer,
-	contactItemsContainer,
-	contactItem
+declare const __default_export__: {
+	main: typeof main;
+	contactInfoContainer: typeof contactInfoContainer;
+	contactItemsContainer: typeof contactItemsContainer;
+	contactItem: typeof contactItem;
 };
+export default __default_export__;

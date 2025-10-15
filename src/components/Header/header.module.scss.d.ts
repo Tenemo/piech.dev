@@ -6,11 +6,11 @@
  * https://npmjs.com/vite-css-modules
  */
 
-const header: string;
-const logo: string;
-const navigation: string;
-const navLink: string;
-const activeLink: string;
+declare const header: string;
+declare const logo: string;
+declare const navigation: string;
+declare const navLink: string;
+declare const activeLink: string;
 
 export {
 	header,
@@ -20,10 +20,11 @@ export {
 	activeLink
 };
 
-export default {
-	header,
-	logo,
-	navigation,
-	navLink,
-	activeLink
+declare const __default_export__: {
+	header: typeof header;
+	logo: typeof logo;
+	navigation: typeof navigation;
+	navLink: typeof navLink;
+	activeLink: typeof activeLink;
 };
+export default __default_export__;

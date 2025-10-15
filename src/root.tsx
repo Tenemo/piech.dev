@@ -27,6 +27,7 @@ export const Layout = ({
             <head>
                 <base href="/" />
                 <meta content="piotr@piech.dev" name="author" />
+                <meta content="piech.dev" property="og:site_name"></meta>
                 <meta
                     content="piotr, piech, piotr piech, reactplate, react, typescript, elgamal, threshold-elgamal, projects, portfolio"
                     name="keywords"
@@ -37,8 +38,9 @@ export const Layout = ({
                     name="viewport"
                 />
                 <meta content="#383838" name="theme-color" />
-                <meta content="follow" name="robots" />
+                <meta content="index, follow" name="robots" />
                 <meta content="piech.dev" name="apple-mobile-web-app-title" />
+                <meta content="telephone=no" name="format-detection"></meta>
 
                 <link
                     href="/favicon/favicon-96x96.png"

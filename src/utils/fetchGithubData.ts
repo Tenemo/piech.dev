@@ -25,7 +25,7 @@ const PROJECTS_FILE = path.join(
     'projectsList.ts',
 );
 
-type RepoInfo = { name: string; description: string };
+type RepoInfo = { name: string; description: string; topics?: string[] };
 export type GithubData = {
     METADATA: { datetimeFetched: string };
     REPOSITORY_INFO: Record<string, RepoInfo>;
@@ -154,9 +154,13 @@ export async function fetchGithubData(options?: {
 
     const worker = async (repo: string): Promise<void> => {
         // Fetch repo info and README concurrently; handle failures independently
-        const [infoRes, readmeRes] = await Promise.allSettled([
+        const [infoRes, topicsRes, readmeRes] = await Promise.allSettled([
             fetchJson<{ name?: string; description?: string }>(
                 `https://api.github.com/repos/${OWNER}/${repo}`,
+                token,
+            ),
+            fetchJson<{ names?: string[] }>(
+                `https://api.github.com/repos/${OWNER}/${repo}/topics`,
                 token,
             ),
             getReadme(OWNER, repo),
@@ -167,17 +171,33 @@ export async function fetchGithubData(options?: {
             infoObject[repo] = {
                 name: repoData.name ?? repo,
                 description: repoData.description ?? 'No description available',
+                topics:
+                    topicsRes.status === 'fulfilled'
+                        ? (topicsRes.value.names ?? [])
+                        : undefined,
             };
         } else {
             infoObject[repo] = {
                 name: repo,
                 description: 'No description available',
+                topics:
+                    topicsRes.status === 'fulfilled'
+                        ? (topicsRes.value.names ?? [])
+                        : undefined,
             };
             // infoRes is rejected here; log a safe stringified reason
             console.warn(
                 '[githubData] Repo info failed for',
                 repo,
                 stringifyReason(infoRes.reason),
+            );
+        }
+
+        if (topicsRes.status === 'rejected') {
+            console.warn(
+                '[githubData] Topics fetch failed for',
+                repo,
+                stringifyReason(topicsRes.reason),
             );
         }
 

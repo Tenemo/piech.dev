@@ -1,6 +1,7 @@
 export type RepositoryInfo = {
     name: string;
     description: string;
+    topics?: string[];
 };
 
 export type GithubData = {

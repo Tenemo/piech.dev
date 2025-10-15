@@ -119,9 +119,10 @@ export async function fetchGitHubData(options?: {
             const metaStr = current.METADATA?.datetimeFetched;
             const metaDate = metaStr ? new Date(metaStr) : undefined;
             const fileMtimeMs = fssync.statSync(OUT_PATH).mtime.getTime();
-            const effectiveTimeMs = metaDate && !isNaN(metaDate.getTime())
-                ? metaDate.getTime()
-                : fileMtimeMs;
+            const effectiveTimeMs =
+                metaDate && !isNaN(metaDate.getTime())
+                    ? metaDate.getTime()
+                    : fileMtimeMs;
             const ONE_DAY_MS = 24 * 60 * 60 * 1000;
             const olderThanOneDay = Date.now() - effectiveTimeMs > ONE_DAY_MS;
 
@@ -131,11 +132,15 @@ export async function fetchGitHubData(options?: {
                 (r) => infoKeys.includes(r) && readmeKeys.includes(r),
             );
             if (!refetch && complete && !olderThanOneDay) {
-                console.log('[githubData] Up-to-date and fresh file found, skipping.');
+                console.log(
+                    '[githubData] Up-to-date and fresh file found, skipping.',
+                );
                 return;
             }
             if (olderThanOneDay) {
-                console.log('[githubData] Existing file is older than a day; refetching.');
+                console.log(
+                    '[githubData] Existing file is older than a day; refetching.',
+                );
             }
         } catch {
             // fall-through to regenerate

@@ -1,5 +1,6 @@
 import eslint from '@eslint/js';
 import vitestPlugin from '@vitest/eslint-plugin';
+import { defineConfig } from 'eslint/config';
 import { flatConfigs as importConfigs } from 'eslint-plugin-import';
 import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
 import errorOnlyPlugin from 'eslint-plugin-only-error';
@@ -10,7 +11,7 @@ import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import securityPlugin from 'eslint-plugin-security';
 import unusedImportsPlugin from 'eslint-plugin-unused-imports';
 import globals from 'globals';
-import tseslint, { configs as tsConfigs } from 'typescript-eslint';
+import { plugin as tsPlugin, configs as tsConfigs } from 'typescript-eslint';
 
 // To avoid wasting time with html-eslint in the future, it doesn't work with @typescript-eslint/parser
 // https://github.com/yeonjuan/html-eslint/issues/87
@@ -19,7 +20,7 @@ import tseslint, { configs as tsConfigs } from 'typescript-eslint';
 const OFF = 0;
 const ERROR = 2;
 
-export default tseslint.defineConfig(
+export default defineConfig(
     eslint.configs.recommended,
     ...tsConfigs.strictTypeChecked,
     ...tsConfigs.stylisticTypeChecked,
@@ -36,6 +37,7 @@ export default tseslint.defineConfig(
         files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
         ...reactHooksPlugin.configs['recommended-latest'],
         plugins: {
+            '@typescript-eslint': tsPlugin,
             react: reactPlugin,
             'react-hooks': reactHooksPlugin,
             'jsx-a11y': jsxA11yPlugin,

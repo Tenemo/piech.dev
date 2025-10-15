@@ -21,7 +21,6 @@ const App = (): React.JSX.Element => {
                 }}
             >
                 <Header />
-                {/* Child routes will render here via the framework router */}
                 <Outlet />
                 <Footer />
             </ErrorBoundary>

@@ -18,17 +18,13 @@ export const meta: MetaFunction = (args) => {
         { property: 'og:title', content: title },
         { property: 'og:description', content: desc },
         { property: 'og:url', content: `https://piech.dev/projects/${repo}` },
+        {
+            tagName: 'link',
+            rel: 'canonical',
+            href: `https://piech.dev/projects/${repo}`,
+        },
     ];
 };
-
-export const links = (
-    args: Parameters<MetaFunction>[0],
-): { rel: string; href: string }[] => [
-    {
-        rel: 'canonical',
-        href: `https://piech.dev/projects/${args.params.repo ?? ''}`,
-    },
-];
 
 const Route = (): React.JSX.Element => <ProjectItem />;
 export default Route;

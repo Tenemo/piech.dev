@@ -15,10 +15,11 @@ export const meta: MetaFunction = () => [
         content: 'Contact Piotr Piech (email, LinkedIn, GitHub, Telegram).',
     },
     { property: 'og:url', content: 'https://piech.dev/contact/' },
-];
-
-export const links = (): { rel: string; href: string }[] => [
-    { rel: 'canonical', href: 'https://piech.dev/contact/' },
+    {
+        tagName: 'link',
+        rel: 'canonical',
+        href: 'https://piech.dev/contact/',
+    },
 ];
 
 const Route = (): React.JSX.Element => <Contact />;

@@ -19,6 +19,7 @@ export const meta: MetaFunction = (args) => {
         { name: 'description', content: desc },
         { property: 'og:title', content: title },
         { property: 'og:description', content: desc },
+        { property: 'og:url', content: `https://piech.dev/projects/${repo}` },
     ];
 };
 

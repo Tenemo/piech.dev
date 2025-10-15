@@ -16,6 +16,7 @@ export const meta: MetaFunction = () => [
         content:
             'Non-commercial projects I built in my free time: small tools, libraries, and experiments in React, TypeScript, cryptography, and more.',
     },
+    { property: 'og:url', content: 'https://piech.dev/projects/' },
 ];
 
 export const links = (_args: unknown): { rel: string; href: string }[] => [

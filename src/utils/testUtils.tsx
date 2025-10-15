@@ -1,4 +1,3 @@
-import { HelmetProvider } from '@dr.pogodin/react-helmet';
 // Not true, it's there
 // eslint-disable-next-line import/named
 import { render, RenderOptions } from '@testing-library/react';
@@ -20,7 +19,7 @@ export const renderWithProviders = (
         let wrappedChildren = children;
         if (withRouter)
             wrappedChildren = <BrowserRouter>{wrappedChildren}</BrowserRouter>;
-        return <HelmetProvider>{wrappedChildren}</HelmetProvider>;
+        return <>{wrappedChildren}</>;
     };
     return render(ui, { wrapper: Wrapper, ...renderOptions });
 };

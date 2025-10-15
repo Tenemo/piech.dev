@@ -1,4 +1,3 @@
-import { Helmet } from '@dr.pogodin/react-helmet';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import GitHub from '@mui/icons-material/GitHub';
 import React from 'react';
@@ -24,9 +23,7 @@ const ProjectItemDetails: React.FC = (): React.JSX.Element => {
 
     return (
         <main className={styles.container}>
-            <Helmet>
-                <title>{`${repo} | piech.dev`}</title>
-            </Helmet>
+            <title>{`${repo} | piech.dev`}</title>
             <div className={styles.topBar}>
                 <Link to="/projects">
                     <ArrowBack /> Back to Projects

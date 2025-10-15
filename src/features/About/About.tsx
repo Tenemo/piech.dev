@@ -1,4 +1,3 @@
-import { Helmet } from '@dr.pogodin/react-helmet';
 import { differenceInYears } from 'date-fns';
 import React from 'react';
 import { Link } from 'react-router';
@@ -18,9 +17,7 @@ const About = (): React.JSX.Element => {
 
     return (
         <main className={styles.main}>
-            <Helmet>
-                <title>piech.dev</title>
-            </Helmet>
+            <title>piech.dev</title>
             <h2>About me</h2>
             <div className={'divider'} />
             <p className={'smallHeadline'}>

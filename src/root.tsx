@@ -1,4 +1,3 @@
-import { HelmetProvider } from '@dr.pogodin/react-helmet';
 import React from 'react';
 import { Links, Meta, Outlet, Scripts } from 'react-router';
 
@@ -105,11 +104,7 @@ const Root = (): React.JSX.Element => {
         console.log(`Build date: ${__BUILD_DATE__}`);
     }, []);
 
-    return (
-        <HelmetProvider>
-            <Outlet />
-        </HelmetProvider>
-    );
+    return <Outlet />;
 };
 
 export default Root;

@@ -45,7 +45,6 @@
     },
     "type": "module",
     "dependencies": {
-        "@dr.pogodin/react-helmet": "^3.0.4",
         "@emotion/styled": "^11.14.1",
         "@mui/icons-material": "^7.3.4",
         "date-fns": "^4.1.0",

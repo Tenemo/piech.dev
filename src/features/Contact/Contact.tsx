@@ -1,4 +1,3 @@
-import { Helmet } from '@dr.pogodin/react-helmet';
 import EmailIcon from '@mui/icons-material/AlternateEmail';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
@@ -10,9 +9,7 @@ import styles from './contact.module.scss';
 const Contact = (): React.JSX.Element => {
     return (
         <main className={styles.main}>
-            <Helmet>
-                <title>Contact | piech.dev</title>
-            </Helmet>
+            <title>Contact | piech.dev</title>
             <h2>Contact</h2>
             <div className={'divider'} />
             <div className={styles.contactInfoContainer}>

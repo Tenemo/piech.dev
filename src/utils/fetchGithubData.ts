@@ -1,6 +1,6 @@
 /*
- - CLI usage: node --experimental-strip-types src/utils/fetchGitHubData.ts [--refetch]
- - Programmatic usage: await fetchGitHubData({ refetch?: boolean })
+ - CLI usage: node --experimental-strip-types src/utils/fetchGithubData.ts [--refetch]
+ - Programmatic usage: await fetchGithubData({ refetch?: boolean })
  - Writes temp/githubData.json with shape:
      {
          METADATA: { datetimeFetched: string },
@@ -101,7 +101,7 @@ async function getReadme(owner: string, repo: string): Promise<string> {
     return '# README not found\n';
 }
 
-export async function fetchGitHubData(options?: {
+export async function fetchGithubData(options?: {
     refetch?: boolean;
 }): Promise<void> {
     const refetch = Boolean(options?.refetch);
@@ -224,7 +224,7 @@ if (
     (process.argv[1] && new URL('file://' + process.argv[1]).href)
 ) {
     const refetch = process.argv.includes('--refetch');
-    void fetchGitHubData({ refetch }).catch((e: unknown) => {
+    void fetchGithubData({ refetch }).catch((e: unknown) => {
         console.error('[githubData] Generation failed:', e);
         process.exitCode = 1;
     });

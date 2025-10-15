@@ -4,8 +4,6 @@ import type { MetaFunction } from 'react-router';
 import ProjectItem from 'features/Projects/ProjectItem/ProjectItem';
 import { REPOSITORY_INFO } from 'utils/githubData';
 
-type LinkTag = { rel: string; href: string };
-
 export const meta: MetaFunction = (args) => {
     const repo = args.params.repo ?? '';
     const info = REPOSITORY_INFO[repo];
@@ -23,10 +21,12 @@ export const meta: MetaFunction = (args) => {
     ];
 };
 
-export const links = (args?: { params?: { repo?: string } }): LinkTag[] => [
+export const links = (
+    args: Parameters<MetaFunction>[0],
+): { rel: string; href: string }[] => [
     {
         rel: 'canonical',
-        href: `https://piech.dev/projects/${args?.params?.repo ?? ''}`,
+        href: `https://piech.dev/projects/${args.params.repo ?? ''}`,
     },
 ];
 

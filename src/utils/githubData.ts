@@ -1,7 +1,11 @@
-import data from '../../temp/githubData.json';
-import type { GithubData, RepositoryInfo } from '../types/github-data';
+// Disabling the rule not to require the JSON file
+// to be preset for linting during CI
+// eslint-disable-next-line import/no-unresolved
+import data from '../../temp/gitHubData.json';
 
-const githubData = data as GithubData;
+import type { RepositoryInfo } from 'types/github-data';
+
+const githubData = data;
 
 export const REPOSITORY_INFO: Partial<Record<string, RepositoryInfo>> =
     githubData.REPOSITORY_INFO;

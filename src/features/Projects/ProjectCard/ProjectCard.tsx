@@ -2,11 +2,12 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import React from 'react';
 import { Link } from 'react-router';
 
-import { REPOSITORY_INFO } from '../../../utils/githubData';
 import { TECHNOLOGIES } from '../technologies';
 
 import styles from './projectCard.module.scss';
 import ProjectTechnologies from './ProjectTechnologies/ProjectTechnologies';
+
+import { REPOSITORY_INFO } from 'utils/githubData';
 
 type ProjectCardProps = {
     projectPreview: string;

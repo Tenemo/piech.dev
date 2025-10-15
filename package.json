@@ -26,7 +26,6 @@
         "eslint:fix": "eslint . --fix -c eslint.config.js",
         "github-refetch": "node --experimental-strip-types src/utils/fetchGitHubData.ts --refetch",
         "stylelint": "stylelint **/*.scss **/*.css",
-        "prelint": "node --experimental-strip-types src/utils/fetchGitHubData.ts",
         "lint": "npm run eslint && npm run stylelint",
         "preview": "vite preview --outDir dist/client",
         "tsc": "tsc",

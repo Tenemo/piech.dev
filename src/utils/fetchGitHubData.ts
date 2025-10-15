@@ -1,7 +1,7 @@
 /*
  - CLI usage: node --experimental-strip-types src/utils/fetchGitHubData.ts [--refetch]
  - Programmatic usage: await fetchGitHubData({ refetch?: boolean })
- - Writes temp/githubData.json with shape:
+ - Writes temp/gitHubData.json with shape:
      {
          METADATA: { datetimeFetched: string },
          REPOSITORY_INFO: { [repo]: { name, description } },
@@ -16,7 +16,7 @@ import path from 'node:path';
 const OWNER = 'tenemo';
 const BRANCHES = ['master', 'main'] as const;
 const OUT_DIR = path.join(process.cwd(), 'temp');
-const OUT_PATH = path.join(OUT_DIR, 'githubData.json');
+const OUT_PATH = path.join(OUT_DIR, 'gitHubData.json');
 const PROJECTS_FILE = path.join(
     process.cwd(),
     'src',
@@ -105,7 +105,7 @@ export async function fetchGitHubData(options?: {
     refetch?: boolean;
 }): Promise<void> {
     const refetch = Boolean(options?.refetch);
-    const token = process.env.GITHUB_TOKEN ?? process.env.GH_TOKEN;
+    const token = process.env.PERSONAL_GITHUB_TOKEN ?? process.env.GH_TOKEN;
 
     const projectsText = await fs.readFile(PROJECTS_FILE, 'utf8');
     const repos = parseReposFromProjectsFile(projectsText);

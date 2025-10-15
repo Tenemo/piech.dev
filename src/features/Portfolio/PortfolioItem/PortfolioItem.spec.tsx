@@ -39,7 +39,7 @@ describe('PortfolioItem', () => {
         const headingElement = await screen.findByRole('heading', { level: 1 });
         expect(headingElement).toHaveTextContent('Test Readme Content');
 
-        expect(screen.getByText(/back to portfolio/i)).toBeInTheDocument();
+    expect(screen.getByText(/back to projects/i)).toBeInTheDocument();
         expect(
             screen.getByText(/github.com\/tenemo\/test-repo/i),
         ).toBeInTheDocument();

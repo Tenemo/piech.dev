@@ -29,12 +29,10 @@ describe('Portfolio', () => {
         vi.clearAllMocks();
     });
 
-    it('should render portfolio heading and divider', () => {
+    it('should render projects heading and divider', () => {
         renderWithProviders(<Portfolio />);
 
-        expect(
-            screen.getByRole('heading', { name: /portfolio/i }),
-        ).toBeInTheDocument();
+        expect(screen.getByRole('heading', { name: /projects/i })).toBeInTheDocument();
         expect(document.querySelector('.divider')).toBeInTheDocument();
     });
 

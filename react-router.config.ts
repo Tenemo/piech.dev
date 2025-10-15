@@ -11,9 +11,9 @@ export default {
     ssr: true,
     async prerender() {
         await fetchGitHubData({ refetch: false });
-        const staticPaths = ['/', '/portfolio', '/contact'];
+        const staticPaths = ['/', '/projects', '/contact'];
         const itemPaths = PROJECTS.map(
-            (p) => `/portfolio/${p.repoName ?? p.project}`,
+            (p) => `/projects/${p.repoName ?? p.project}`,
         );
         return [...staticPaths, ...itemPaths];
     },

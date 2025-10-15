@@ -9,9 +9,9 @@ const Portfolio = (): React.JSX.Element => {
     return (
         <main className={styles.portfolio}>
             <Helmet>
-                <title>Portfolio | piech.dev</title>
+                <title>Projects | piech.dev</title>
             </Helmet>
-            <h2>Portfolio</h2>
+            <h2>Projects</h2>
             <div className={'divider'} />
             <p className={'smallHeadline'}>
                 Non-commercial projects I did in my free time.

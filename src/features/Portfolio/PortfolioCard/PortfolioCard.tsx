@@ -49,7 +49,7 @@ const PortfolioCard = ({
         return (
             <Link
                 aria-label={`View ${project} project details`}
-                to={`/portfolio/${githubRepository}`}
+                to={`/projects/${githubRepository}`}
             >
                 {previewContent}
             </Link>
@@ -70,7 +70,7 @@ const PortfolioCard = ({
             <div className={styles.content}>
                 <Link
                     className={styles.description}
-                    to={`/portfolio/${githubRepository}`}
+                    to={`/projects/${githubRepository}`}
                 >
                     <h3 className={styles.projectTitle}>
                         {project}

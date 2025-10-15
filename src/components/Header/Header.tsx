@@ -27,9 +27,9 @@ const Header = (): React.JSX.Element => {
                             ? `${styles.navLink} ${styles.activeLink}`
                             : styles.navLink
                     }
-                    to="/portfolio/"
+                    to="/projects/"
                 >
-                    Portfolio
+                    Projects
                 </NavLink>
                 <NavLink
                     className={({ isActive }) =>

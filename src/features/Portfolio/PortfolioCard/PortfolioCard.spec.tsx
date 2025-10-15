@@ -155,10 +155,10 @@ describe('PortfolioCard', () => {
         // ensure it links to custom repo route
         const links = screen
             .getAllByRole('link')
-            .filter((l) => l.getAttribute('href')?.includes('/portfolio/'));
+            .filter((l) => l.getAttribute('href')?.includes('/projects/'));
         expect(
             links.some(
-                (l) => l.getAttribute('href') === '/portfolio/custom-repo',
+                (l) => l.getAttribute('href') === '/projects/custom-repo',
             ),
         ).toBe(true);
     });
@@ -215,13 +215,13 @@ describe('PortfolioCard', () => {
         const portfolioLinks = screen
             .getAllByRole('link')
             .filter((link) =>
-                link.getAttribute('href')?.startsWith('/portfolio'),
+                link.getAttribute('href')?.startsWith('/projects'),
             );
 
         expect(portfolioLinks.length).toBeGreaterThan(0);
 
         portfolioLinks.forEach((link) => {
-            expect(link).toHaveAttribute('href', '/portfolio/link-test');
+            expect(link).toHaveAttribute('href', '/projects/link-test');
         });
     });
 });

@@ -14,6 +14,7 @@ export const meta: MetaFunction = () => [
         property: 'og:description',
         content: 'Contact Piotr Piech (email, LinkedIn, GitHub, Telegram).',
     },
+    { property: 'og:url', content: 'https://piech.dev/contact/' },
 ];
 
 export const links = (_args: unknown): { rel: string; href: string }[] => [

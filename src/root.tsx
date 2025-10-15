@@ -25,19 +25,12 @@ export const Layout = ({
     return (
         <html lang="en">
             <head>
+                <base href="/" />
                 <meta content="piotr@piech.dev" name="author" />
-                <meta content="Piotr's personal page." name="description" />
                 <meta
-                    content="piotr, piech, piotr piech, reactplate, react, typescript, elgamal, threshold-elgamal"
+                    content="piotr, piech, piotr piech, reactplate, react, typescript, elgamal, threshold-elgamal, projects, portfolio"
                     name="keywords"
                 />
-                <meta content="piech.dev" property="og:title" />
-                <meta
-                    content="Piotr's personal page."
-                    property="og:description"
-                />
-                <meta content="https://piech.dev" property="og:url" />
-                <meta content="follow" name="robots" />
                 <meta charSet="utf-8" />
                 <meta httpEquiv="X-UA-Compatible" />
                 <meta
@@ -45,7 +38,8 @@ export const Layout = ({
                     name="viewport"
                 />
                 <meta content="#383838" name="theme-color" />
-                <base href="/" />
+                <meta content="follow" name="robots" />
+                <meta content="piech.dev" name="apple-mobile-web-app-title" />
 
                 <link
                     href="/favicon/favicon-96x96.png"
@@ -64,7 +58,6 @@ export const Layout = ({
                     rel="apple-touch-icon"
                     sizes="180x180"
                 />
-                <meta content="piech.dev" name="apple-mobile-web-app-title" />
                 <link href="/favicon/site.webmanifest" rel="manifest" />
                 {/* LCP image */}
                 <link
@@ -78,7 +71,6 @@ export const Layout = ({
                 <link as="document" href="/" rel="prefetch" />
                 <link as="document" href="/projects/" rel="prefetch" />
                 <link as="document" href="/contact/" rel="prefetch" />
-                <title>piech.dev</title>
                 <FrameworkReady>
                     <Meta />
                     <Links />

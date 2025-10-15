@@ -6,9 +6,9 @@
  * https://npmjs.com/vite-css-modules
  */
 
-const technologiesContainer: string;
-const logo: string;
-const wideLogo: string;
+declare const technologiesContainer: string;
+declare const logo: string;
+declare const wideLogo: string;
 
 export {
 	technologiesContainer,
@@ -16,8 +16,9 @@ export {
 	wideLogo
 };
 
-export default {
-	technologiesContainer,
-	logo,
-	wideLogo
+declare const __default_export__: {
+	technologiesContainer: typeof technologiesContainer;
+	logo: typeof logo;
+	wideLogo: typeof wideLogo;
 };
+export default __default_export__;

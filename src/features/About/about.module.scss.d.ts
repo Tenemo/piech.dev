@@ -6,12 +6,12 @@
  * https://npmjs.com/vite-css-modules
  */
 
-const main: string;
-const aboutMeDescription: string;
-const buttonsContainer: string;
-const dividerText: string;
-const mainButton: string;
-const contactButton: string;
+declare const main: string;
+declare const aboutMeDescription: string;
+declare const buttonsContainer: string;
+declare const dividerText: string;
+declare const mainButton: string;
+declare const contactButton: string;
 
 export {
 	main,
@@ -22,11 +22,12 @@ export {
 	contactButton
 };
 
-export default {
-	main,
-	aboutMeDescription,
-	buttonsContainer,
-	dividerText,
-	mainButton,
-	contactButton
+declare const __default_export__: {
+	main: typeof main;
+	aboutMeDescription: typeof aboutMeDescription;
+	buttonsContainer: typeof buttonsContainer;
+	dividerText: typeof dividerText;
+	mainButton: typeof mainButton;
+	contactButton: typeof contactButton;
 };
+export default __default_export__;

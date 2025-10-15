@@ -6,15 +6,16 @@
  * https://npmjs.com/vite-css-modules
  */
 
-const footer: string;
-const gitHubLink: string;
+declare const footer: string;
+declare const gitHubLink: string;
 
 export {
 	footer,
 	gitHubLink
 };
 
-export default {
-	footer,
-	gitHubLink
+declare const __default_export__: {
+	footer: typeof footer;
+	gitHubLink: typeof gitHubLink;
 };
+export default __default_export__;

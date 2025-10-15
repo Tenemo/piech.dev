@@ -19,7 +19,7 @@ import tseslint, { configs as tsConfigs } from 'typescript-eslint';
 const OFF = 0;
 const ERROR = 2;
 
-export default tseslint.config(
+export default tseslint.defineConfig(
     eslint.configs.recommended,
     ...tsConfigs.strictTypeChecked,
     ...tsConfigs.stylisticTypeChecked,

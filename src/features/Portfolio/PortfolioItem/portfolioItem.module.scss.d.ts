@@ -6,11 +6,11 @@
  * https://npmjs.com/vite-css-modules
  */
 
-const container: string;
-const githubLink: string;
-const topBar: string;
-const loading: string;
-const error: string;
+declare const container: string;
+declare const githubLink: string;
+declare const topBar: string;
+declare const loading: string;
+declare const error: string;
 
 export {
 	container,
@@ -20,10 +20,11 @@ export {
 	error
 };
 
-export default {
-	container,
-	githubLink,
-	topBar,
-	loading,
-	error
+declare const __default_export__: {
+	container: typeof container;
+	githubLink: typeof githubLink;
+	topBar: typeof topBar;
+	loading: typeof loading;
+	error: typeof error;
 };
+export default __default_export__;

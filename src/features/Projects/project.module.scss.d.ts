@@ -6,16 +6,16 @@
  * https://npmjs.com/vite-css-modules
  */
 
-declare const portfolio: string;
-declare const portfolioItemsContainer: string;
+declare const projects: string;
+declare const projectsItemsContainer: string;
 
 export {
-	portfolio,
-	portfolioItemsContainer
+	projects,
+	projectsItemsContainer
 };
 
 declare const __default_export__: {
-	portfolio: typeof portfolio;
-	portfolioItemsContainer: typeof portfolioItemsContainer;
+	projects: typeof projects;
+	projectsItemsContainer: typeof projectsItemsContainer;
 };
 export default __default_export__;

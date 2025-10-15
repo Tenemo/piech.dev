@@ -21,7 +21,7 @@ const PROJECTS_FILE = path.join(
     process.cwd(),
     'src',
     'features',
-    'Portfolio',
+    'Projects',
     'projects.ts',
 );
 

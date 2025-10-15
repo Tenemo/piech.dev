@@ -2,15 +2,15 @@ import React from 'react';
 
 import { TECHNOLOGIES } from '../../technologies';
 
-import styles from './portfolioTechnologies.module.scss';
+import styles from './projectTechnologies.module.scss';
 
-type PortfolioTechnologiesProps = {
+type ProjectTechnologiesProps = {
     technologies: (keyof typeof TECHNOLOGIES)[];
 };
 
-const PortfolioTechnologies = ({
+const ProjectTechnologies = ({
     technologies,
-}: PortfolioTechnologiesProps): React.JSX.Element => {
+}: ProjectTechnologiesProps): React.JSX.Element => {
     if (technologies.length === 0) {
         return <></>;
     }
@@ -44,4 +44,4 @@ const PortfolioTechnologies = ({
     );
 };
 
-export default PortfolioTechnologies;
+export default ProjectTechnologies;

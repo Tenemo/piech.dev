@@ -2,11 +2,11 @@ import { screen } from '@testing-library/react';
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 
-import PortfolioTechnologies from './PortfolioTechnologies';
+import ProjectTechnologies from './ProjectTechnologies';
 
 import { renderWithProviders } from 'utils/testUtils';
 
-vi.mock('features/Portfolio/technologies', () => ({
+vi.mock('features/Projects/technologies', () => ({
     TECHNOLOGIES: {
         react: {
             fullName: 'React',
@@ -20,17 +20,17 @@ vi.mock('features/Portfolio/technologies', () => ({
     },
 }));
 
-describe('PortfolioTechnologies', () => {
+describe('ProjectTechnologies', () => {
     it('should render nothing when technologies array is empty', () => {
         const { container } = renderWithProviders(
-            <PortfolioTechnologies technologies={[]} />,
+            <ProjectTechnologies technologies={[]} />,
         );
         expect(container.firstChild).toBeNull();
     });
 
     it('should render all provided technologies', () => {
         renderWithProviders(
-            <PortfolioTechnologies technologies={['react', 'typescript']} />,
+            <ProjectTechnologies technologies={['react', 'typescript']} />,
         );
 
         expect(
@@ -50,7 +50,7 @@ describe('PortfolioTechnologies', () => {
 
     it('should apply different classes based on wideLogo property', () => {
         const { container } = renderWithProviders(
-            <PortfolioTechnologies technologies={['react', 'typescript']} />,
+            <ProjectTechnologies technologies={['react', 'typescript']} />,
         );
 
         const reactLogo = container.querySelector('img[alt="react logo"]');
@@ -63,7 +63,7 @@ describe('PortfolioTechnologies', () => {
 
     it('should have correct href and title attributes on links', () => {
         renderWithProviders(
-            <PortfolioTechnologies technologies={['react', 'typescript']} />,
+            <ProjectTechnologies technologies={['react', 'typescript']} />,
         );
 
         const reactLink = screen.getByRole('link', { name: /react/i });
@@ -82,7 +82,7 @@ describe('PortfolioTechnologies', () => {
 
     it('should have correct attributes on images', () => {
         const { container } = renderWithProviders(
-            <PortfolioTechnologies technologies={['react']} />,
+            <ProjectTechnologies technologies={['react']} />,
         );
 
         const reactLogo = container.querySelector('img[alt="react logo"]');

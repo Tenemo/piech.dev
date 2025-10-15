@@ -1,9 +1,9 @@
 import { Helmet } from '@dr.pogodin/react-helmet';
 import React from 'react';
 
-import styles from './project.module.scss';
 import ProjectCard from './ProjectCard/ProjectCard';
-import { PROJECTS } from './projects';
+import styles from './projects.module.scss';
+import { PROJECTS } from './projectsList';
 
 const Project = (): React.JSX.Element => {
     return (

@@ -21,11 +21,11 @@ describe('Header', () => {
     it('should render navigation links', () => {
         renderWithProviders(<Header />);
 
-    const projectsLink = screen.getByText(/projects/i);
+        const projectsLink = screen.getByText(/projects/i);
         const aboutLink = screen.getByText(/about me/i);
         const contactLink = screen.getByText(/contact/i);
 
-    expect(projectsLink).toBeInTheDocument();
+        expect(projectsLink).toBeInTheDocument();
         expect(aboutLink).toBeInTheDocument();
         expect(contactLink).toBeInTheDocument();
     });

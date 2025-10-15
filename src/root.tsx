@@ -28,10 +28,6 @@ export const Layout = ({
                 <base href="/" />
                 <meta content="piotr@piech.dev" name="author" />
                 <meta content="piech.dev" property="og:site_name"></meta>
-                <meta
-                    content="piotr, piech, piotr piech, reactplate, react, typescript, elgamal, threshold-elgamal, projects, portfolio"
-                    name="keywords"
-                />
                 <meta charSet="utf-8" />
                 <meta
                     content="width=device-width, initial-scale=1, shrink-to-fit=no"

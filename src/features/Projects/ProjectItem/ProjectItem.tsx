@@ -6,7 +6,7 @@ import { Link, useParams } from 'react-router';
 import styles from './projectItem.module.scss';
 import ProjectMarkdown from './ProjectMarkdown/ProjectMarkdown';
 
-import { README_CONTENT } from 'utils/githubDatazzz';
+import { README_CONTENT } from 'utils/githubData';
 
 const ProjectItemDetails: React.FC = (): React.JSX.Element => {
     const { repo } = useParams<{ repo: string }>();

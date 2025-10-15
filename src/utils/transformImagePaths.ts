@@ -10,17 +10,18 @@ async function findHtmlFiles(dir: string): Promise<string[]> {
     // eslint-disable-next-line security/detect-non-literal-fs-filename
     const dirents = await fs.readdir(dir, { withFileTypes: true });
     const files = await Promise.all(
-        dirents.map((dirent) => {
+        dirents.map(async (dirent) => {
             const res = path.resolve(dir, dirent.name);
             if (dirent.isDirectory()) {
                 return findHtmlFiles(res);
             }
-            return res.endsWith('.html') ? res : null;
+            if (res.endsWith('.html')) {
+                return [res];
+            }
+            return [] as string[];
         }),
     );
-    return (Array.prototype.concat(...files) as (string | null)[]).filter(
-        (file): file is string => file !== null,
-    );
+    return files.flat();
 }
 
 async function transformImagePaths(): Promise<void> {

@@ -26,16 +26,18 @@ async function findHtmlFiles(dir: string): Promise<string[]> {
     // eslint-disable-next-line security/detect-non-literal-fs-filename
     const dirents = await fs.readdir(dir, { withFileTypes: true });
     const files = await Promise.all(
-        dirents.map((d) => {
+        dirents.map(async (d) => {
             const p = path.resolve(dir, d.name);
-            return d.isDirectory()
-                ? findHtmlFiles(p)
-                : p.endsWith('.html')
-                  ? p
-                  : null;
+            if (d.isDirectory()) {
+                return findHtmlFiles(p);
+            }
+            if (p.endsWith('.html')) {
+                return [p];
+            }
+            return [] as string[];
         }),
     );
-    return files.flat().filter(Boolean) as string[];
+    return files.flat();
 }
 
 // Pull href + media off each <link rel="stylesheet" ...>

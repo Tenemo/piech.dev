@@ -32,7 +32,6 @@ export const Layout = ({
                     name="keywords"
                 />
                 <meta charSet="utf-8" />
-                <meta httpEquiv="X-UA-Compatible" />
                 <meta
                     content="width=device-width, initial-scale=1, shrink-to-fit=no"
                     name="viewport"

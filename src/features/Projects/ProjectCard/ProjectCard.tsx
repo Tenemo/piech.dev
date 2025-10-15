@@ -7,7 +7,7 @@ import { TECHNOLOGIES } from '../technologies';
 import styles from './projectCard.module.scss';
 import ProjectTechnologies from './ProjectTechnologies/ProjectTechnologies';
 
-import { REPOSITORY_INFO } from 'utils/githubData';
+import { REPOSITORY_INFO } from 'utils/githubDatazzz';
 
 type ProjectCardProps = {
     projectPreview: string;

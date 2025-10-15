@@ -23,7 +23,6 @@ const ProjectMarkdown = ({
     markdown,
     repo,
 }: ProjectMarkdownProps): React.JSX.Element => {
-    // react-markdown passes a hast node; we only need to distinguish attributes by key
     const urlTransform = (
         url: string,
         key: string,

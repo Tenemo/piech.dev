@@ -21,3 +21,5 @@ My personal page, [visit it](https://piech.dev) to find out more.
 - The whole site, including all project routes, is pre-rendered with React Router in framework mode into HTML.
 - The site ships without ANY client-side JavaScript despite being built in React.
 - Thanks to the above (and a ton of other optimizations), the heaviest route (/projects) scores perfect 100/100/100/100 on [pagespeed.web.dev](https://pagespeed.web.dev/) mobile (which throttles to slow 4G)
+
+<img src="public/media/readme/lighthouse.webp" alt="Lighthouse results" title="Lighthouse results" width="500" />

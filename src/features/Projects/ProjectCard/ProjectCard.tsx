@@ -59,7 +59,7 @@ const ProjectCard = ({
     const renderContent = (): React.ReactNode => {
         const description =
             repositoryInfo?.description ?? 'No description available';
-        return <p>{description}</p>;
+        return <p data-nosnippet>{description}</p>;
     };
 
     return (

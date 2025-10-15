@@ -9,7 +9,6 @@ import styles from './contact.module.scss';
 const Contact = (): React.JSX.Element => {
     return (
         <main className={styles.main}>
-            <title>Contact | piech.dev</title>
             <h2>Contact</h2>
             <div className={'divider'} />
             <div className={styles.contactInfoContainer}>

@@ -2,6 +2,8 @@ import { screen } from '@testing-library/react';
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
+import { meta as projectsMeta } from '../../routes/projects';
+
 import ProjectPage from './Projects';
 import styles from './projects.module.scss';
 
@@ -72,21 +74,19 @@ describe('Projects page', () => {
         expect(dividers.length).toBeGreaterThan(1);
     });
 
-    it('sets a single, correct meta description and title', () => {
-        renderWithProviders(<ProjectPage />);
-        const title = document.querySelector('title');
-        expect(title?.textContent).toBe('Projects | piech.dev');
-
-        const descriptions = document.querySelectorAll(
-            'meta[name="description"]',
+    it('exposes correct meta for Projects route', () => {
+        const tags = projectsMeta({
+            params: {},
+            data: null,
+            location: new URL('https://piech.dev/projects'),
+            loaderData: undefined as unknown as Record<string, unknown>,
+            matches: [],
+        } as unknown as Parameters<typeof projectsMeta>[0]);
+        expect(tags).toEqual(
+            expect.arrayContaining([
+                { title: 'Projects | piech.dev' },
+                expect.objectContaining({ name: 'description' }),
+            ]),
         );
-        expect(descriptions.length).toBeGreaterThanOrEqual(1);
-        // The page-level one should be present
-        const pageDesc = Array.from(descriptions).find((m) =>
-            (m.getAttribute('content') ?? '').startsWith(
-                'Non-commercial projects I built',
-            ),
-        );
-        expect(pageDesc).toBeTruthy();
     });
 });

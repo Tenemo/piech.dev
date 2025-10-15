@@ -23,7 +23,12 @@ const ProjectMarkdown = ({
     markdown,
     repo,
 }: ProjectMarkdownProps): React.JSX.Element => {
-    const urlTransform = (url: string, key: string, _node: unknown): string => {
+    // react-markdown passes a hast node; we only need to distinguish attributes by key
+    const urlTransform = (
+        url: string,
+        key: string,
+        _node: { type?: string } | null,
+    ): string => {
         if (url.startsWith('http')) {
             // Don't transform GitHub user-attachment URLs in urlTransform
             // We'll handle them in the component rendering

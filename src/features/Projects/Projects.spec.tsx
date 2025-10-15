@@ -1,4 +1,5 @@
 import { screen } from '@testing-library/react';
+import type { Location as HistoryLocation } from 'history';
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
@@ -75,13 +76,21 @@ describe('Projects page', () => {
     });
 
     it('exposes correct meta for Projects route', () => {
+        const location: HistoryLocation = {
+            pathname: '/projects',
+            search: '',
+            hash: '',
+            state: null,
+            key: 'test',
+        };
+
         const tags = projectsMeta({
             params: {},
             data: null,
-            location: new URL('https://piech.dev/projects'),
-            loaderData: undefined as unknown as Record<string, unknown>,
+            location,
+            loaderData: {} as Record<string, never>,
             matches: [],
-        } as unknown as Parameters<typeof projectsMeta>[0]);
+        } as Parameters<typeof projectsMeta>[0]);
         expect(tags).toEqual(
             expect.arrayContaining([
                 { title: 'Projects | piech.dev' },

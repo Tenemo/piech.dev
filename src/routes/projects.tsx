@@ -19,7 +19,7 @@ export const meta: MetaFunction = () => [
     { property: 'og:url', content: 'https://piech.dev/projects/' },
 ];
 
-export const links = (_args: unknown): { rel: string; href: string }[] => [
+export const links = (): { rel: string; href: string }[] => [
     { rel: 'canonical', href: 'https://piech.dev/projects/' },
 ];
 

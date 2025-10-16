@@ -1,6 +1,7 @@
 import React from 'react';
 import type { MetaFunction } from 'react-router';
 
+import { DEFAULT_KEYWORDS } from 'constants/seo';
 import ProjectItem from 'features/Projects/ProjectItem/ProjectItem';
 import { REPOSITORY_INFO } from 'utils/githubData';
 
@@ -11,12 +12,10 @@ export const meta: MetaFunction = (args) => {
     const desc =
         info?.description ??
         `Project details for ${repo} from github.com/tenemo/${repo}`;
-    const defaultKeywords =
-        'react, typescript, elgamal, threshold-elgamal, ESP32, reactplate, homomorphic encryption, homomorphic';
     const keywords =
         info?.topics && info.topics.length > 0
             ? info.topics.join(', ')
-            : defaultKeywords;
+            : DEFAULT_KEYWORDS;
 
     return [
         { title },

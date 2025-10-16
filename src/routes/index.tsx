@@ -1,6 +1,7 @@
 import React from 'react';
 import type { MetaFunction } from 'react-router';
 
+import { DEFAULT_KEYWORDS } from 'constants/seo';
 import About from 'features/About/About';
 
 export const meta: MetaFunction = () => [
@@ -8,8 +9,7 @@ export const meta: MetaFunction = () => [
     { name: 'description', content: "Piotr's personal page." },
     {
         name: 'keywords',
-        content:
-            'react, typescript, elgamal, threshold-elgamal, ESP32, reactplate, homomorphic encryption, homomorphic',
+        content: DEFAULT_KEYWORDS,
     },
     { property: 'og:title', content: 'piech.dev' },
     { property: 'og:description', content: "Piotr's personal page." },

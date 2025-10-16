@@ -11,7 +11,7 @@ My personal page, [visit it](https://piech.dev) to find out more.
 - Projects are defined in `src/features/Projects/projectsList.ts` (name, optional `repoName`, technologies, and a local preview image/video).
 - During build or locally, `src/utils/fetchGithubData.ts` fetches metadata and READMEs for those repos from GitHub and writes `temp/githubData.json`.
 - At runtime, `src/utils/githubData.ts` imports that JSON and exposes:
-    - `REPOSITORY_INFO[repo]` → repo name/description for cards
+    - `REPOSITORY_INFO[repo]` → repo name/description (+ `topics` from GitHub repo topics to be used as keywords) for cards and SEO
     - `README_CONTENT[repo]` → raw markdown for details view
 - The projects list (`Project.tsx` → `ProjectCard`) shows each project with its preview and GitHub description at https://piech.dev/projects/.
 - The project details page (`ProjectItem.tsx`) renders the repo README at https://piech.dev/projects/:repo using `ProjectMarkdown`, transforming relative links and embedding media.

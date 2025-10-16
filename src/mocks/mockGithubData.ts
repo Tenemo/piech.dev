@@ -6,12 +6,32 @@ const data: GithubData = {
         'test-project': {
             name: 'test-project',
             description: 'Test description',
+            topics: ['react', 'typescript'],
         },
-        'img-test': { name: 'img-test', description: 'Image test' },
-        'video-test': { name: 'video-test', description: 'Video test' },
-        'right-test': { name: 'right-test', description: 'Right image test' },
-        'custom-repo': { name: 'custom-repo', description: 'Custom repo test' },
-        'cached-repo': { name: 'cached-repo', description: 'Cached repo' },
+        'img-test': {
+            name: 'img-test',
+            description: 'Image test',
+            topics: ['images'],
+        },
+        'video-test': {
+            name: 'video-test',
+            description: 'Video test',
+            topics: ['video'],
+        },
+        'right-test': {
+            name: 'right-test',
+            description: 'Right image test',
+            topics: ['ui'],
+        },
+        'custom-repo': {
+            name: 'custom-repo',
+            description: 'Custom repo test',
+        },
+        'cached-repo': {
+            name: 'cached-repo',
+            description: 'Cached repo',
+            topics: [],
+        },
         'link-test': { name: 'link-test', description: 'Link test' },
     },
     README_CONTENT: {

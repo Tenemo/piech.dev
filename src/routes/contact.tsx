@@ -1,6 +1,7 @@
 import React from 'react';
 import type { MetaFunction } from 'react-router';
 
+import { DEFAULT_KEYWORDS } from 'constants/seo';
 import Contact from 'features/Contact/Contact';
 
 export const meta: MetaFunction = () => [
@@ -9,11 +10,7 @@ export const meta: MetaFunction = () => [
         name: 'description',
         content: 'Contact Piotr Piech (email, LinkedIn, GitHub, Telegram).',
     },
-    {
-        name: 'keywords',
-        content:
-            'react, typescript, elgamal, threshold-elgamal, ESP32, reactplate, homomorphic encryption, homomorphic',
-    },
+    { name: 'keywords', content: DEFAULT_KEYWORDS },
     { property: 'og:title', content: 'Contact | piech.dev' },
     {
         property: 'og:description',

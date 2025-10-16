@@ -9,6 +9,11 @@ export const meta: MetaFunction = () => [
         name: 'description',
         content: 'Contact Piotr Piech (email, LinkedIn, GitHub, Telegram).',
     },
+    {
+        name: 'keywords',
+        content:
+            'react, typescript, elgamal, threshold-elgamal, ESP32, reactplate, homomorphic encryption, homomorphic',
+    },
     { property: 'og:title', content: 'Contact | piech.dev' },
     {
         property: 'og:description',

@@ -11,10 +11,17 @@ export const meta: MetaFunction = (args) => {
     const desc =
         info?.description ??
         `Project details for ${repo} from github.com/tenemo/${repo}`;
+    const defaultKeywords =
+        'react, typescript, elgamal, threshold-elgamal, ESP32, reactplate, homomorphic encryption, homomorphic';
+    const keywords =
+        info?.topics && info.topics.length > 0
+            ? info.topics.join(', ')
+            : defaultKeywords;
 
     return [
         { title },
         { name: 'description', content: desc },
+        { name: 'keywords', content: keywords },
         { property: 'og:title', content: title },
         { property: 'og:description', content: desc },
         { property: 'og:url', content: `https://piech.dev/projects/${repo}` },

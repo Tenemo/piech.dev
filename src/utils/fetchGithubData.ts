@@ -4,7 +4,7 @@
  - Writes temp/githubData.json with shape:
      {
          METADATA: { datetimeFetched: string },
-         REPOSITORY_INFO: { [repo]: { name, description } },
+         REPOSITORY_INFO: { [repo]: { name, description, topics?: string[] } },
          README_CONTENT: { [repo]: markdown }
      }
 */

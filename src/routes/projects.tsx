@@ -10,6 +10,11 @@ export const meta: MetaFunction = () => [
         content:
             'Non-commercial projects I built in my free time: small tools, libraries, and experiments in React, TypeScript, cryptography, and more.',
     },
+    {
+        name: 'keywords',
+        content:
+            'react, typescript, elgamal, threshold-elgamal, ESP32, reactplate, homomorphic encryption, homomorphic',
+    },
     { property: 'og:title', content: 'Projects | piech.dev' },
     {
         property: 'og:description',

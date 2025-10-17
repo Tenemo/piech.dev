@@ -8,6 +8,9 @@
     background-color: var(--header-color);
     padding: 0.5rem 1rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 10;
     a h1 {
         text-decoration: none;
     }

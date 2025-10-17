@@ -65,5 +65,5 @@ status = 301
 # Redirect unknown paths to home
 [[redirects]]
 from = "/*"
-to = "/"
-status = 301
+to = "/index.html"
+status = 200

@@ -149,4 +149,4 @@ export const PROJECTS: {
     //     projectPreview: 'YYYYYYYYYY',
     //     technologies: [],
     // },
-];
+] as const;

@@ -6,6 +6,8 @@
 
 My personal page. Over time it turned into a complex project itself: it supports loading all projects' information directly from GitHub, renders GitHub's markdown, the whole page is pre-rendered and served with zero JS. It also includes dynamic <meta> tags for each project page, including individual og:image tags with sizes.
 
+<img src="public/media/projects/piech.dev.webp" alt="Lighthouse results" title="Lighthouse results" width="500" />
+
 ## Dynamic, GitHub-based project list and details
 
 - Projects pull metadata and READMEs directly from GitHub at build time

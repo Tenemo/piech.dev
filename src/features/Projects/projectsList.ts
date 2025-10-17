@@ -72,7 +72,7 @@ export const PROJECTS: {
     {
         project: 'piech.dev',
         projectPreview: 'piech.dev.webp',
-        ogImage: 'piech.dev_preview.jpg',
+        ogImage: 'piech.dev_projects.jpg',
         ogImageAlt:
             'Screenshot of the piech.dev Projects page with project cards.',
         technologies: [

@@ -36,7 +36,9 @@ export function getImageSize(imagePath: string): ImageSize {
             return { width, height };
         }
         throw new Error(`Missing size for OG image: ${imagePath}`);
-    } catch {
-        throw new Error(`Missing size for OG image: ${imagePath}`);
+    } catch (error) {
+        throw new Error(
+            `Missing size for OG image: ${imagePath}: ${error instanceof Error ? error.message : String(error)}`,
+        );
     }
 }

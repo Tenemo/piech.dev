@@ -21,6 +21,6 @@ My personal page. Over time it turned into a complex project itself: it supports
 - The site ships without ANY client-side JavaScript despite being built in React.
 - For performance reasons, the whole CSS is inlined into HTML, as there is so little of it and it significantly sped up page load times and it eliminates the awful Flash of Unstyled Content no matter the connection speed.
 - Images are utilizing Netlify Image CDN to speed up their load times and to avoid serving oversized images.
-- Thanks to the above and a ton of other optimizations, all routes, including the heaviest /projects route score perfect 100/100/100/100 [Google Lighthouse](https://pagespeed.web.dev/) mobile which throttles to slow 4G.
+- Thanks to the above and a ton of other optimizations, all routes, including the heaviest /projects route, score a perfect 100/100/100/100 on [Google Lighthouse](https://pagespeed.web.dev/) mobile, which throttles to a slow 4G network connection.
 
 <img src="public/media/readme/lighthouse.webp" alt="Lighthouse results" title="Lighthouse results" width="500" />

@@ -33,11 +33,6 @@ export const meta: MetaFunction = (args) => {
     const ogImageAlt = projectEntry.ogImageAlt;
 
     const size = getImageSize(`${LOCAL_OG_IMAGES_DIRECTORY}${ogImage}`);
-    if (!size) {
-        throw new Error(
-            `Missing size for OG image: public/media/projects/og_images/${ogImage}`,
-        );
-    }
     return [
         { title },
         { name: 'description', content: desc },

@@ -26,7 +26,7 @@ const manualChunks = (id: string): string | null => {
     return null;
 };
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode, command }) => {
     const env = loadEnv(mode, process.cwd(), '');
     const analyze = env.ANALYZE === 'true';
     return {
@@ -43,6 +43,7 @@ export default defineConfig(({ mode }) => {
                     filename: 'dist/stats.html',
                 }),
         ],
+        ssr: command === 'build' ? { noExternal: true } : {},
         define: {
             __BUILD_DATE__: JSON.stringify(
                 new Date().toISOString().split('T')[0],

@@ -3,8 +3,8 @@
  - Programmatic usage: await fetchGithubData({ refetch?: boolean })
  - Writes temp/githubData.json with shape:
      {
-         METADATA: { datetimeFetched: string },
-         REPOSITORY_INFO: { [repo]: { name, description, topics?: string[] } },
+         METADATA: { fetchedDatetime: string },
+         REPOSITORY_INFO: { [repo]: { name, description, topics?: string[], createdDatetime: string } },
          README_CONTENT: { [repo]: markdown }
      }
 */
@@ -25,9 +25,14 @@ const PROJECTS_FILE = path.join(
     'projectsList.ts',
 );
 
-type RepoInfo = { name: string; description: string; topics?: string[] };
+type RepoInfo = {
+    name: string;
+    description: string;
+    topics?: string[];
+    createdDatetime: string;
+};
 export type GithubData = {
-    METADATA: { datetimeFetched: string };
+    METADATA: { fetchedDatetime: string };
     REPOSITORY_INFO: Record<string, RepoInfo>;
     README_CONTENT: Record<string, string>;
 };
@@ -116,7 +121,7 @@ export async function fetchGithubData(options?: {
             const current = JSON.parse(raw) as Partial<GithubData>;
 
             // Determine if the file is older than one day
-            const metaStr = current.METADATA?.datetimeFetched;
+            const metaStr = current.METADATA?.fetchedDatetime;
             const metaDate = metaStr ? new Date(metaStr) : undefined;
             const fileMtimeMs = fssync.statSync(OUT_PATH).mtime.getTime();
             const effectiveTimeMs =
@@ -153,12 +158,13 @@ export async function fetchGithubData(options?: {
     const MAX_CONCURRENCY = Number(process.env.GH_CONCURRENCY ?? 8);
 
     const worker = async (repo: string): Promise<void> => {
-        // Fetch repo info and README concurrently; handle failures independently
+        // Fetch repo info and README concurrently
         const [infoRes, topicsRes, readmeRes] = await Promise.allSettled([
-            fetchJson<{ name?: string; description?: string }>(
-                `https://api.github.com/repos/${OWNER}/${repo}`,
-                token,
-            ),
+            fetchJson<{
+                name?: string;
+                description?: string;
+                created_at?: string;
+            }>(`https://api.github.com/repos/${OWNER}/${repo}`, token),
             fetchJson<{ names?: string[] }>(
                 `https://api.github.com/repos/${OWNER}/${repo}/topics`,
                 token,
@@ -166,11 +172,13 @@ export async function fetchGithubData(options?: {
             getReadme(OWNER, repo),
         ]);
 
+        const epochIso = '1970-01-01T00:00:00.000Z';
         if (infoRes.status === 'fulfilled') {
             const repoData = infoRes.value;
             infoObject[repo] = {
                 name: repoData.name ?? repo,
                 description: repoData.description ?? 'No description available',
+                createdDatetime: repoData.created_at ?? epochIso,
                 topics:
                     topicsRes.status === 'fulfilled'
                         ? (topicsRes.value.names ?? [])
@@ -180,6 +188,8 @@ export async function fetchGithubData(options?: {
             infoObject[repo] = {
                 name: repo,
                 description: 'No description available',
+                // Fallback to epoch to make failures obvious
+                createdDatetime: epochIso,
                 topics:
                     topicsRes.status === 'fulfilled'
                         ? (topicsRes.value.names ?? [])
@@ -230,7 +240,7 @@ export async function fetchGithubData(options?: {
 
     await fs.mkdir(OUT_DIR, { recursive: true });
     const payload: GithubData = {
-        METADATA: { datetimeFetched: new Date().toISOString() },
+        METADATA: { fetchedDatetime: new Date().toISOString() },
         REPOSITORY_INFO: infoObject,
         README_CONTENT: readmeObject,
     };

@@ -69,22 +69,22 @@ export const PROJECTS: {
             'sentry',
         ],
     },
-    // {
-    //     project: 'piech.dev',
-    //     projectPreview: 'piech.dev.webp',
-    //     ogImage: 'piech.dev_preview.jpg',
-    //     ogImageAlt:
-    //         'Screenshot of the piech.dev Projects page with project cards.',
-    //     technologies: [
-    //         'typescript',
-    //         'react',
-    //         'sass',
-    //         'vitejs',
-    //         'eslint',
-    //         'prettier',
-    //         'netlify',
-    //     ],
-    // },
+    {
+        project: 'piech.dev',
+        projectPreview: 'piech.dev.webp',
+        ogImage: 'piech.dev_preview.jpg',
+        ogImageAlt:
+            'Screenshot of the piech.dev Projects page with project cards.',
+        technologies: [
+            'typescript',
+            'react',
+            'sass',
+            'vitejs',
+            'eslint',
+            'prettier',
+            'netlify',
+        ],
+    },
     {
         project: 'expressplate',
         projectPreview: 'expressplate.webp',

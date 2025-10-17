@@ -1,6 +1,7 @@
 @use "styles/variables";
 
 html,
+#root,
 body {
     font-size: 1rem;
     background-color: var(--background-color);

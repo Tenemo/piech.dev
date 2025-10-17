@@ -14,18 +14,41 @@ vi.mock('../../../../temp/githubData', () => ({
                 name: 'test-project',
                 description: 'Test description',
             },
-            'img-test': { name: 'img-test', description: 'Image test' },
-            'video-test': { name: 'video-test', description: 'Video test' },
+            'img-test': {
+                name: 'img-test',
+                description: 'Image test',
+                createdDatetime: '2023-09-12T08:00:00.000Z',
+            },
+            'video-test': {
+                name: 'video-test',
+                description: 'Video test',
+                createdDatetime: '2022-01-20T15:30:00.000Z',
+            },
             'right-test': {
                 name: 'right-test',
                 description: 'Right image test',
+                createdDatetime: '2024-06-01T00:00:00.000Z',
             },
             'custom-repo': {
                 name: 'custom-repo',
                 description: 'Custom repo test',
+                createdDatetime: '2020-12-31T23:59:59.000Z',
             },
-            'cached-repo': { name: 'cached-repo', description: 'Cached repo' },
-            'link-test': { name: 'link-test', description: 'Link test' },
+            'cached-repo': {
+                name: 'cached-repo',
+                description: 'Cached repo',
+                createdDatetime: '2019-03-10T10:00:00.000Z',
+            },
+            'link-test': {
+                name: 'link-test',
+                description: 'Link test',
+                createdDatetime: '2018-07-07T07:07:07.000Z',
+            },
+            'epoch-test': {
+                name: 'epoch-test',
+                description: 'Epoch fallback',
+                createdDatetime: '1970-01-01T00:00:00.000Z',
+            },
         },
     },
 }));
@@ -97,6 +120,30 @@ describe('ProjectCard', () => {
             name: /view img-test project details/i,
         });
         expect(previewLink).toBeInTheDocument();
+
+        // Date badge is rendered inside description, not in preview
+        const previewHasBadge = container.querySelector(
+            `.${styles.previewContainer} time.${styles.dateBadge}`,
+        );
+        expect(previewHasBadge).toBeNull();
+
+        const descriptionLink = container.querySelector(
+            `a.${styles.description}`,
+        );
+        const badge = descriptionLink?.querySelector(
+            `time.${styles.dateBadge}`,
+        ) as HTMLElement | null;
+        expect(badge).toBeInTheDocument();
+        // September 2023 (from 2023-09-12)
+        expect(badge).toHaveTextContent(/september\s+2023/i);
+        expect(badge).toHaveAttribute('dateTime', '2023-09-12T08:00:00.000Z');
+        expect(badge).toHaveAttribute(
+            'title',
+            'Month the project was kicked off in',
+        );
+        expect(badge).toHaveAccessibleName(
+            /project kickoff month: september 2023/i,
+        );
     });
 
     it('should render video for video preview files', () => {
@@ -124,6 +171,16 @@ describe('ProjectCard', () => {
             name: /view video-test project details/i,
         });
         expect(previewLink).toBeInTheDocument();
+
+        // Badge should reflect January 2022 for 2022-01-20
+        const descriptionLink = container.querySelector(
+            `a.${styles.description}`,
+        );
+        const badge = descriptionLink?.querySelector(
+            `time.${styles.dateBadge}`,
+        );
+        expect(badge).toBeInTheDocument();
+        expect(badge).toHaveTextContent(/january\s+2022/i);
     });
 
     it('should use imageRight class when imageOnRight is true', () => {
@@ -140,6 +197,12 @@ describe('ProjectCard', () => {
         const cardElement = container.querySelector(`.${styles.card}`);
         expect(cardElement).toHaveClass(styles.imageRight);
         expect(cardElement).not.toHaveClass(styles.imageLeft);
+
+        // Badge present for right-test
+        const badge = container.querySelector(
+            `a.${styles.description} time.${styles.dateBadge}`,
+        );
+        expect(badge).toBeInTheDocument();
     });
 
     it('should use a custom repo name when provided', () => {
@@ -176,6 +239,10 @@ describe('ProjectCard', () => {
         expect(
             screen.getByText(/no description available/i),
         ).toBeInTheDocument();
+        // No badge if no repo info
+        expect(
+            document.querySelector(`time.${styles.dateBadge}`),
+        ).not.toBeInTheDocument();
     });
 
     it('should use cached package info when available', () => {
@@ -223,5 +290,49 @@ describe('ProjectCard', () => {
         projectLinks.forEach((link) => {
             expect(link).toHaveAttribute('href', '/projects/link-test');
         });
+
+        // Badge present and formatted for link-test
+        const badge = document.querySelector(
+            `a.${styles.description} time.${styles.dateBadge}`,
+        );
+        expect(badge).toBeInTheDocument();
+        expect(badge).toHaveTextContent(/july\s+2018/i);
+    });
+
+    it('should not render badge when repo info is missing', () => {
+        renderWithProviders(
+            <ProjectCard
+                project="missing-repo"
+                projectPreview="test.webp"
+                technologies={['typescript']}
+            />,
+            { withRouter: true },
+        );
+        expect(
+            document.querySelector(`time.${styles.dateBadge}`),
+        ).not.toBeInTheDocument();
+    });
+
+    it('should render epoch fallback visually as January 1970', () => {
+        const { container } = renderWithProviders(
+            <ProjectCard
+                project="epoch-test"
+                projectPreview="test.webp"
+                technologies={['typescript']}
+            />,
+            { withRouter: true },
+        );
+        const badge = container.querySelector(
+            `a.${styles.description} time.${styles.dateBadge}`,
+        );
+        expect(badge).toBeInTheDocument();
+        expect(badge).toHaveTextContent(/january\s+1970/i);
+        expect(badge).toHaveAccessibleName(
+            /project kickoff month: january 1970/i,
+        );
+        expect(badge).toHaveAttribute(
+            'title',
+            'Month the project was kicked off in',
+        );
     });
 });

@@ -12,11 +12,6 @@ import { getImageSize } from 'utils/getImageSize';
 export const meta: MetaFunction = () => {
     const ogImage = 'piech.dev_projects.jpg';
     const size = getImageSize(`${LOCAL_OG_IMAGES_DIRECTORY}${ogImage}`);
-    if (!size) {
-        throw new Error(
-            `Missing size for OG image: public/media/projects/og_images/${ogImage}`,
-        );
-    }
 
     return [
         { title: 'Projects | piech.dev' },

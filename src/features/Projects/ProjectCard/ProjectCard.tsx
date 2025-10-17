@@ -1,4 +1,5 @@
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { format } from 'date-fns';
 import React from 'react';
 import { Link } from 'react-router';
 
@@ -26,6 +27,10 @@ const ProjectCard = ({
 }: ProjectCardProps): React.JSX.Element => {
     const githubRepository = repoName ?? project;
     const repositoryInfo = REPOSITORY_INFO[githubRepository];
+    const createdIso = repositoryInfo?.createdDatetime;
+    const createdLabel = createdIso
+        ? format(new Date(createdIso), 'MMMM yyyy')
+        : undefined;
 
     const isVideo = /\.(mp4|webm|ogg)$/i.test(projectPreview.toLowerCase());
 
@@ -73,6 +78,16 @@ const ProjectCard = ({
                     className={styles.description}
                     to={`/projects/${githubRepository}`}
                 >
+                    {createdLabel && (
+                        <time
+                            aria-label={`Project kickoff month: ${createdLabel}`}
+                            className={styles.dateBadge as string}
+                            dateTime={createdIso}
+                            title="Date the project was kicked off"
+                        >
+                            {createdLabel}
+                        </time>
+                    )}
                     <h3 className={styles.projectTitle}>
                         {project}
                         <OpenInNewIcon fontSize="small" />

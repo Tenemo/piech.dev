@@ -62,8 +62,23 @@ from = "/discord"
 to = "https://discord.com/users/297930621760831488"
 status = 301
 
-# Redirect unknown paths to home
+# 404 redirects
 [[redirects]]
-from = "/*"
-to = "/index.html"
-status = 200
+from = "/:path"
+to = "/"
+status = 301
+
+[[redirects]]
+from = "/:path/"
+to = "/"
+status = 301
+
+[[redirects]]
+from = "/:path/*"
+to = "/"
+status = 301
+
+[[redirects]]
+from = "/index.html"
+to = "/"
+status = 301

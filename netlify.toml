@@ -29,6 +29,16 @@ to = "/robots.txt"
 status = 200
 
 [[redirects]]
+from = "/portfolio"
+to = "/projects"
+status = 301
+
+[[redirects]]
+from = "/portfolio/*"
+to = "/projects/:splat"
+status = 301
+
+[[redirects]]
 from = "/linkedin"
 to = "https://www.linkedin.com/in/ppiech/"
 status = 301

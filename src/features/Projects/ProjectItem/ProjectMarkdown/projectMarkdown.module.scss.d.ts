@@ -7,12 +7,14 @@
  */
 
 declare const markdownContainer: string;
+declare const dateBadge: string;
 declare const videoPlayer: string;
 declare const codeBlock: string;
 declare const inlineCode: string;
 
 export {
 	markdownContainer,
+	dateBadge,
 	videoPlayer,
 	codeBlock,
 	inlineCode
@@ -20,6 +22,7 @@ export {
 
 declare const __default_export__: {
 	markdownContainer: typeof markdownContainer;
+	dateBadge: typeof dateBadge;
 	videoPlayer: typeof videoPlayer;
 	codeBlock: typeof codeBlock;
 	inlineCode: typeof inlineCode;

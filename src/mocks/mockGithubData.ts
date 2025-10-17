@@ -13,13 +13,13 @@ const data: GithubData = {
             name: 'img-test',
             description: 'Image test',
             topics: ['images'],
-            createdDatetime: '2021-02-10T09:30:00.000Z',
+            createdDatetime: '2023-09-12T08:00:00.000Z',
         },
         'video-test': {
             name: 'video-test',
             description: 'Video test',
             topics: ['video'],
-            createdDatetime: '2019-11-20T18:45:00.000Z',
+            createdDatetime: '2022-01-20T15:30:00.000Z',
         },
         'right-test': {
             name: 'right-test',
@@ -41,7 +41,12 @@ const data: GithubData = {
         'link-test': {
             name: 'link-test',
             description: 'Link test',
-            createdDatetime: '2016-12-12T12:12:12.000Z',
+            createdDatetime: '2018-07-07T07:07:07.000Z',
+        },
+        'epoch-test': {
+            name: 'epoch-test',
+            description: 'Epoch fallback',
+            createdDatetime: '1970-01-01T00:00:00.000Z',
         },
     },
     README_CONTENT: {

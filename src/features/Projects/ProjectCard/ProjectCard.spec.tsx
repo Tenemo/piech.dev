@@ -139,7 +139,7 @@ describe('ProjectCard', () => {
         expect(badge).toHaveAttribute('dateTime', '2023-09-12T08:00:00.000Z');
         expect(badge).toHaveAttribute(
             'title',
-            'Month the project was kicked off in',
+            'Date the project was kicked off',
         );
         expect(badge).toHaveAccessibleName(
             /project kickoff month: september 2023/i,
@@ -332,7 +332,7 @@ describe('ProjectCard', () => {
         );
         expect(badge).toHaveAttribute(
             'title',
-            'Month the project was kicked off in',
+            'Date the project was kicked off',
         );
     });
 });

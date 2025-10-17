@@ -83,7 +83,7 @@ const ProjectCard = ({
                             aria-label={`Project kickoff month: ${createdLabel}`}
                             className={styles.dateBadge}
                             dateTime={createdIso}
-                            title="Month the project was kicked off in"
+                            title="Date the project was kicked off"
                         >
                             {createdLabel}
                         </time>

@@ -1,5 +1,5 @@
-import React from 'react';
 import { format } from 'date-fns';
+import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import type { Components } from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -9,6 +9,7 @@ import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 
 import styles from './projectMarkdown.module.scss';
+
 import { REPOSITORY_INFO } from 'utils/githubData';
 
 const OWNER = 'tenemo';

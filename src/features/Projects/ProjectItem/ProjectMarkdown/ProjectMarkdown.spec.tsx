@@ -131,4 +131,44 @@ describe('ProjectMarkdown', () => {
         expect(h2.style.color).toBe('var(--accent-color)');
         expect(h3.style.color).toBe('var(--accent-color)');
     });
+
+    it('renders created date badge when repo info is available', () => {
+        const markdown = 'Content';
+        // Using repo present in global mocks with createdDatetime
+        render(<ProjectMarkdown markdown={markdown} repo="img-test" />);
+
+        const badge = screen.getByLabelText(
+            /Repository created:\s+September\s+2023/i,
+        );
+        expect(badge).toBeInTheDocument();
+        expect(badge).toHaveTextContent(
+            /Repository created:\s+September\s+2023/i,
+        );
+        expect(badge).toHaveAttribute('dateTime', '2023-09-12T08:00:00.000Z');
+        expect(badge).toHaveAttribute(
+            'title',
+            'Month the project was kicked off in',
+        );
+    });
+
+    it('renders epoch fallback as January 1970 when provided', () => {
+        const markdown = 'Content';
+        render(<ProjectMarkdown markdown={markdown} repo="epoch-test" />);
+
+        const badge = screen.getByLabelText(
+            /Repository created:\s+January\s+1970/i,
+        );
+        expect(badge).toBeInTheDocument();
+        expect(badge).toHaveTextContent(
+            /Repository created:\s+January\s+1970/i,
+        );
+    });
+
+    it('does not render a date badge when repo info is missing', () => {
+        const markdown = 'Content';
+        render(<ProjectMarkdown markdown={markdown} repo="missing-repo" />);
+        expect(
+            screen.queryByLabelText(/Repository created:/i),
+        ).not.toBeInTheDocument();
+    });
 });

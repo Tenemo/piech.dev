@@ -156,6 +156,7 @@ export async function fetchGithubData(options?: {
     const readmeObject: Record<string, string> = {};
 
     const MAX_CONCURRENCY = Number(process.env.GH_CONCURRENCY ?? 8);
+    const EPOCH_ISO = '1970-01-01T00:00:00.000Z';
 
     const worker = async (repo: string): Promise<void> => {
         // Fetch repo info and README concurrently
@@ -172,13 +173,12 @@ export async function fetchGithubData(options?: {
             getReadme(OWNER, repo),
         ]);
 
-        const epochIso = '1970-01-01T00:00:00.000Z';
         if (infoRes.status === 'fulfilled') {
             const repoData = infoRes.value;
             infoObject[repo] = {
                 name: repoData.name ?? repo,
                 description: repoData.description ?? 'No description available',
-                createdDatetime: repoData.created_at ?? epochIso,
+                createdDatetime: repoData.created_at ?? EPOCH_ISO,
                 topics:
                     topicsRes.status === 'fulfilled'
                         ? (topicsRes.value.names ?? [])
@@ -189,7 +189,7 @@ export async function fetchGithubData(options?: {
                 name: repo,
                 description: 'No description available',
                 // Fallback to epoch to make failures obvious
-                createdDatetime: epochIso,
+                createdDatetime: EPOCH_ISO,
                 topics:
                     topicsRes.status === 'fulfilled'
                         ? (topicsRes.value.names ?? [])

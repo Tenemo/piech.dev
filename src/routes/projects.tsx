@@ -22,7 +22,11 @@ export const meta: MetaFunction = () => [
     {
         property: 'og:image',
         content:
-            'https://piech.dev/media/projects/og_images/piech.dev_preview.jpg',
+            'https://piech.dev/media/projects/og_images/projects_preview.jpg',
+    },
+    {
+        property: 'og:image:alt',
+        content: 'Preview image for piech.dev projects.',
     },
     { property: 'og:url', content: 'https://piech.dev/projects/' },
     {

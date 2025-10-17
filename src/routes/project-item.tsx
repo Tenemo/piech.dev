@@ -18,12 +18,17 @@ export const meta: MetaFunction = (args) => {
             ? info.topics.join(', ')
             : DEFAULT_KEYWORDS;
 
-    const projectEntry = PROJECTS.find(
+    const projectEntry: (typeof PROJECTS)[number] | undefined = PROJECTS.find(
         (p) => (p.repoName ?? p.project) === repo,
     );
     const ogImage = `https://piech.dev/media/projects/og_images/${
-        projectEntry?.ogImage ?? 'piech.dev_preview.jpg'
+        projectEntry?.ogImage ?? 'projects_preview.jpg'
     }`;
+    let ogImageAlt = 'Preview image for piech.dev projects.';
+    const maybeAlt: unknown = projectEntry?.ogImageAlt as unknown;
+    if (typeof maybeAlt === 'string' && maybeAlt.trim().length > 0) {
+        ogImageAlt = maybeAlt;
+    }
 
     return [
         { title },
@@ -34,6 +39,7 @@ export const meta: MetaFunction = (args) => {
         { property: 'og:type', content: 'article' },
         { property: 'og:url', content: `https://piech.dev/projects/${repo}` },
         { property: 'og:image', content: ogImage },
+        { property: 'og:image:alt', content: ogImageAlt },
         {
             tagName: 'link',
             rel: 'canonical',

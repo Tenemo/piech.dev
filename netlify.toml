@@ -32,11 +32,13 @@ status = 200
 from = "/portfolio"
 to = "/projects"
 status = 301
+force = true
 
 [[redirects]]
 from = "/portfolio/*"
 to = "/projects/:splat"
 status = 301
+force = true
 
 [[redirects]]
 from = "/linkedin"

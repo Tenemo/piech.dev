@@ -28,6 +28,7 @@ from = "/robots.txt"
 to = "/robots.txt"
 status = 200
 
+# Redirects for legacy portfolio routes to support old links
 [[redirects]]
 from = "/portfolio"
 to = "/projects"
@@ -40,6 +41,7 @@ to = "/projects/:splat"
 status = 301
 force = true
 
+# Contact routes
 [[redirects]]
 from = "/linkedin"
 to = "https://www.linkedin.com/in/ppiech/"

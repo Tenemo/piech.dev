@@ -3,6 +3,7 @@ import type { MetaFunction } from 'react-router';
 
 import { DEFAULT_KEYWORDS } from 'constants/seo';
 import ProjectItem from 'features/Projects/ProjectItem/ProjectItem';
+import { PROJECTS } from 'features/Projects/projectsList';
 import { REPOSITORY_INFO } from 'utils/githubData';
 
 export const meta: MetaFunction = (args) => {
@@ -17,13 +18,22 @@ export const meta: MetaFunction = (args) => {
             ? info.topics.join(', ')
             : DEFAULT_KEYWORDS;
 
+    const projectEntry = PROJECTS.find(
+        (p) => (p.repoName ?? p.project) === repo,
+    );
+    const ogImage = `https://piech.dev/media/projects/og_images/${
+        projectEntry?.ogImage ?? 'piech.dev_preview.jpg'
+    }`;
+
     return [
         { title },
         { name: 'description', content: desc },
         { name: 'keywords', content: keywords },
         { property: 'og:title', content: title },
         { property: 'og:description', content: desc },
+        { property: 'og:type', content: 'article' },
         { property: 'og:url', content: `https://piech.dev/projects/${repo}` },
+        { property: 'og:image', content: ogImage },
         {
             tagName: 'link',
             rel: 'canonical',

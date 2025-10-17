@@ -4,20 +4,20 @@ export const PROJECTS: {
     projectPreview: string;
     project: string;
     repoName?: string;
-    seoImage: string;
+    ogImage: string;
     technologies: (keyof typeof TECHNOLOGIES)[];
 }[] = [
     {
         project: 'threshold-elgamal',
         projectPreview: 'threshold-elgamal.webp',
-        seoImage: 'threshold-elgamal_preview.jpg',
+        ogImage: 'threshold-elgamal_preview.jpg',
         technologies: ['typescript', 'npm', 'typedoc'],
     },
     {
         project: 'sealed.vote',
         repoName: 'sealed-vote-web',
         projectPreview: 'sealed.vote.mp4',
-        seoImage: 'sealed.vote_preview.jpg',
+        ogImage: 'sealed.vote_preview.jpg',
         technologies: [
             'typescript',
             'fastify',
@@ -33,7 +33,7 @@ export const PROJECTS: {
     {
         project: 'bob',
         projectPreview: 'bob-demo-movement.mp4',
-        seoImage: 'bob_preview.jpg',
+        ogImage: 'bob_preview.jpg',
         technologies: [
             'cpp',
             'platformio',
@@ -47,7 +47,7 @@ export const PROJECTS: {
     {
         project: 'reactplate',
         projectPreview: 'reactplate_lighthouse.webp',
-        seoImage: 'reactplate_preview.jpg',
+        ogImage: 'reactplate_preview.jpg',
         technologies: [
             'typescript',
             'react',
@@ -63,7 +63,7 @@ export const PROJECTS: {
     {
         project: 'expressplate',
         projectPreview: 'expressplate.webp',
-        seoImage: 'expressplate_preview.jpg',
+        ogImage: 'expressplate_preview.jpg',
         technologies: [
             'typescript',
             'nodejs',
@@ -77,14 +77,14 @@ export const PROJECTS: {
     {
         project: 'aliases.sh',
         projectPreview: 'aliases.sh.webp',
-        seoImage: 'aliases.sh_preview.jpg',
+        ogImage: 'aliases.sh_preview.jpg',
         technologies: ['bash'],
     },
     {
         project: 'tiles.town',
         repoName: 'tiles-town',
         projectPreview: 'tiles-town_full-game_dark-mode.mp4',
-        seoImage: 'tiles.town_preview.jpg',
+        ogImage: 'tiles.town_preview.jpg',
         technologies: [
             'typescript',
             'express',
@@ -99,7 +99,7 @@ export const PROJECTS: {
         project: 'particle.golf',
         repoName: 'particle-golf',
         projectPreview: 'particle-golf_demo.mp4',
-        seoImage: 'particle-golf_preview.jpg',
+        ogImage: 'particle-golf_preview.jpg',
         technologies: [
             'typescript',
             'react',

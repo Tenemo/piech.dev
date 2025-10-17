@@ -18,6 +18,12 @@ export const meta: MetaFunction = () => [
         content:
             'Non-commercial projects I built in my free time: small tools, libraries, and experiments in React, TypeScript, cryptography, and more.',
     },
+    { property: 'og:type', content: 'website' },
+    {
+        property: 'og:image',
+        content:
+            'https://piech.dev/media/projects/og_images/piech.dev_preview.jpg',
+    },
     { property: 'og:url', content: 'https://piech.dev/projects/' },
     {
         tagName: 'link',

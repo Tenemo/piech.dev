@@ -17,15 +17,14 @@
 
 .description .dateBadge {
     position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
+    top: 0;
+    right: 0;
     background-color: var(--background-color);
     color: var(--text-color);
-    padding: 0.2rem 0.5rem;
-    border-radius: 0.25rem;
+    padding: 0.6rem;
+    border-radius: 0 0 0 1rem;
     font-size: 0.8rem;
     line-height: 1;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
     z-index: 1;
 }
 

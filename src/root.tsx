@@ -34,6 +34,7 @@ export const Layout = ({
                     name="viewport"
                 />
                 <meta content="#383838" name="theme-color" />
+                <meta content="dark" name="color-scheme" />
                 <meta content="index, follow" name="robots" />
                 <meta content="piech.dev" name="apple-mobile-web-app-title" />
                 <meta content="telephone=no" name="format-detection"></meta>

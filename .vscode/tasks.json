@@ -18,6 +18,11 @@
 				"$tsc",
 				"$eslint-stylish"
 			]
+		},
+		{
+			"label": "Typecheck",
+			"type": "shell",
+			"command": "npm run tsc --silent"
 		}
 	]
 }

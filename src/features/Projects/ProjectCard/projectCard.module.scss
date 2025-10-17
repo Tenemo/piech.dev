@@ -58,7 +58,8 @@ video.image {
 
 .description {
     padding: 1rem;
-    position: relative; /* Anchor for .dateBadge so it stays within description card */
+    color: var(--text-color) !important;
+    position: relative;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -101,7 +102,7 @@ video.image {
 }
 
 .loadingContainer {
-    position: relative; /* Adjusted position for content area */
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;

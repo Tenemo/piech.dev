@@ -1,9 +1,14 @@
 import React from 'react';
 import type { MetaFunction } from 'react-router';
 
-import { DEFAULT_KEYWORDS } from 'constants/seo';
+import {
+    DEFAULT_KEYWORDS,
+    LOCAL_OG_IMAGES_DIRECTORY,
+    PRODUCTION_OG_IMAGES_DIRECTORY,
+} from 'app/appConstants';
 import ProjectItem from 'features/Projects/ProjectItem/ProjectItem';
 import { PROJECTS } from 'features/Projects/projectsList';
+import { getImageSize } from 'utils/getImageSize';
 import { REPOSITORY_INFO } from 'utils/githubData';
 
 export const meta: MetaFunction = (args) => {
@@ -18,18 +23,21 @@ export const meta: MetaFunction = (args) => {
             ? info.topics.join(', ')
             : DEFAULT_KEYWORDS;
 
-    const projectEntry: (typeof PROJECTS)[number] | undefined = PROJECTS.find(
+    const projectEntry = PROJECTS.find(
         (p) => (p.repoName ?? p.project) === repo,
     );
-    const ogImage = `https://piech.dev/media/projects/og_images/${
-        projectEntry?.ogImage ?? 'projects_preview.jpg'
-    }`;
-    let ogImageAlt = 'Preview image for piech.dev projects.';
-    const maybeAlt: unknown = projectEntry?.ogImageAlt as unknown;
-    if (typeof maybeAlt === 'string' && maybeAlt.trim().length > 0) {
-        ogImageAlt = maybeAlt;
+    if (!projectEntry) {
+        throw new Error(`Project entry not found for repo "${repo}"`);
     }
+    const ogImage = projectEntry.ogImage;
+    const ogImageAlt = projectEntry.ogImageAlt;
 
+    const size = getImageSize(`${LOCAL_OG_IMAGES_DIRECTORY}${ogImage}`);
+    if (!size) {
+        throw new Error(
+            `Missing size for OG image: public/media/projects/og_images/${ogImage}`,
+        );
+    }
     return [
         { title },
         { name: 'description', content: desc },
@@ -38,7 +46,12 @@ export const meta: MetaFunction = (args) => {
         { property: 'og:description', content: desc },
         { property: 'og:type', content: 'article' },
         { property: 'og:url', content: `https://piech.dev/projects/${repo}` },
-        { property: 'og:image', content: ogImage },
+        {
+            property: 'og:image',
+            content: `${PRODUCTION_OG_IMAGES_DIRECTORY}${ogImage}`,
+        },
+        { property: 'og:image:width', content: String(size.width) },
+        { property: 'og:image:height', content: String(size.height) },
         { property: 'og:image:alt', content: ogImageAlt },
         {
             tagName: 'link',

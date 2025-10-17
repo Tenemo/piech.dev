@@ -19,8 +19,11 @@ export const meta: MetaFunction = () => [
     { property: 'og:type', content: 'website' },
     {
         property: 'og:image',
-        content:
-            'https://piech.dev/media/projects/og_images/piech.dev_preview.jpg',
+        content: 'https://piech.dev/media/projects/og_images/contact.jpg',
+    },
+    {
+        property: 'og:image:alt',
+        content: 'Screenshot of contact links for Piotr Piech.',
     },
     { property: 'og:url', content: 'https://piech.dev/contact/' },
     {

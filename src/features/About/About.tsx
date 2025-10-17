@@ -20,8 +20,8 @@ const About = (): React.JSX.Element => {
             <h2>About me</h2>
             <div className={'divider'} />
             <p className={'smallHeadline'}>
-                ISO 8601 fan since 2012. Technically RFC 3339, but let&apos;s
-                not get me started on it!
+                ISO 8601 fan since 2012. Technically RFC 3339, but don&apos;t
+                get me started on it!
             </p>
             <div className={'divider'} />
 

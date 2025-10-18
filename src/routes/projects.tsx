@@ -11,7 +11,7 @@ import type {
     ImageObject,
 } from 'schema-dts';
 
-import { PERSON_ID, WEBSITE_ID } from './index';
+import { PERSON, PERSON_ID, WEBSITE_ID } from './index';
 
 import {
     DEFAULT_KEYWORDS,
@@ -47,6 +47,7 @@ const projectsItemList: ItemList = {
 
 const breadcrumbList: BreadcrumbList = {
     '@type': 'BreadcrumbList',
+    '@id': 'https://piech.dev/projects/#breadcrumb',
     itemListElement: [
         {
             '@type': 'ListItem',
@@ -66,25 +67,19 @@ const breadcrumbList: BreadcrumbList = {
 export const meta: MetaFunction = () => {
     const ogImage = 'piech.dev_projects.jpg';
     const size = getImageSize(`${LOCAL_OG_IMAGES_DIRECTORY}${ogImage}`);
-    const imageObj: ImageObject = {
+    const imageObj = {
         '@type': 'ImageObject',
+        '@id': 'https://piech.dev/projects/#main-image',
+        contentUrl: `${PRODUCTION_OG_IMAGES_DIRECTORY}${ogImage}`,
         url: `${PRODUCTION_OG_IMAGES_DIRECTORY}${ogImage}`,
-        width: { '@type': 'QuantitativeValue', value: size.width },
-        height: { '@type': 'QuantitativeValue', value: size.height },
+        width: size.width,
+        height: size.height,
         caption: 'Preview image for piech.dev projects.',
-    };
+    } as unknown as ImageObject;
 
     const websiteNode: WebSite = {
         '@type': 'WebSite',
         '@id': WEBSITE_ID,
-        name: 'piech.dev',
-        alternateName: 'Piotr Piech — piech.dev',
-        url: 'https://piech.dev/',
-        inLanguage: 'en',
-        description: "Piotr's personal page.",
-        author: { '@id': PERSON_ID },
-        publisher: { '@id': PERSON_ID },
-        copyrightHolder: { '@id': PERSON_ID },
     };
 
     const collectionPage = {
@@ -95,13 +90,22 @@ export const meta: MetaFunction = () => {
         description: 'Projects built by Piotr Piech',
         inLanguage: 'en',
         isPartOf: { '@id': WEBSITE_ID },
+        author: { '@id': PERSON_ID },
+        breadcrumb: { '@id': 'https://piech.dev/projects/#breadcrumb' },
         mainEntity: projectsItemList,
-        primaryImageOfPage: imageObj,
+        primaryImageOfPage: { '@id': 'https://piech.dev/projects/#main-image' },
+        image: { '@id': 'https://piech.dev/projects/#main-image' },
     } as unknown as WebPage;
 
     const graph: Graph = {
         '@context': 'https://schema.org',
-        '@graph': [websiteNode, collectionPage, breadcrumbList],
+        '@graph': [
+            websiteNode,
+            collectionPage,
+            breadcrumbList,
+            PERSON,
+            imageObj,
+        ],
     };
 
     return [
@@ -135,11 +139,7 @@ export const meta: MetaFunction = () => {
             rel: 'canonical',
             href: 'https://piech.dev/projects/',
         },
-        {
-            tagName: 'script',
-            type: 'application/ld+json',
-            children: JSON.stringify(graph),
-        },
+        { 'script:ld+json': JSON.stringify(graph) },
     ];
 };
 

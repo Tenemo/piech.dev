@@ -9,7 +9,7 @@ import type {
     ImageObject,
 } from 'schema-dts';
 
-import { PERSON_ID, WEBSITE_ID } from './index';
+import { PERSON, PERSON_ID, WEBSITE_ID } from './index';
 
 import {
     DEFAULT_KEYWORDS,
@@ -43,16 +43,19 @@ export const meta: MetaFunction = (args) => {
     const ogImageAlt = projectEntry.ogImageAlt;
 
     const size = getImageSize(`${LOCAL_OG_IMAGES_DIRECTORY}${ogImage}`);
-    const imageObj: ImageObject = {
+    const imageObj = {
         '@type': 'ImageObject',
+        '@id': `https://piech.dev/projects/${repo}#image`,
+        contentUrl: `${PRODUCTION_OG_IMAGES_DIRECTORY}${ogImage}`,
         url: `${PRODUCTION_OG_IMAGES_DIRECTORY}${ogImage}`,
-        width: { '@type': 'QuantitativeValue', value: size.width },
-        height: { '@type': 'QuantitativeValue', value: size.height },
+        width: size.width,
+        height: size.height,
         caption: ogImageAlt,
-    };
+    } as unknown as ImageObject;
 
     const breadcrumbList: BreadcrumbList = {
         '@type': 'BreadcrumbList',
+        '@id': `https://piech.dev/projects/${repo}#breadcrumb`,
         itemListElement: [
             {
                 '@type': 'ListItem',
@@ -84,7 +87,7 @@ export const meta: MetaFunction = (args) => {
         url: `https://piech.dev/projects/${repo}`,
         codeRepository: `https://github.com/Tenemo/${repo}`,
         programmingLanguage: 'TypeScript',
-        image: imageObj,
+        image: { '@id': `https://piech.dev/projects/${repo}#image` },
         keywords: info?.topics,
         dateCreated: info?.createdDatetime,
         dateModified: info?.lastCommitDatetime,
@@ -98,14 +101,6 @@ export const meta: MetaFunction = (args) => {
     const websiteNode: WebSite = {
         '@type': 'WebSite',
         '@id': WEBSITE_ID,
-        name: 'piech.dev',
-        alternateName: 'Piotr Piech — piech.dev',
-        url: 'https://piech.dev/',
-        inLanguage: 'en',
-        description: "Piotr's personal page.",
-        author: { '@id': PERSON_ID },
-        publisher: { '@id': PERSON_ID },
-        copyrightHolder: { '@id': PERSON_ID },
     };
 
     const itemPage = {
@@ -117,12 +112,25 @@ export const meta: MetaFunction = (args) => {
         inLanguage: 'en',
         isPartOf: { '@id': WEBSITE_ID },
         mainEntity: { '@id': codeId },
-        primaryImageOfPage: imageObj,
+        breadcrumb: { '@id': `https://piech.dev/projects/${repo}#breadcrumb` },
+        primaryImageOfPage: {
+            '@id': `https://piech.dev/projects/${repo}#image`,
+        },
+        image: { '@id': `https://piech.dev/projects/${repo}#image` },
+        datePublished: info?.createdDatetime,
+        dateModified: info?.lastCommitDatetime,
     } as unknown as WebPage;
 
     const graph: Graph = {
         '@context': 'https://schema.org',
-        '@graph': [websiteNode, itemPage, codeNode, breadcrumbList],
+        '@graph': [
+            websiteNode,
+            itemPage,
+            codeNode,
+            breadcrumbList,
+            PERSON,
+            imageObj,
+        ],
     };
 
     return [
@@ -145,11 +153,7 @@ export const meta: MetaFunction = (args) => {
             rel: 'canonical',
             href: `https://piech.dev/projects/${repo}`,
         },
-        {
-            tagName: 'script',
-            type: 'application/ld+json',
-            children: JSON.stringify(graph),
-        },
+        { 'script:ld+json': JSON.stringify(graph) },
     ];
 };
 

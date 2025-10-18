@@ -24,7 +24,7 @@ const contactPoints: ContactPoint[] = [
     {
         '@type': 'ContactPoint',
         contactType: 'general inquiries',
-        email: 'mailto:piotr@piech.dev',
+        email: 'piotr@piech.dev',
         availableLanguage: ['en', 'pl', 'ru'],
     },
     {
@@ -49,6 +49,7 @@ const contactPoints: ContactPoint[] = [
 
 const breadcrumbList: BreadcrumbList = {
     '@type': 'BreadcrumbList',
+    '@id': 'https://piech.dev/contact/#breadcrumb',
     itemListElement: [
         {
             '@type': 'ListItem',
@@ -68,25 +69,19 @@ const breadcrumbList: BreadcrumbList = {
 export const meta: MetaFunction = () => {
     const ogImage = 'piech.dev_contact.jpg';
     const size = getImageSize(`${LOCAL_OG_IMAGES_DIRECTORY}${ogImage}`);
-    const imageObj: ImageObject = {
+    const imageObj = {
         '@type': 'ImageObject',
+        '@id': 'https://piech.dev/contact/#image',
+        contentUrl: `${PRODUCTION_OG_IMAGES_DIRECTORY}${ogImage}`,
         url: `${PRODUCTION_OG_IMAGES_DIRECTORY}${ogImage}`,
-        width: { '@type': 'QuantitativeValue', value: size.width },
-        height: { '@type': 'QuantitativeValue', value: size.height },
+        width: size.width,
+        height: size.height,
         caption: 'Screenshot of contact links for Piotr Piech.',
-    };
+    } as unknown as ImageObject;
 
     const websiteNode: WebSite = {
         '@type': 'WebSite',
         '@id': WEBSITE_ID,
-        name: 'piech.dev',
-        alternateName: 'Piotr Piech — piech.dev',
-        url: 'https://piech.dev/',
-        inLanguage: 'en',
-        description: "Piotr's personal page.",
-        author: { '@id': PERSON_ID },
-        publisher: { '@id': PERSON_ID },
-        copyrightHolder: { '@id': PERSON_ID },
     };
 
     const pageId = 'https://piech.dev/contact/#page';
@@ -99,19 +94,26 @@ export const meta: MetaFunction = () => {
         inLanguage: 'en',
         isPartOf: { '@id': WEBSITE_ID },
         mainEntity: { '@id': PERSON_ID },
-        primaryImageOfPage: imageObj,
+        breadcrumb: { '@id': 'https://piech.dev/contact/#breadcrumb' },
+        primaryImageOfPage: { '@id': 'https://piech.dev/contact/#image' },
+        image: { '@id': 'https://piech.dev/contact/#image' },
     } as unknown as WebPage;
 
-    const personPartial: Person = {
+    const personNode: Person = {
         '@type': 'Person',
         '@id': PERSON_ID,
-        mainEntityOfPage: { '@id': pageId },
         contactPoint: contactPoints,
     };
 
     const graph: Graph = {
         '@context': 'https://schema.org',
-        '@graph': [websiteNode, contactPage, breadcrumbList, personPartial],
+        '@graph': [
+            websiteNode,
+            contactPage,
+            breadcrumbList,
+            personNode,
+            imageObj,
+        ],
     };
 
     return [
@@ -143,11 +145,7 @@ export const meta: MetaFunction = () => {
             rel: 'canonical',
             href: 'https://piech.dev/contact/',
         },
-        {
-            tagName: 'script',
-            type: 'application/ld+json',
-            children: JSON.stringify(graph),
-        },
+        { 'script:ld+json': JSON.stringify(graph) },
     ];
 };
 

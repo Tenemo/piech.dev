@@ -19,6 +19,7 @@ import About from 'features/About/About';
 import { PROJECTS } from 'features/Projects/projectsList';
 import { TECHNOLOGIES } from 'features/Projects/technologies';
 import { getImageSize } from 'utils/getImageSize';
+import { REPOSITORY_INFO } from 'utils/githubData';
 
 const alumniOf: EducationalOrganization = {
     '@type': 'EducationalOrganization',
@@ -28,7 +29,7 @@ const alumniOf: EducationalOrganization = {
 export const PERSON_ID = 'https://piech.dev/#person';
 export const WEBSITE_ID = 'https://piech.dev/#website';
 export const ABOUT_ID = 'https://piech.dev/#about';
-export const PERSON_IMAGE_ID = 'https://piech.dev/#person-image';
+export const PIOTR_IMAGE_ID = 'https://piech.dev/#piotr-image';
 
 export const PERSON: Person = {
     '@type': 'Person',
@@ -39,7 +40,7 @@ export const PERSON: Person = {
     givenName: 'Piotr',
     familyName: 'Piech',
     image: 'https://piech.dev/media/projects/og_images/piotr.jpg',
-    email: 'mailto:piotr@piech.dev',
+    email: 'piotr@piech.dev',
     alumniOf,
     sameAs: [
         'https://github.com/Tenemo',
@@ -59,6 +60,18 @@ export const PERSON: Person = {
             ),
         ),
     ),
+    nationality: {
+        '@type': 'Country',
+        name: 'Poland',
+    },
+    workLocation: {
+        '@type': 'Place',
+        address: {
+            '@type': 'PostalAddress',
+            addressLocality: 'Lublin',
+            addressCountry: 'PL',
+        },
+    },
     mainEntityOfPage: { '@id': ABOUT_ID },
 };
 
@@ -80,12 +93,13 @@ export const meta: MetaFunction = () => {
     const size = getImageSize(`${LOCAL_OG_IMAGES_DIRECTORY}${ogImage}`);
     const portrait = {
         '@type': 'ImageObject',
-        '@id': PERSON_IMAGE_ID,
+        '@id': PIOTR_IMAGE_ID,
+        contentUrl: `${PRODUCTION_OG_IMAGES_DIRECTORY}${ogImage}`,
         url: `${PRODUCTION_OG_IMAGES_DIRECTORY}${ogImage}`,
-        width: { '@type': 'QuantitativeValue', value: size.width },
-        height: { '@type': 'QuantitativeValue', value: size.height },
+        width: size.width,
+        height: size.height,
         caption: 'Portrait photo of Piotr Piech.',
-    } as const;
+    } as unknown as import('schema-dts').ImageObject;
 
     const aboutWebPage: WebPage | (AboutPage & ProfilePage) = {
         '@type': ['WebPage', 'AboutPage', 'ProfilePage'],
@@ -96,12 +110,15 @@ export const meta: MetaFunction = () => {
         inLanguage: 'en',
         isPartOf: { '@id': WEBSITE_ID },
         mainEntity: { '@id': PERSON_ID },
-        primaryImageOfPage: { '@id': PERSON_IMAGE_ID },
+        primaryImageOfPage: { '@id': PIOTR_IMAGE_ID },
+        image: { '@id': PIOTR_IMAGE_ID },
+        datePublished: REPOSITORY_INFO['piech.dev']?.createdDatetime,
+        dateModified: REPOSITORY_INFO['piech.dev']?.lastCommitDatetime,
     } as unknown as WebPage;
 
     const personNode: Person = {
         ...PERSON,
-        image: { '@id': PERSON_IMAGE_ID },
+        image: { '@id': PIOTR_IMAGE_ID },
     };
 
     const graph: Graph = {
@@ -133,11 +150,7 @@ export const meta: MetaFunction = () => {
             content: 'Portrait photo of Piotr Piech.',
         },
         { tagName: 'link', rel: 'canonical', href: 'https://piech.dev/' },
-        {
-            tagName: 'script',
-            type: 'application/ld+json',
-            children: JSON.stringify(graph),
-        },
+        { 'script:ld+json': JSON.stringify(graph) },
     ];
 };
 

@@ -1,13 +1,17 @@
 import React from 'react';
 import type { MetaFunction } from 'react-router';
 import type {
-    CollectionPage,
     ListItem,
     SoftwareSourceCode,
-    WithContext,
     ItemList,
     BreadcrumbList,
+    Graph,
+    WebPage,
+    WebSite,
+    ImageObject,
 } from 'schema-dts';
+
+import { PERSON_ID, WEBSITE_ID } from './index';
 
 import {
     DEFAULT_KEYWORDS,
@@ -20,6 +24,8 @@ import { getImageSize } from 'utils/getImageSize';
 
 const projectsItemList: ItemList = {
     '@type': 'ItemList',
+    itemListOrder: 'https://schema.org/ItemListOrderAscending',
+    numberOfItems: PROJECTS.length,
     itemListElement: PROJECTS.map<ListItem>(({ repoName, project }, i) => {
         const name = repoName ?? project;
         const code: SoftwareSourceCode = {
@@ -29,6 +35,7 @@ const projectsItemList: ItemList = {
             url: `https://piech.dev/projects/${name}`,
             codeRepository: `https://github.com/Tenemo/${name}`,
             programmingLanguage: 'TypeScript',
+            author: { '@id': PERSON_ID },
         };
         return {
             '@type': 'ListItem',
@@ -38,18 +45,7 @@ const projectsItemList: ItemList = {
     }),
 };
 
-const collectionJsonLd: WithContext<CollectionPage> = {
-    '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
-    name: 'Projects | piech.dev',
-    url: 'https://piech.dev/projects/',
-    description: 'Projects built by Piotr Piech',
-    inLanguage: 'en',
-    mainEntity: projectsItemList,
-};
-
-const breadcrumbJsonLd: WithContext<BreadcrumbList> = {
-    '@context': 'https://schema.org',
+const breadcrumbList: BreadcrumbList = {
     '@type': 'BreadcrumbList',
     itemListElement: [
         {
@@ -61,7 +57,7 @@ const breadcrumbJsonLd: WithContext<BreadcrumbList> = {
         {
             '@type': 'ListItem',
             position: 2,
-            name: 'Contact',
+            name: 'Projects',
             item: 'https://piech.dev/projects/',
         },
     ],
@@ -70,6 +66,43 @@ const breadcrumbJsonLd: WithContext<BreadcrumbList> = {
 export const meta: MetaFunction = () => {
     const ogImage = 'piech.dev_projects.jpg';
     const size = getImageSize(`${LOCAL_OG_IMAGES_DIRECTORY}${ogImage}`);
+    const imageObj: ImageObject = {
+        '@type': 'ImageObject',
+        url: `${PRODUCTION_OG_IMAGES_DIRECTORY}${ogImage}`,
+        width: { '@type': 'QuantitativeValue', value: size.width },
+        height: { '@type': 'QuantitativeValue', value: size.height },
+        caption: 'Preview image for piech.dev projects.',
+    };
+
+    const websiteNode: WebSite = {
+        '@type': 'WebSite',
+        '@id': WEBSITE_ID,
+        name: 'piech.dev',
+        alternateName: 'Piotr Piech — piech.dev',
+        url: 'https://piech.dev/',
+        inLanguage: 'en',
+        description: "Piotr's personal page.",
+        author: { '@id': PERSON_ID },
+        publisher: { '@id': PERSON_ID },
+        copyrightHolder: { '@id': PERSON_ID },
+    };
+
+    const collectionPage = {
+        '@type': ['WebPage', 'CollectionPage'],
+        '@id': 'https://piech.dev/projects/#page',
+        url: 'https://piech.dev/projects/',
+        name: 'Projects | piech.dev',
+        description: 'Projects built by Piotr Piech',
+        inLanguage: 'en',
+        isPartOf: { '@id': WEBSITE_ID },
+        mainEntity: projectsItemList,
+        primaryImageOfPage: imageObj,
+    } as unknown as WebPage;
+
+    const graph: Graph = {
+        '@context': 'https://schema.org',
+        '@graph': [websiteNode, collectionPage, breadcrumbList],
+    };
 
     return [
         { title: 'Projects | piech.dev' },
@@ -105,12 +138,7 @@ export const meta: MetaFunction = () => {
         {
             tagName: 'script',
             type: 'application/ld+json',
-            children: JSON.stringify(collectionJsonLd),
-        },
-        {
-            tagName: 'script',
-            type: 'application/ld+json',
-            children: JSON.stringify(breadcrumbJsonLd),
+            children: JSON.stringify(graph),
         },
     ];
 };

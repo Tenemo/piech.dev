@@ -3,9 +3,11 @@ import type { MetaFunction } from 'react-router';
 import type {
     EducationalOrganization,
     Person,
-    WithContext,
     WebSite,
+    Graph,
+    WebPage,
     AboutPage,
+    ProfilePage,
 } from 'schema-dts';
 
 import {
@@ -26,6 +28,7 @@ const alumniOf: EducationalOrganization = {
 export const PERSON_ID = 'https://piech.dev/#person';
 export const WEBSITE_ID = 'https://piech.dev/#website';
 export const ABOUT_ID = 'https://piech.dev/#about';
+export const PERSON_IMAGE_ID = 'https://piech.dev/#person-image';
 
 export const PERSON: Person = {
     '@type': 'Person',
@@ -36,7 +39,7 @@ export const PERSON: Person = {
     givenName: 'Piotr',
     familyName: 'Piech',
     image: 'https://piech.dev/media/projects/og_images/piotr.jpg',
-    email: 'piotr@piech.dev',
+    email: 'mailto:piotr@piech.dev',
     alumniOf,
     sameAs: [
         'https://github.com/Tenemo',
@@ -48,6 +51,7 @@ export const PERSON: Person = {
         addressLocality: 'Lublin',
         addressCountry: 'PL',
     },
+    knowsLanguage: ['en', 'pl', 'ru'],
     knowsAbout: Array.from(
         new Set(
             PROJECTS.flatMap((p) => p.technologies).map(
@@ -55,40 +59,55 @@ export const PERSON: Person = {
             ),
         ),
     ),
+    mainEntityOfPage: { '@id': ABOUT_ID },
 };
 
-const personJsonLd: WithContext<Person> = {
-    '@context': 'https://schema.org',
-    ...PERSON,
-};
-
-export const websiteJsonLd: WithContext<WebSite> = {
-    '@context': 'https://schema.org',
+const websiteNode: WebSite = {
     '@type': 'WebSite',
     '@id': WEBSITE_ID,
     name: 'piech.dev',
+    alternateName: 'Piotr Piech — piech.dev',
     url: 'https://piech.dev/',
     inLanguage: 'en',
     description: "Piotr's personal page.",
     author: { '@id': PERSON_ID },
-};
-
-const aboutPageJsonLd: WithContext<AboutPage> = {
-    '@context': 'https://schema.org',
-    '@type': 'AboutPage',
-    '@id': ABOUT_ID,
-    image: 'https://piech.dev/media/projects/og_images/piotr.jpg',
-    url: 'https://piech.dev/',
-    name: 'About Piotr Piech',
-    description: "Piotr's personal page.",
-    inLanguage: 'en',
-    mainEntity: { '@id': PERSON_ID },
     publisher: { '@id': PERSON_ID },
+    copyrightHolder: { '@id': PERSON_ID },
 };
 
 export const meta: MetaFunction = () => {
     const ogImage = 'piotr.jpg';
     const size = getImageSize(`${LOCAL_OG_IMAGES_DIRECTORY}${ogImage}`);
+    const portrait = {
+        '@type': 'ImageObject',
+        '@id': PERSON_IMAGE_ID,
+        url: `${PRODUCTION_OG_IMAGES_DIRECTORY}${ogImage}`,
+        width: { '@type': 'QuantitativeValue', value: size.width },
+        height: { '@type': 'QuantitativeValue', value: size.height },
+        caption: 'Portrait photo of Piotr Piech.',
+    } as const;
+
+    const aboutWebPage: WebPage | (AboutPage & ProfilePage) = {
+        '@type': ['WebPage', 'AboutPage', 'ProfilePage'],
+        '@id': ABOUT_ID,
+        url: 'https://piech.dev/',
+        name: 'About Piotr Piech',
+        description: "Piotr's personal page.",
+        inLanguage: 'en',
+        isPartOf: { '@id': WEBSITE_ID },
+        mainEntity: { '@id': PERSON_ID },
+        primaryImageOfPage: { '@id': PERSON_IMAGE_ID },
+    } as unknown as WebPage;
+
+    const personNode: Person = {
+        ...PERSON,
+        image: { '@id': PERSON_IMAGE_ID },
+    };
+
+    const graph: Graph = {
+        '@context': 'https://schema.org',
+        '@graph': [websiteNode, aboutWebPage, personNode, portrait],
+    };
 
     return [
         { title: 'piech.dev' },
@@ -117,17 +136,7 @@ export const meta: MetaFunction = () => {
         {
             tagName: 'script',
             type: 'application/ld+json',
-            children: JSON.stringify(personJsonLd),
-        },
-        {
-            tagName: 'script',
-            type: 'application/ld+json',
-            children: JSON.stringify(websiteJsonLd),
-        },
-        {
-            tagName: 'script',
-            type: 'application/ld+json',
-            children: JSON.stringify(aboutPageJsonLd),
+            children: JSON.stringify(graph),
         },
     ];
 };

@@ -3,10 +3,13 @@ import type { MetaFunction } from 'react-router';
 import type {
     BreadcrumbList,
     SoftwareSourceCode,
-    WithContext,
+    Graph,
+    WebPage,
+    WebSite,
+    ImageObject,
 } from 'schema-dts';
 
-import { PERSON_ID } from './index';
+import { PERSON_ID, WEBSITE_ID } from './index';
 
 import {
     DEFAULT_KEYWORDS,
@@ -40,21 +43,15 @@ export const meta: MetaFunction = (args) => {
     const ogImageAlt = projectEntry.ogImageAlt;
 
     const size = getImageSize(`${LOCAL_OG_IMAGES_DIRECTORY}${ogImage}`);
-    const projectJsonLd: WithContext<SoftwareSourceCode> = {
-        '@context': 'https://schema.org',
-        '@type': 'SoftwareSourceCode',
-        name: repo,
-        description: desc,
-        url: `https://piech.dev/projects/${repo}`,
-        codeRepository: `https://github.com/Tenemo/${repo}`,
-        programmingLanguage: 'TypeScript',
-        keywords: info?.topics,
-        dateCreated: info?.createdDatetime,
-        author: { '@id': PERSON_ID },
+    const imageObj: ImageObject = {
+        '@type': 'ImageObject',
+        url: `${PRODUCTION_OG_IMAGES_DIRECTORY}${ogImage}`,
+        width: { '@type': 'QuantitativeValue', value: size.width },
+        height: { '@type': 'QuantitativeValue', value: size.height },
+        caption: ogImageAlt,
     };
 
-    const breadcrumbJsonLd: WithContext<BreadcrumbList> = {
-        '@context': 'https://schema.org',
+    const breadcrumbList: BreadcrumbList = {
         '@type': 'BreadcrumbList',
         itemListElement: [
             {
@@ -66,15 +63,66 @@ export const meta: MetaFunction = (args) => {
             {
                 '@type': 'ListItem',
                 position: 2,
-                name: 'Contact',
+                name: 'Projects',
                 item: 'https://piech.dev/projects/',
             },
             {
                 '@type': 'ListItem',
                 position: 3,
                 name: repo,
+                item: `https://piech.dev/projects/${repo}`,
             },
         ],
+    };
+
+    const codeId = `https://piech.dev/projects/${repo}#code`;
+    const codeNode: SoftwareSourceCode = {
+        '@type': 'SoftwareSourceCode',
+        '@id': codeId,
+        name: repo,
+        description: desc,
+        url: `https://piech.dev/projects/${repo}`,
+        codeRepository: `https://github.com/Tenemo/${repo}`,
+        programmingLanguage: 'TypeScript',
+        image: imageObj,
+        keywords: info?.topics,
+        dateCreated: info?.createdDatetime,
+        dateModified: info?.lastCommitDatetime,
+        license: info?.license,
+        author: { '@id': PERSON_ID },
+        creator: { '@id': PERSON_ID },
+        maintainer: { '@id': PERSON_ID },
+        mainEntityOfPage: { '@id': `https://piech.dev/projects/${repo}#page` },
+    };
+
+    const websiteNode: WebSite = {
+        '@type': 'WebSite',
+        '@id': WEBSITE_ID,
+        name: 'piech.dev',
+        alternateName: 'Piotr Piech — piech.dev',
+        url: 'https://piech.dev/',
+        inLanguage: 'en',
+        description: "Piotr's personal page.",
+        author: { '@id': PERSON_ID },
+        publisher: { '@id': PERSON_ID },
+        copyrightHolder: { '@id': PERSON_ID },
+    };
+
+    const itemPage = {
+        '@type': ['WebPage', 'ItemPage'],
+        '@id': `https://piech.dev/projects/${repo}#page`,
+        url: `https://piech.dev/projects/${repo}`,
+        name: `${repo} | piech.dev`,
+        description: desc,
+        inLanguage: 'en',
+        isPartOf: { '@id': WEBSITE_ID },
+        mainEntity: { '@id': codeId },
+        primaryImageOfPage: imageObj,
+    } as unknown as WebPage;
+
+    const graph: Graph = {
+        '@context': 'https://schema.org',
+        '@graph': [websiteNode, itemPage, codeNode, breadcrumbList],
     };
 
     return [
@@ -100,12 +148,7 @@ export const meta: MetaFunction = (args) => {
         {
             tagName: 'script',
             type: 'application/ld+json',
-            children: JSON.stringify(projectJsonLd),
-        },
-        {
-            tagName: 'script',
-            type: 'application/ld+json',
-            children: JSON.stringify(breadcrumbJsonLd),
+            children: JSON.stringify(graph),
         },
     ];
 };

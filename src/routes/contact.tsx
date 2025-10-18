@@ -2,13 +2,15 @@ import React from 'react';
 import type { MetaFunction } from 'react-router';
 import type {
     ContactPoint,
-    ContactPage,
-    WithContext,
     Person,
     BreadcrumbList,
+    Graph,
+    WebSite,
+    WebPage,
+    ImageObject,
 } from 'schema-dts';
 
-import { PERSON_ID } from './index';
+import { PERSON_ID, WEBSITE_ID } from './index';
 
 import {
     DEFAULT_KEYWORDS,
@@ -21,29 +23,31 @@ import { getImageSize } from 'utils/getImageSize';
 const contactPoints: ContactPoint[] = [
     {
         '@type': 'ContactPoint',
-        contactType: 'recruitment, IT services, business inquiries',
-        email: 'piotr@piech.dev',
+        contactType: 'general inquiries',
+        email: 'mailto:piotr@piech.dev',
         availableLanguage: ['en', 'pl', 'ru'],
     },
     {
         '@type': 'ContactPoint',
         contactType: 'social',
         url: 'https://www.linkedin.com/in/ppiech',
+        availableLanguage: ['en', 'pl', 'ru'],
     },
     {
         '@type': 'ContactPoint',
-        contactType: 'code repository',
+        contactType: 'code repositories',
         url: 'https://github.com/Tenemo',
+        availableLanguage: ['en', 'pl', 'ru'],
     },
     {
         '@type': 'ContactPoint',
-        contactType: 'messaging',
+        contactType: 'general inquiries',
         url: 'https://t.me/tenemo',
+        availableLanguage: ['en', 'pl', 'ru'],
     },
 ];
 
-const breadcrumbJsonLd: WithContext<BreadcrumbList> = {
-    '@context': 'https://schema.org',
+const breadcrumbList: BreadcrumbList = {
     '@type': 'BreadcrumbList',
     itemListElement: [
         {
@@ -61,28 +65,54 @@ const breadcrumbJsonLd: WithContext<BreadcrumbList> = {
     ],
 };
 
-const contactPageJsonLd: WithContext<ContactPage> = {
-    '@context': 'https://schema.org',
-    '@type': 'ContactPage',
-    '@id': 'https://piech.dev/contact/#page',
-    url: 'https://piech.dev/contact/',
-    name: 'Contact | piech.dev',
-    description: 'Contact Piotr Piech (email, LinkedIn, GitHub, Telegram).',
-    inLanguage: 'en',
-    about: { '@id': PERSON_ID },
-    mainEntity: { '@id': PERSON_ID },
-};
-
-const personContactJsonLd: WithContext<Person> = {
-    '@context': 'https://schema.org',
-    '@type': 'Person',
-    '@id': PERSON_ID,
-    contactPoint: contactPoints,
-};
-
 export const meta: MetaFunction = () => {
     const ogImage = 'piech.dev_contact.jpg';
     const size = getImageSize(`${LOCAL_OG_IMAGES_DIRECTORY}${ogImage}`);
+    const imageObj: ImageObject = {
+        '@type': 'ImageObject',
+        url: `${PRODUCTION_OG_IMAGES_DIRECTORY}${ogImage}`,
+        width: { '@type': 'QuantitativeValue', value: size.width },
+        height: { '@type': 'QuantitativeValue', value: size.height },
+        caption: 'Screenshot of contact links for Piotr Piech.',
+    };
+
+    const websiteNode: WebSite = {
+        '@type': 'WebSite',
+        '@id': WEBSITE_ID,
+        name: 'piech.dev',
+        alternateName: 'Piotr Piech — piech.dev',
+        url: 'https://piech.dev/',
+        inLanguage: 'en',
+        description: "Piotr's personal page.",
+        author: { '@id': PERSON_ID },
+        publisher: { '@id': PERSON_ID },
+        copyrightHolder: { '@id': PERSON_ID },
+    };
+
+    const pageId = 'https://piech.dev/contact/#page';
+    const contactPage = {
+        '@type': ['WebPage', 'ContactPage'],
+        '@id': pageId,
+        url: 'https://piech.dev/contact/',
+        name: 'Contact | piech.dev',
+        description: 'Contact Piotr Piech (email, LinkedIn, GitHub, Telegram).',
+        inLanguage: 'en',
+        isPartOf: { '@id': WEBSITE_ID },
+        mainEntity: { '@id': PERSON_ID },
+        primaryImageOfPage: imageObj,
+    } as unknown as WebPage;
+
+    const personPartial: Person = {
+        '@type': 'Person',
+        '@id': PERSON_ID,
+        mainEntityOfPage: { '@id': pageId },
+        contactPoint: contactPoints,
+    };
+
+    const graph: Graph = {
+        '@context': 'https://schema.org',
+        '@graph': [websiteNode, contactPage, breadcrumbList, personPartial],
+    };
 
     return [
         { title: 'Contact | piech.dev' },
@@ -116,17 +146,7 @@ export const meta: MetaFunction = () => {
         {
             tagName: 'script',
             type: 'application/ld+json',
-            children: JSON.stringify(contactPageJsonLd),
-        },
-        {
-            tagName: 'script',
-            type: 'application/ld+json',
-            children: JSON.stringify(personContactJsonLd),
-        },
-        {
-            tagName: 'script',
-            type: 'application/ld+json',
-            children: JSON.stringify(breadcrumbJsonLd),
+            children: JSON.stringify(graph),
         },
     ];
 };

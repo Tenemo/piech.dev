@@ -20,7 +20,7 @@ import {
 import Projects from 'features/Projects/Projects';
 import { PROJECTS } from 'features/Projects/projectsList';
 import { getImageSize } from 'utils/getImageSize';
-import { REPOSITORIES } from 'utils/githubData';
+import { repositoriesData } from 'utils/githubData';
 
 const projectsItemList: ItemList = {
     '@type': 'ItemList',
@@ -99,8 +99,8 @@ export const meta: MetaFunction = () => {
         mainEntity: projectsItemList,
         primaryImageOfPage: { '@id': 'https://piech.dev/projects/#main-image' },
         image: { '@id': 'https://piech.dev/projects/#main-image' },
-        datePublished: REPOSITORIES['piech.dev']?.createdDatetime,
-        dateModified: REPOSITORIES['piech.dev']?.lastCommitDatetime,
+        datePublished: repositoriesData['piech.dev']?.createdDatetime,
+        dateModified: repositoriesData['piech.dev']?.lastCommitDatetime,
     };
 
     const graph: Graph = {

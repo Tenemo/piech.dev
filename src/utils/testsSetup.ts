@@ -7,6 +7,6 @@ import {
 } from 'mocks/mockGithubData';
 
 vi.mock('utils/githubData', () => ({
-    REPOSITORIES: STUB_REPOSITORIES,
-    METADATA: STUB_METADATA,
+    repositoriesData: STUB_REPOSITORIES,
+    metadata: STUB_METADATA,
 }));

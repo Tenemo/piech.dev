@@ -6,7 +6,7 @@ import { Link, useParams } from 'react-router';
 import styles from './projectItem.module.scss';
 import ProjectMarkdown from './ProjectMarkdown/ProjectMarkdown';
 
-import { REPOSITORIES } from 'utils/githubData';
+import { repositoriesData } from 'utils/githubData';
 
 const ProjectItemDetails: React.FC = (): React.JSX.Element => {
     const { repo } = useParams<{ repo: string }>();
@@ -19,7 +19,7 @@ const ProjectItemDetails: React.FC = (): React.JSX.Element => {
         );
     }
 
-    const markdown = REPOSITORIES[repo]?.readme_content ?? '';
+    const markdown = repositoriesData[repo]?.readme_content ?? '';
 
     return (
         <main className={styles.container}>

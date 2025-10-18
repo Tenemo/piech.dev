@@ -6,52 +6,6 @@ import ProjectCard from './ProjectCard';
 import styles from './projectCard.module.scss';
 
 import { renderWithProviders } from 'utils/testUtils';
-// Provide a default export to align with JSON default import usage in code
-vi.mock('../../../../temp/githubData', () => ({
-    default: {
-        REPOSITORY_INFO: {
-            'test-project': {
-                name: 'test-project',
-                description: 'Test description',
-            },
-            'img-test': {
-                name: 'img-test',
-                description: 'Image test',
-                createdDatetime: '2023-09-12T08:00:00.000Z',
-            },
-            'video-test': {
-                name: 'video-test',
-                description: 'Video test',
-                createdDatetime: '2022-01-20T15:30:00.000Z',
-            },
-            'right-test': {
-                name: 'right-test',
-                description: 'Right image test',
-                createdDatetime: '2024-06-01T00:00:00.000Z',
-            },
-            'custom-repo': {
-                name: 'custom-repo',
-                description: 'Custom repo test',
-                createdDatetime: '2020-12-31T23:59:59.000Z',
-            },
-            'cached-repo': {
-                name: 'cached-repo',
-                description: 'Cached repo',
-                createdDatetime: '2019-03-10T10:00:00.000Z',
-            },
-            'link-test': {
-                name: 'link-test',
-                description: 'Link test',
-                createdDatetime: '2018-07-07T07:07:07.000Z',
-            },
-            'epoch-test': {
-                name: 'epoch-test',
-                description: 'Epoch fallback',
-                createdDatetime: '1970-01-01T00:00:00.000Z',
-            },
-        },
-    },
-}));
 
 describe('ProjectCard', () => {
     beforeEach(() => {

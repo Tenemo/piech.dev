@@ -12,3 +12,8 @@ export type GithubData = {
     metadata?: { fetchedDatetime: string };
     repositories: Partial<Record<string, RepositoryInfo>>;
 };
+
+declare module '../../temp/githubData.json' {
+    const value: GithubData;
+    export default value;
+}

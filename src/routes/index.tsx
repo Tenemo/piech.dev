@@ -67,6 +67,8 @@ export const PERSON: Person = {
     familyName: 'Piech',
     image: 'https://piech.dev/media/projects/og_images/piotr.jpg',
     email: 'piotr@piech.dev',
+    description:
+        'Engineering Manager & Software Architect specializing in full-stack web development.',
     alumniOf,
     sameAs: [
         'https://github.com/Tenemo',

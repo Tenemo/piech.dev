@@ -194,7 +194,7 @@ export const meta: MetaFunction = () => {
             content: 'Portrait photo of Piotr Piech.',
         },
         { tagName: 'link', rel: 'canonical', href: 'https://piech.dev/' },
-        { 'script:ld+json': JSON.stringify(graph) },
+        { 'script:ld+json': graph },
     ];
 };
 

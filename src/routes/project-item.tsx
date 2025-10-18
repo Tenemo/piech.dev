@@ -155,7 +155,7 @@ export const meta: MetaFunction = (args) => {
             rel: 'canonical',
             href: `https://piech.dev/projects/${repo}`,
         },
-        { 'script:ld+json': JSON.stringify(graph) },
+        { 'script:ld+json': graph },
     ];
 };
 

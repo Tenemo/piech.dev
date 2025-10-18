@@ -113,43 +113,47 @@ async function getPackageJsonLicenseFromMaster(
     repo: string,
 ): Promise<string | undefined> {
     // Spec: license from package.json on master HEAD commit, if present.
-    // We intentionally only check the 'master' branch as requested,
-    // and do not fallback to 'main' here.
-    try {
-        const raw = await fetchText(
-            `https://raw.githubusercontent.com/${owner}/${repo}/master/package.json`,
-        );
+    // Fallback: if 'master' isn't available, try 'main'.
+    const candidateBranches = ['master', 'main'] as const;
+
+    for (const branch of candidateBranches) {
         try {
-            const pkg = JSON.parse(raw) as unknown;
-            if (
-                pkg &&
-                typeof pkg === 'object' &&
-                'license' in (pkg as Record<string, unknown>)
-            ) {
-                const lic = (pkg as Record<string, unknown>).license;
-                if (typeof lic === 'string') return lic;
+            const raw = await fetchText(
+                `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/package.json`,
+            );
+            try {
+                const pkg = JSON.parse(raw) as unknown;
                 if (
-                    lic &&
-                    typeof lic === 'object' &&
-                    'type' in (lic as Record<string, unknown>) &&
-                    typeof (lic as Record<string, unknown>).type === 'string'
-                )
-                    return (lic as Record<string, unknown>).type as string;
-            }
-            // Support legacy `licenses` array
-            if (pkg && typeof pkg === 'object') {
-                const anyPkg = pkg as Record<string, unknown>;
-                const licensesRaw = anyPkg.licenses;
-                if (Array.isArray(licensesRaw) && licensesRaw.length > 0) {
-                    const first = licensesRaw[0] as { type?: unknown };
-                    if (typeof first.type === 'string') return first.type;
+                    pkg &&
+                    typeof pkg === 'object' &&
+                    'license' in (pkg as Record<string, unknown>)
+                ) {
+                    const lic = (pkg as Record<string, unknown>).license;
+                    if (typeof lic === 'string') return lic;
+                    if (
+                        lic &&
+                        typeof lic === 'object' &&
+                        'type' in (lic as Record<string, unknown>)
+                    ) {
+                        const typeVal = (lic as Record<string, unknown>).type;
+                        if (typeof typeVal === 'string') return typeVal;
+                    }
                 }
+                // Support legacy `licenses` array
+                if (pkg && typeof pkg === 'object') {
+                    const anyPkg = pkg as Record<string, unknown>;
+                    const licensesRaw = anyPkg.licenses;
+                    if (Array.isArray(licensesRaw) && licensesRaw.length > 0) {
+                        const first = licensesRaw[0] as { type?: unknown };
+                        if (typeof first.type === 'string') return first.type;
+                    }
+                }
+            } catch {
+                // ignore JSON parsing errors and try next branch
             }
         } catch {
-            // ignore JSON parsing errors and fall through
+            // package.json not found or inaccessible on this branch; try next
         }
-    } catch {
-        // master/package.json not found or inaccessible
     }
     return undefined;
 }

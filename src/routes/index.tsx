@@ -7,6 +7,7 @@ import type {
     Graph,
     WebPage,
     ContactPoint,
+    ImageObject,
 } from 'schema-dts';
 
 import {
@@ -122,7 +123,7 @@ export const WEBSITE: WebSite = {
 export const meta: MetaFunction = () => {
     const ogImage = 'piotr.jpg';
     const size = getImageSize(`${LOCAL_OG_IMAGES_DIRECTORY}${ogImage}`);
-    const portrait: import('schema-dts').ImageObject = {
+    const portrait: ImageObject = {
         '@type': 'ImageObject',
         '@id': PIOTR_IMAGE_ID,
         contentUrl: `${PRODUCTION_OG_IMAGES_DIRECTORY}${ogImage}`,

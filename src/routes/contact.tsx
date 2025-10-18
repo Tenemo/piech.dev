@@ -11,6 +11,7 @@ import {
 } from 'app/appConstants';
 import Contact from 'features/Contact/Contact';
 import { getImageSize } from 'utils/getImageSize';
+import { REPOSITORY_INFO } from 'utils/githubData';
 
 const breadcrumbList: BreadcrumbList = {
     '@type': 'BreadcrumbList',
@@ -65,6 +66,8 @@ export const meta: MetaFunction = () => {
         breadcrumb: { '@id': 'https://piech.dev/contact/#breadcrumb' },
         primaryImageOfPage: { '@id': 'https://piech.dev/contact/#image' },
         image: { '@id': 'https://piech.dev/contact/#image' },
+        datePublished: REPOSITORY_INFO['piech.dev']?.createdDatetime,
+        dateModified: new Date().toISOString(),
     };
 
     const graph: Graph = {

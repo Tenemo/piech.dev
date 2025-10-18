@@ -113,6 +113,8 @@ export const WEBSITE: WebSite = {
     author: { '@id': PERSON_ID },
     publisher: { '@id': PERSON_ID },
     copyrightHolder: { '@id': PERSON_ID },
+    datePublished: REPOSITORY_INFO['piech.dev']?.createdDatetime,
+    dateModified: new Date().toISOString(),
 };
 
 export const meta: MetaFunction = () => {
@@ -152,7 +154,7 @@ export const meta: MetaFunction = () => {
         primaryImageOfPage: { '@id': PIOTR_IMAGE_ID },
         image: { '@id': PIOTR_IMAGE_ID },
         datePublished: REPOSITORY_INFO['piech.dev']?.createdDatetime,
-        dateModified: REPOSITORY_INFO['piech.dev']?.lastCommitDatetime,
+        dateModified: new Date().toISOString(),
     };
 
     const personNode: Person = {

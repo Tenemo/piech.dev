@@ -6,6 +6,7 @@ import type {
     WebSite,
     Graph,
     WebPage,
+    ContactPoint,
 } from 'schema-dts';
 
 import {
@@ -28,6 +29,33 @@ export const PERSON_ID = 'https://piech.dev/#person';
 export const WEBSITE_ID = 'https://piech.dev/#website';
 export const ABOUT_ID = 'https://piech.dev/#about';
 export const PIOTR_IMAGE_ID = 'https://piech.dev/#piotr-image';
+
+const CONTACT_POINTS: ContactPoint[] = [
+    {
+        '@type': 'ContactPoint',
+        contactType: 'general inquiries',
+        email: 'piotr@piech.dev',
+        availableLanguage: ['en', 'pl', 'ru'],
+    },
+    {
+        '@type': 'ContactPoint',
+        contactType: 'social',
+        url: 'https://www.linkedin.com/in/ppiech',
+        availableLanguage: ['en', 'pl', 'ru'],
+    },
+    {
+        '@type': 'ContactPoint',
+        contactType: 'code repositories',
+        url: 'https://github.com/Tenemo',
+        availableLanguage: ['en', 'pl', 'ru'],
+    },
+    {
+        '@type': 'ContactPoint',
+        contactType: 'general inquiries',
+        url: 'https://t.me/tenemo',
+        availableLanguage: ['en', 'pl', 'ru'],
+    },
+];
 
 export const PERSON: Person = {
     '@type': 'Person',
@@ -70,10 +98,11 @@ export const PERSON: Person = {
             addressCountry: 'PL',
         },
     },
+    contactPoint: CONTACT_POINTS,
     mainEntityOfPage: { '@id': ABOUT_ID },
 };
 
-const websiteNode: WebSite = {
+export const WEBSITE: WebSite = {
     '@type': 'WebSite',
     '@id': WEBSITE_ID,
     name: 'piech.dev',
@@ -133,7 +162,7 @@ export const meta: MetaFunction = () => {
 
     const graph: Graph = {
         '@context': 'https://schema.org',
-        '@graph': [websiteNode, aboutWebPage, personNode, portrait],
+        '@graph': [WEBSITE, aboutWebPage, personNode, portrait],
     };
 
     return [

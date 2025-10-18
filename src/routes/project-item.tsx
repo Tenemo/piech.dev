@@ -5,11 +5,10 @@ import type {
     SoftwareSourceCode,
     Graph,
     WebPage,
-    WebSite,
     ImageObject,
 } from 'schema-dts';
 
-import { PERSON, PERSON_ID, WEBSITE_ID } from './index';
+import { PERSON, PERSON_ID, WEBSITE, WEBSITE_ID } from './index';
 
 import {
     DEFAULT_KEYWORDS,
@@ -106,11 +105,6 @@ export const meta: MetaFunction = (args) => {
         mainEntityOfPage: { '@id': `https://piech.dev/projects/${repo}#page` },
     };
 
-    const websiteNode: WebSite = {
-        '@type': 'WebSite',
-        '@id': WEBSITE_ID,
-    };
-
     const itemPage: WebPage = {
         '@type': ['WebPage', 'ItemPage'] as unknown as 'WebPage',
         '@id': `https://piech.dev/projects/${repo}#page`,
@@ -132,7 +126,7 @@ export const meta: MetaFunction = (args) => {
     const graph: Graph = {
         '@context': 'https://schema.org',
         '@graph': [
-            websiteNode,
+            WEBSITE,
             itemPage,
             codeNode,
             breadcrumbList,

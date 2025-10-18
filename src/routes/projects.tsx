@@ -7,11 +7,10 @@ import type {
     BreadcrumbList,
     Graph,
     WebPage,
-    WebSite,
     ImageObject,
 } from 'schema-dts';
 
-import { PERSON, PERSON_ID, WEBSITE_ID } from './index';
+import { PERSON, PERSON_ID, WEBSITE, WEBSITE_ID } from './index';
 
 import {
     DEFAULT_KEYWORDS,
@@ -85,11 +84,6 @@ export const meta: MetaFunction = () => {
         caption: 'Preview image for piech.dev projects.',
     };
 
-    const websiteNode: WebSite = {
-        '@type': 'WebSite',
-        '@id': WEBSITE_ID,
-    };
-
     const collectionPage: WebPage = {
         '@type': ['WebPage', 'CollectionPage'] as unknown as 'WebPage',
         '@id': 'https://piech.dev/projects/#page',
@@ -107,13 +101,7 @@ export const meta: MetaFunction = () => {
 
     const graph: Graph = {
         '@context': 'https://schema.org',
-        '@graph': [
-            websiteNode,
-            collectionPage,
-            breadcrumbList,
-            PERSON,
-            imageObj,
-        ],
+        '@graph': [WEBSITE, collectionPage, breadcrumbList, PERSON, imageObj],
     };
 
     return [

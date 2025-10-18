@@ -3,7 +3,7 @@ export type RepositoryInfo = {
     description: string;
     topics?: string[];
     createdDatetime: string;
-    lastCommitDatetime: string; // must always be present
+    lastCommitDatetime: string;
     license?: string;
     readme_content: string;
 };

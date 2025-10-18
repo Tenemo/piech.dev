@@ -121,50 +121,60 @@ async function getPackageJsonLicenseFromMaster(
     owner: string,
     repo: string,
 ): Promise<string | undefined> {
-    // Spec: license from package.json on master HEAD commit, if present.
-    // Fallback: if 'master' isn't available, try 'main'.
-    const candidateBranches = ['master', 'main'] as const;
+    // Spec: Read license from package.json on master HEAD.
+    // Only try 'main' if fetching from 'master' fails (e.g., 404).
 
-    for (const branch of candidateBranches) {
+    const extract = (raw: string): string | undefined => {
         try {
-            const raw = await fetchText(
-                `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/package.json`,
-            );
-            try {
-                const pkg = JSON.parse(raw) as unknown;
+            const pkg = JSON.parse(raw) as unknown;
+            if (
+                pkg &&
+                typeof pkg === 'object' &&
+                'license' in (pkg as Record<string, unknown>)
+            ) {
+                const lic = (pkg as Record<string, unknown>).license;
+                if (typeof lic === 'string') return lic;
                 if (
-                    pkg &&
-                    typeof pkg === 'object' &&
-                    'license' in (pkg as Record<string, unknown>)
+                    lic &&
+                    typeof lic === 'object' &&
+                    'type' in (lic as Record<string, unknown>)
                 ) {
-                    const lic = (pkg as Record<string, unknown>).license;
-                    if (typeof lic === 'string') return lic;
-                    if (
-                        lic &&
-                        typeof lic === 'object' &&
-                        'type' in (lic as Record<string, unknown>)
-                    ) {
-                        const typeVal = (lic as Record<string, unknown>).type;
-                        if (typeof typeVal === 'string') return typeVal;
-                    }
+                    const typeVal = (lic as Record<string, unknown>).type;
+                    if (typeof typeVal === 'string') return typeVal;
                 }
-                // Support legacy `licenses` array
-                if (pkg && typeof pkg === 'object') {
-                    const anyPkg = pkg as Record<string, unknown>;
-                    const licensesRaw = anyPkg.licenses;
-                    if (Array.isArray(licensesRaw) && licensesRaw.length > 0) {
-                        const first = licensesRaw[0] as { type?: unknown };
-                        if (typeof first.type === 'string') return first.type;
-                    }
+            }
+            // Support legacy `licenses` array
+            if (pkg && typeof pkg === 'object') {
+                const anyPkg = pkg as Record<string, unknown>;
+                const licensesRaw = anyPkg.licenses;
+                if (Array.isArray(licensesRaw) && licensesRaw.length > 0) {
+                    const first = licensesRaw[0] as { type?: unknown };
+                    if (typeof first.type === 'string') return first.type;
                 }
-            } catch {
-                // ignore JSON parsing errors and try next branch
             }
         } catch {
-            // package.json not found or inaccessible on this branch; try next
+            // ignore JSON parsing errors; treat as no license
+        }
+        return undefined;
+    };
+
+    // Try master
+    try {
+        const raw = await fetchText(
+            `https://raw.githubusercontent.com/${owner}/${repo}/master/package.json`,
+        );
+        return extract(raw);
+    } catch {
+        // If master not available, try main
+        try {
+            const raw = await fetchText(
+                `https://raw.githubusercontent.com/${owner}/${repo}/main/package.json`,
+            );
+            return extract(raw);
+        } catch {
+            return undefined;
         }
     }
-    return undefined;
 }
 
 async function getLastCommitDatetime(

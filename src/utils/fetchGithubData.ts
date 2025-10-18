@@ -3,9 +3,18 @@
  - Programmatic usage: await fetchGithubData({ refetch?: boolean })
  - Writes temp/githubData.json with shape:
      {
-         METADATA: { fetchedDatetime: string },
-         REPOSITORY_INFO: { [repo]: { name, description, topics?: string[], createdDatetime: string } },
-         README_CONTENT: { [repo]: markdown }
+         metadata: { fetchedDatetime: string },
+         repositories: {
+             [repo]: {
+                 name: string,
+                 description: string,
+                 topics?: string[],
+                 createdDatetime: string,
+                 lastCommitDatetime: string,
+                 license?: string,
+                 readme_content: string,
+             }
+         }
      }
 */
 
@@ -30,13 +39,13 @@ type RepoInfo = {
     description: string;
     topics?: string[];
     createdDatetime: string;
-    lastCommitDatetime?: string;
+    lastCommitDatetime: string; // required
     license?: string;
+    readme_content: string;
 };
 export type GithubData = {
-    METADATA: { fetchedDatetime: string };
-    REPOSITORY_INFO: Record<string, RepoInfo>;
-    README_CONTENT: Record<string, string>;
+    metadata: { fetchedDatetime: string };
+    repositories: Record<string, RepoInfo>;
 };
 
 function parseReposFromProjectsFile(text: string): string[] {
@@ -112,50 +121,60 @@ async function getPackageJsonLicenseFromMaster(
     owner: string,
     repo: string,
 ): Promise<string | undefined> {
-    // Spec: license from package.json on master HEAD commit, if present.
-    // Fallback: if 'master' isn't available, try 'main'.
-    const candidateBranches = ['master', 'main'] as const;
+    // Spec: Read license from package.json on master HEAD.
+    // Only try 'main' if fetching from 'master' fails (e.g., 404).
 
-    for (const branch of candidateBranches) {
+    const extract = (raw: string): string | undefined => {
         try {
-            const raw = await fetchText(
-                `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/package.json`,
-            );
-            try {
-                const pkg = JSON.parse(raw) as unknown;
+            const pkg = JSON.parse(raw) as unknown;
+            if (
+                pkg &&
+                typeof pkg === 'object' &&
+                'license' in (pkg as Record<string, unknown>)
+            ) {
+                const lic = (pkg as Record<string, unknown>).license;
+                if (typeof lic === 'string') return lic;
                 if (
-                    pkg &&
-                    typeof pkg === 'object' &&
-                    'license' in (pkg as Record<string, unknown>)
+                    lic &&
+                    typeof lic === 'object' &&
+                    'type' in (lic as Record<string, unknown>)
                 ) {
-                    const lic = (pkg as Record<string, unknown>).license;
-                    if (typeof lic === 'string') return lic;
-                    if (
-                        lic &&
-                        typeof lic === 'object' &&
-                        'type' in (lic as Record<string, unknown>)
-                    ) {
-                        const typeVal = (lic as Record<string, unknown>).type;
-                        if (typeof typeVal === 'string') return typeVal;
-                    }
+                    const typeVal = (lic as Record<string, unknown>).type;
+                    if (typeof typeVal === 'string') return typeVal;
                 }
-                // Support legacy `licenses` array
-                if (pkg && typeof pkg === 'object') {
-                    const anyPkg = pkg as Record<string, unknown>;
-                    const licensesRaw = anyPkg.licenses;
-                    if (Array.isArray(licensesRaw) && licensesRaw.length > 0) {
-                        const first = licensesRaw[0] as { type?: unknown };
-                        if (typeof first.type === 'string') return first.type;
-                    }
+            }
+            // Support legacy `licenses` array
+            if (pkg && typeof pkg === 'object') {
+                const anyPkg = pkg as Record<string, unknown>;
+                const licensesRaw = anyPkg.licenses;
+                if (Array.isArray(licensesRaw) && licensesRaw.length > 0) {
+                    const first = licensesRaw[0] as { type?: unknown };
+                    if (typeof first.type === 'string') return first.type;
                 }
-            } catch {
-                // ignore JSON parsing errors and try next branch
             }
         } catch {
-            // package.json not found or inaccessible on this branch; try next
+            // ignore JSON parsing errors; treat as no license
+        }
+        return undefined;
+    };
+
+    // Try master
+    try {
+        const raw = await fetchText(
+            `https://raw.githubusercontent.com/${owner}/${repo}/master/package.json`,
+        );
+        return extract(raw);
+    } catch {
+        // If master not available, try main
+        try {
+            const raw = await fetchText(
+                `https://raw.githubusercontent.com/${owner}/${repo}/main/package.json`,
+            );
+            return extract(raw);
+        } catch {
+            return undefined;
         }
     }
-    return undefined;
 }
 
 async function getLastCommitDatetime(
@@ -196,7 +215,7 @@ export async function fetchGithubData(options?: {
             const current = JSON.parse(raw) as Partial<GithubData>;
 
             // Determine if the file is older than one day
-            const metaStr = current.METADATA?.fetchedDatetime;
+            const metaStr = current.metadata?.fetchedDatetime;
             const metaDate = metaStr ? new Date(metaStr) : undefined;
             const fileMtimeMs = fssync.statSync(OUT_PATH).mtime.getTime();
             const effectiveTimeMs =
@@ -206,11 +225,8 @@ export async function fetchGithubData(options?: {
             const ONE_DAY_MS = 24 * 60 * 60 * 1000;
             const olderThanOneDay = Date.now() - effectiveTimeMs > ONE_DAY_MS;
 
-            const infoKeys = Object.keys(current.REPOSITORY_INFO ?? {});
-            const readmeKeys = Object.keys(current.README_CONTENT ?? {});
-            const complete = repos.every(
-                (r) => infoKeys.includes(r) && readmeKeys.includes(r),
-            );
+            const infoKeys = Object.keys(current.repositories ?? {});
+            const complete = repos.every((r) => infoKeys.includes(r));
             if (!refetch && complete && !olderThanOneDay) {
                 console.log(
                     '[githubData] Up-to-date and fresh file found, skipping.',
@@ -228,7 +244,6 @@ export async function fetchGithubData(options?: {
     }
 
     const infoObject: Record<string, RepoInfo> = {};
-    const readmeObject: Record<string, string> = {};
 
     const MAX_CONCURRENCY = Number(process.env.GH_CONCURRENCY ?? 8);
     const EPOCH_ISO = '1970-01-01T00:00:00.000Z';
@@ -248,6 +263,17 @@ export async function fetchGithubData(options?: {
             ),
             getReadme(OWNER, repo),
         ]);
+
+        let readmeContent = '# README unavailable\n';
+        if (readmeRes.status === 'fulfilled') {
+            readmeContent = readmeRes.value;
+        } else {
+            console.warn(
+                '[githubData] README fetch failed for',
+                repo,
+                stringifyReason(readmeRes.reason),
+            );
+        }
 
         if (infoRes.status === 'fulfilled') {
             const repoData = infoRes.value;
@@ -280,8 +306,10 @@ export async function fetchGithubData(options?: {
                 name: repoData.name ?? repo,
                 description: repoData.description ?? 'No description available',
                 createdDatetime: repoData.created_at ?? EPOCH_ISO,
-                lastCommitDatetime,
+                lastCommitDatetime:
+                    lastCommitDatetime ?? repoData.created_at ?? EPOCH_ISO,
                 license,
+                readme_content: readmeContent,
                 topics:
                     topicsRes.status === 'fulfilled'
                         ? (topicsRes.value.names ?? [])
@@ -310,8 +338,9 @@ export async function fetchGithubData(options?: {
                 description: 'No description available',
                 // Fallback to epoch to make failures obvious
                 createdDatetime: EPOCH_ISO,
-                lastCommitDatetime,
+                lastCommitDatetime: lastCommitDatetime ?? EPOCH_ISO,
                 license,
+                readme_content: readmeContent,
                 topics:
                     topicsRes.status === 'fulfilled'
                         ? (topicsRes.value.names ?? [])
@@ -330,17 +359,6 @@ export async function fetchGithubData(options?: {
                 '[githubData] Topics fetch failed for',
                 repo,
                 stringifyReason(topicsRes.reason),
-            );
-        }
-
-        if (readmeRes.status === 'fulfilled') {
-            readmeObject[repo] = readmeRes.value;
-        } else {
-            readmeObject[repo] = '# README unavailable\n';
-            console.warn(
-                '[githubData] README fetch failed for',
-                repo,
-                stringifyReason(readmeRes.reason),
             );
         }
     };
@@ -362,12 +380,11 @@ export async function fetchGithubData(options?: {
 
     await fs.mkdir(OUT_DIR, { recursive: true });
     const payload: GithubData = {
-        METADATA: { fetchedDatetime: new Date().toISOString() },
-        REPOSITORY_INFO: infoObject,
-        README_CONTENT: readmeObject,
+        metadata: { fetchedDatetime: new Date().toISOString() },
+        repositories: infoObject,
     };
     await fs.writeFile(OUT_PATH, JSON.stringify(payload, null, 2), 'utf8');
-    console.log('[githubData] Wrote', OUT_PATH);
+    console.log('[githubData] Wrote new format to', OUT_PATH);
 }
 
 // CLI

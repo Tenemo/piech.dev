@@ -2,11 +2,11 @@ import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
 import {
-    REPOSITORY_INFO as STUB_REPOSITORY_INFO,
-    README_CONTENT as STUB_README_CONTENT,
+    REPOSITORIES as STUB_REPOSITORIES,
+    METADATA as STUB_METADATA,
 } from 'mocks/mockGithubData';
 
 vi.mock('utils/githubData', () => ({
-    REPOSITORY_INFO: STUB_REPOSITORY_INFO,
-    README_CONTENT: STUB_README_CONTENT,
+    repositoriesData: STUB_REPOSITORIES,
+    metadata: STUB_METADATA,
 }));

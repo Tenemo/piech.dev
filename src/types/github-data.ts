@@ -3,12 +3,12 @@ export type RepositoryInfo = {
     description: string;
     topics?: string[];
     createdDatetime: string;
-    lastCommitDatetime?: string;
+    lastCommitDatetime: string; // must always be present
     license?: string;
+    readme_content: string;
 };
 
 export type GithubData = {
-    METADATA?: { fetchedDatetime: string };
-    REPOSITORY_INFO: Partial<Record<string, RepositoryInfo>>;
-    README_CONTENT: Partial<Record<string, string>>;
+    metadata?: { fetchedDatetime: string };
+    repositories: Partial<Record<string, RepositoryInfo>>;
 };

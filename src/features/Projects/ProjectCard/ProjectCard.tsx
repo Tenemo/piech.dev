@@ -8,7 +8,7 @@ import { TECHNOLOGIES } from '../technologies';
 import styles from './projectCard.module.scss';
 import ProjectTechnologies from './ProjectTechnologies/ProjectTechnologies';
 
-import { REPOSITORY_INFO } from 'utils/githubData';
+import { REPOSITORIES } from 'utils/githubData';
 
 type ProjectCardProps = {
     projectPreview: string;
@@ -26,7 +26,7 @@ const ProjectCard = ({
     repoName,
 }: ProjectCardProps): React.JSX.Element => {
     const githubRepository = repoName ?? project;
-    const repositoryInfo = REPOSITORY_INFO[githubRepository];
+    const repositoryInfo = REPOSITORIES[githubRepository];
     const createdIso = repositoryInfo?.createdDatetime;
     const createdLabel = createdIso
         ? format(new Date(createdIso), 'MMMM yyyy')

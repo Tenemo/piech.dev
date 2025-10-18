@@ -18,11 +18,11 @@ import {
 import ProjectItem from 'features/Projects/ProjectItem/ProjectItem';
 import { PROJECTS } from 'features/Projects/projectsList';
 import { getImageSize } from 'utils/getImageSize';
-import { REPOSITORY_INFO } from 'utils/githubData';
+import { REPOSITORIES } from 'utils/githubData';
 
 export const meta: MetaFunction = (args) => {
     const repo = args.params.repo ?? '';
-    const info = REPOSITORY_INFO[repo];
+    const info = REPOSITORIES[repo];
     const title = `${repo} | piech.dev`;
     const desc =
         info?.description ??

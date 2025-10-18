@@ -19,7 +19,7 @@ import About from 'features/About/About';
 import { PROJECTS } from 'features/Projects/projectsList';
 import { TECHNOLOGIES } from 'features/Projects/technologies';
 import { getImageSize } from 'utils/getImageSize';
-import { REPOSITORY_INFO } from 'utils/githubData';
+import { REPOSITORIES } from 'utils/githubData';
 
 const alumniOf: EducationalOrganization = {
     '@type': 'EducationalOrganization',
@@ -116,8 +116,8 @@ export const WEBSITE: WebSite = {
     author: { '@id': PERSON_ID },
     publisher: { '@id': PERSON_ID },
     copyrightHolder: { '@id': PERSON_ID },
-    datePublished: REPOSITORY_INFO['piech.dev']?.createdDatetime,
-    dateModified: REPOSITORY_INFO['piech.dev']?.lastCommitDatetime,
+    datePublished: REPOSITORIES['piech.dev']?.createdDatetime,
+    dateModified: REPOSITORIES['piech.dev']?.lastCommitDatetime,
 };
 
 export const meta: MetaFunction = () => {
@@ -156,8 +156,8 @@ export const meta: MetaFunction = () => {
         mainEntity: { '@id': PERSON_ID },
         primaryImageOfPage: { '@id': PIOTR_IMAGE_ID },
         image: { '@id': PIOTR_IMAGE_ID },
-        datePublished: REPOSITORY_INFO['piech.dev']?.createdDatetime,
-        dateModified: REPOSITORY_INFO['piech.dev']?.lastCommitDatetime,
+        datePublished: REPOSITORIES['piech.dev']?.createdDatetime,
+        dateModified: REPOSITORIES['piech.dev']?.lastCommitDatetime,
     };
 
     const personNode: Person = {

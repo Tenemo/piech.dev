@@ -10,7 +10,7 @@ import remarkGfm from 'remark-gfm';
 
 import styles from './projectMarkdown.module.scss';
 
-import { REPOSITORY_INFO } from 'utils/githubData';
+import { REPOSITORIES } from 'utils/githubData';
 
 const OWNER = 'tenemo';
 const BRANCH = 'master';
@@ -26,7 +26,7 @@ const ProjectMarkdown = ({
     markdown,
     repo,
 }: ProjectMarkdownProps): React.JSX.Element => {
-    const createdIso = REPOSITORY_INFO[repo]?.createdDatetime;
+    const createdIso = REPOSITORIES[repo]?.createdDatetime;
     const createdLabel = createdIso
         ? format(new Date(createdIso), 'MMMM yyyy')
         : undefined;

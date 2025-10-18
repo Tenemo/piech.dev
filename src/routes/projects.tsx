@@ -6,6 +6,7 @@ import type {
     SoftwareSourceCode,
     WithContext,
     ItemList,
+    BreadcrumbList,
 } from 'schema-dts';
 
 import {
@@ -42,7 +43,28 @@ const collectionJsonLd: WithContext<CollectionPage> = {
     '@type': 'CollectionPage',
     name: 'Projects | piech.dev',
     url: 'https://piech.dev/projects/',
+    description: 'Projects built by Piotr Piech',
+    inLanguage: 'en',
     mainEntity: projectsItemList,
+};
+
+const breadcrumbJsonLd: WithContext<BreadcrumbList> = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+        {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: 'https://piech.dev/',
+        },
+        {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Contact',
+            item: 'https://piech.dev/projects/',
+        },
+    ],
 };
 
 export const meta: MetaFunction = () => {
@@ -54,14 +76,14 @@ export const meta: MetaFunction = () => {
         {
             name: 'description',
             content:
-                'Non-commercial projects I built in my free time: small tools, libraries, and experiments in React, TypeScript, cryptography, and more.',
+                'Projects I built in my free time: small tools, libraries, and experiments in React, TypeScript, cryptography, and more.',
         },
         { name: 'keywords', content: DEFAULT_KEYWORDS },
         { property: 'og:title', content: 'Projects | piech.dev' },
         {
             property: 'og:description',
             content:
-                'Non-commercial projects I built in my free time: small tools, libraries, and experiments in React, TypeScript, cryptography, and more.',
+                'Projects I built in my free time: small tools, libraries, and experiments in React, TypeScript, cryptography, and more.',
         },
         { property: 'og:type', content: 'website' },
         {
@@ -84,6 +106,11 @@ export const meta: MetaFunction = () => {
             tagName: 'script',
             type: 'application/ld+json',
             children: JSON.stringify(collectionJsonLd),
+        },
+        {
+            tagName: 'script',
+            type: 'application/ld+json',
+            children: JSON.stringify(breadcrumbJsonLd),
         },
     ];
 };

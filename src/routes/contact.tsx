@@ -5,6 +5,7 @@ import type {
     ContactPage,
     WithContext,
     Person,
+    BreadcrumbList,
 } from 'schema-dts';
 
 import { PERSON_ID } from './index';
@@ -20,8 +21,9 @@ import { getImageSize } from 'utils/getImageSize';
 const contactPoints: ContactPoint[] = [
     {
         '@type': 'ContactPoint',
-        contactType: 'customer support',
+        contactType: 'recruitment, IT services, business inquiries',
         email: 'piotr@piech.dev',
+        availableLanguage: ['en', 'pl', 'ru'],
     },
     {
         '@type': 'ContactPoint',
@@ -40,13 +42,35 @@ const contactPoints: ContactPoint[] = [
     },
 ];
 
+const breadcrumbJsonLd: WithContext<BreadcrumbList> = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+        {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: 'https://piech.dev/',
+        },
+        {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Contact',
+            item: 'https://piech.dev/contact/',
+        },
+    ],
+};
+
 const contactPageJsonLd: WithContext<ContactPage> = {
     '@context': 'https://schema.org',
     '@type': 'ContactPage',
     '@id': 'https://piech.dev/contact/#page',
     url: 'https://piech.dev/contact/',
     name: 'Contact | piech.dev',
+    description: 'Contact Piotr Piech (email, LinkedIn, GitHub, Telegram).',
+    inLanguage: 'en',
     about: { '@id': PERSON_ID },
+    mainEntity: { '@id': PERSON_ID },
 };
 
 const personContactJsonLd: WithContext<Person> = {
@@ -98,6 +122,11 @@ export const meta: MetaFunction = () => {
             tagName: 'script',
             type: 'application/ld+json',
             children: JSON.stringify(personContactJsonLd),
+        },
+        {
+            tagName: 'script',
+            type: 'application/ld+json',
+            children: JSON.stringify(breadcrumbJsonLd),
         },
     ];
 };

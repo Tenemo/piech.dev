@@ -35,12 +35,19 @@ export const PERSON: Person = {
     name: 'Piotr Piech',
     givenName: 'Piotr',
     familyName: 'Piech',
+    image: 'https://piech.dev/media/projects/og_images/piotr.jpg',
+    email: 'piotr@piech.dev',
     alumniOf,
     sameAs: [
         'https://github.com/Tenemo',
         'https://www.linkedin.com/in/ppiech',
         'https://t.me/tenemo',
     ],
+    address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Lublin',
+        addressCountry: 'PL',
+    },
     knowsAbout: Array.from(
         new Set(
             PROJECTS.flatMap((p) => p.technologies).map(
@@ -73,7 +80,10 @@ const aboutPageJsonLd: WithContext<AboutPage> = {
     image: 'https://piech.dev/media/projects/og_images/piotr.jpg',
     url: 'https://piech.dev/',
     name: 'About Piotr Piech',
+    description: "Piotr's personal page.",
+    inLanguage: 'en',
     mainEntity: { '@id': PERSON_ID },
+    publisher: { '@id': PERSON_ID },
 };
 
 export const meta: MetaFunction = () => {

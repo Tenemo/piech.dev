@@ -1,6 +1,12 @@
 import React from 'react';
 import type { MetaFunction } from 'react-router';
-import type { SoftwareSourceCode, WithContext } from 'schema-dts';
+import type {
+    BreadcrumbList,
+    SoftwareSourceCode,
+    WithContext,
+} from 'schema-dts';
+
+import { PERSON_ID } from './index';
 
 import {
     DEFAULT_KEYWORDS,
@@ -11,22 +17,6 @@ import ProjectItem from 'features/Projects/ProjectItem/ProjectItem';
 import { PROJECTS } from 'features/Projects/projectsList';
 import { getImageSize } from 'utils/getImageSize';
 import { REPOSITORY_INFO } from 'utils/githubData';
-
-const buildProjectJsonLd = (
-    repo: string,
-    desc: string,
-    info?: { topics?: string[]; createdDatetime?: string },
-): WithContext<SoftwareSourceCode> => ({
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareSourceCode',
-    name: repo,
-    description: desc,
-    url: `https://piech.dev/projects/${repo}`,
-    codeRepository: `https://github.com/Tenemo/${repo}`,
-    programmingLanguage: 'TypeScript',
-    keywords: info?.topics,
-    dateCreated: info?.createdDatetime,
-});
 
 export const meta: MetaFunction = (args) => {
     const repo = args.params.repo ?? '';
@@ -50,7 +40,42 @@ export const meta: MetaFunction = (args) => {
     const ogImageAlt = projectEntry.ogImageAlt;
 
     const size = getImageSize(`${LOCAL_OG_IMAGES_DIRECTORY}${ogImage}`);
-    const jsonLd = buildProjectJsonLd(repo, desc, info);
+    const projectJsonLd: WithContext<SoftwareSourceCode> = {
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareSourceCode',
+        name: repo,
+        description: desc,
+        url: `https://piech.dev/projects/${repo}`,
+        codeRepository: `https://github.com/Tenemo/${repo}`,
+        programmingLanguage: 'TypeScript',
+        keywords: info?.topics,
+        dateCreated: info?.createdDatetime,
+        author: { '@id': PERSON_ID },
+    };
+
+    const breadcrumbJsonLd: WithContext<BreadcrumbList> = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: 'https://piech.dev/',
+            },
+            {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Contact',
+                item: 'https://piech.dev/projects/',
+            },
+            {
+                '@type': 'ListItem',
+                position: 3,
+                name: repo,
+            },
+        ],
+    };
 
     return [
         { title },
@@ -75,7 +100,12 @@ export const meta: MetaFunction = (args) => {
         {
             tagName: 'script',
             type: 'application/ld+json',
-            children: JSON.stringify(jsonLd),
+            children: JSON.stringify(projectJsonLd),
+        },
+        {
+            tagName: 'script',
+            type: 'application/ld+json',
+            children: JSON.stringify(breadcrumbJsonLd),
         },
     ];
 };

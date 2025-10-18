@@ -3,6 +3,10 @@ export type RepositoryInfo = {
     description: string;
     topics?: string[];
     createdDatetime: string;
+    // ISO string of the last commit datetime on the default or known branch
+    lastCommitDatetime?: string;
+    // SPDX license string from package.json (if present)
+    license?: string;
 };
 
 export type GithubData = {

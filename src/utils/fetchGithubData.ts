@@ -30,6 +30,8 @@ type RepoInfo = {
     description: string;
     topics?: string[];
     createdDatetime: string;
+    lastCommitDatetime?: string;
+    license?: string;
 };
 export type GithubData = {
     METADATA: { fetchedDatetime: string };
@@ -106,6 +108,75 @@ async function getReadme(owner: string, repo: string): Promise<string> {
     return '# README not found\n';
 }
 
+async function getPackageJsonLicenseFromMaster(
+    owner: string,
+    repo: string,
+): Promise<string | undefined> {
+    // Spec: license from package.json on master HEAD commit, if present.
+    // We intentionally only check the 'master' branch as requested,
+    // and do not fallback to 'main' here.
+    try {
+        const raw = await fetchText(
+            `https://raw.githubusercontent.com/${owner}/${repo}/master/package.json`,
+        );
+        try {
+            const pkg = JSON.parse(raw) as unknown;
+            if (
+                pkg &&
+                typeof pkg === 'object' &&
+                'license' in (pkg as Record<string, unknown>)
+            ) {
+                const lic = (pkg as Record<string, unknown>).license;
+                if (typeof lic === 'string') return lic;
+                if (
+                    lic &&
+                    typeof lic === 'object' &&
+                    'type' in (lic as Record<string, unknown>) &&
+                    typeof (lic as Record<string, unknown>).type === 'string'
+                )
+                    return (lic as Record<string, unknown>).type as string;
+            }
+            // Support legacy `licenses` array
+            if (pkg && typeof pkg === 'object') {
+                const anyPkg = pkg as Record<string, unknown>;
+                const licensesRaw = anyPkg.licenses;
+                if (Array.isArray(licensesRaw) && licensesRaw.length > 0) {
+                    const first = licensesRaw[0] as { type?: unknown };
+                    if (typeof first.type === 'string') return first.type;
+                }
+            }
+        } catch {
+            // ignore JSON parsing errors and fall through
+        }
+    } catch {
+        // master/package.json not found or inaccessible
+    }
+    return undefined;
+}
+
+async function getLastCommitDatetime(
+    owner: string,
+    repo: string,
+    token: string | undefined,
+    branch: string,
+): Promise<string | undefined> {
+    // Use the commits API to get the head commit for the branch.
+    // If this fails (e.g. branch doesn't exist), callers will try fallbacks.
+    try {
+        const res = await fetchJson<{
+            sha: string;
+            commit?: { author?: { date?: string } };
+        }>(
+            `https://api.github.com/repos/${owner}/${repo}/commits/${branch}`,
+            token,
+        );
+        const date = res.commit?.author?.date;
+        return typeof date === 'string' ? date : undefined;
+    } catch {
+        return undefined;
+    }
+}
+
 export async function fetchGithubData(options?: {
     refetch?: boolean;
 }): Promise<void> {
@@ -165,6 +236,7 @@ export async function fetchGithubData(options?: {
                 name?: string;
                 description?: string;
                 created_at?: string;
+                default_branch?: string;
             }>(`https://api.github.com/repos/${OWNER}/${repo}`, token),
             fetchJson<{ names?: string[] }>(
                 `https://api.github.com/repos/${OWNER}/${repo}/topics`,
@@ -175,21 +247,67 @@ export async function fetchGithubData(options?: {
 
         if (infoRes.status === 'fulfilled') {
             const repoData = infoRes.value;
+            // Attempt to populate lastCommitDatetime using the default branch when available.
+            let lastCommitDatetime: string | undefined;
+            if (repoData.default_branch) {
+                lastCommitDatetime = await getLastCommitDatetime(
+                    OWNER,
+                    repo,
+                    token,
+                    repoData.default_branch,
+                );
+            } else {
+                // Fallback to trying known branch names.
+                for (const b of BRANCHES) {
+                    lastCommitDatetime = await getLastCommitDatetime(
+                        OWNER,
+                        repo,
+                        token,
+                        b,
+                    );
+                    if (lastCommitDatetime) break;
+                }
+            }
+
+            // License from master/package.json only (per spec)
+            const license = await getPackageJsonLicenseFromMaster(OWNER, repo);
+
             infoObject[repo] = {
                 name: repoData.name ?? repo,
                 description: repoData.description ?? 'No description available',
                 createdDatetime: repoData.created_at ?? EPOCH_ISO,
+                lastCommitDatetime,
+                license,
                 topics:
                     topicsRes.status === 'fulfilled'
                         ? (topicsRes.value.names ?? [])
                         : undefined,
             };
         } else {
+            // Even if repo info failed, still attempt best-effort for lastCommitDatetime and license
+            let lastCommitDatetime: string | undefined;
+            for (const b of BRANCHES) {
+                // Try known branches; ignore failures
+                const maybe = await getLastCommitDatetime(
+                    OWNER,
+                    repo,
+                    token,
+                    b,
+                );
+                if (maybe) {
+                    lastCommitDatetime = maybe;
+                    break;
+                }
+            }
+            const license = await getPackageJsonLicenseFromMaster(OWNER, repo);
+
             infoObject[repo] = {
                 name: repo,
                 description: 'No description available',
                 // Fallback to epoch to make failures obvious
                 createdDatetime: EPOCH_ISO,
+                lastCommitDatetime,
+                license,
                 topics:
                     topicsRes.status === 'fulfilled'
                         ? (topicsRes.value.names ?? [])

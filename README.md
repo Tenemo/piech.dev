@@ -4,15 +4,15 @@
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/4df86a71-2a3f-40f9-9bd5-b6dacd4f420c/deploy-status)](https://app.netlify.com/sites/piech-dev/deploys)
 
-My personal page. Over time it turned into a complex project itself: it supports loading all projects' information directly from GitHub, renders GitHub's markdown, the whole page is pre-rendered and served with zero JS. It also includes dynamic <meta> tags for each project page, including individual og:image tags with sizes.
+My personal page. Over time it turned into a complex project itself: it supports loading all projects' information directly from GitHub, renders GitHub's markdown, the whole page is pre-rendered and served with zero JS. It also includes dynamic <meta> tags for each project page, including individual og:image tags with sizes. All routes have appropriate JSON-LD objects with relevant information.
 
 <img src="public/media/projects/piech.dev.webp" alt="Lighthouse results" title="Lighthouse results" width="500" />
 
-## Dynamic, GitHub-based project list and details
+## Dynamic project list pulled from GitHub-based
 
-- Projects pull metadata and READMEs directly from GitHub at build time
+- The projects/ page is managed via minimal configuration, just based on repository names. Projects metadata and READMEs are fetched directly from GitHub at build time.
 - Markdown rendering transforms relative links to proper URLs and handles videos, so that you can see video previews of my projects without leaving my site.
-- GitHub topics automatically become \<meta> keywords.
+- GitHub repository topics automatically become \<meta> keywords.
 - GitHub information, as well as images are dynamically pulled to each project's \<head> into appropriate og: tags, allowing for custom preview card of each project in social media and on messengers.
 
 ## React pre-rendering with zero JavaScript served to the user

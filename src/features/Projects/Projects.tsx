@@ -9,9 +9,7 @@ const Project = (): React.JSX.Element => {
         <main className={styles.projects}>
             <h2>Projects</h2>
             <div className={'divider'} />
-            <p className={'smallHeadline'}>
-                Non-commercial projects I built in my free time.
-            </p>
+            <p className={'smallHeadline'}>Projects I built in my free time.</p>
             <div className={'divider'} />
             <div className={styles.projectsItemsContainer}>
                 {PROJECTS.map(

@@ -3,6 +3,8 @@ export type RepositoryInfo = {
     description: string;
     topics?: string[];
     createdDatetime: string;
+    lastCommitDatetime?: string;
+    license?: string;
 };
 
 export type GithubData = {

@@ -69,15 +69,23 @@ const breadcrumbList: BreadcrumbList = {
 export const meta: MetaFunction = () => {
     const ogImage = 'piech.dev_contact.jpg';
     const size = getImageSize(`${LOCAL_OG_IMAGES_DIRECTORY}${ogImage}`);
-    const imageObj = {
+    const imageObj: ImageObject = {
         '@type': 'ImageObject',
         '@id': 'https://piech.dev/contact/#image',
         contentUrl: `${PRODUCTION_OG_IMAGES_DIRECTORY}${ogImage}`,
         url: `${PRODUCTION_OG_IMAGES_DIRECTORY}${ogImage}`,
-        width: size.width,
-        height: size.height,
+        width: {
+            '@type': 'QuantitativeValue',
+            value: size.width,
+            unitText: 'px',
+        },
+        height: {
+            '@type': 'QuantitativeValue',
+            value: size.height,
+            unitText: 'px',
+        },
         caption: 'Screenshot of contact links for Piotr Piech.',
-    } as unknown as ImageObject;
+    };
 
     const websiteNode: WebSite = {
         '@type': 'WebSite',
@@ -85,8 +93,8 @@ export const meta: MetaFunction = () => {
     };
 
     const pageId = 'https://piech.dev/contact/#page';
-    const contactPage = {
-        '@type': ['WebPage', 'ContactPage'],
+    const contactPage: WebPage = {
+        '@type': ['WebPage', 'ContactPage'] as unknown as 'WebPage',
         '@id': pageId,
         url: 'https://piech.dev/contact/',
         name: 'Contact | piech.dev',
@@ -97,7 +105,7 @@ export const meta: MetaFunction = () => {
         breadcrumb: { '@id': 'https://piech.dev/contact/#breadcrumb' },
         primaryImageOfPage: { '@id': 'https://piech.dev/contact/#image' },
         image: { '@id': 'https://piech.dev/contact/#image' },
-    } as unknown as WebPage;
+    };
 
     const personNode: Person = {
         '@type': 'Person',

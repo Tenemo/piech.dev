@@ -6,8 +6,6 @@ import type {
     WebSite,
     Graph,
     WebPage,
-    AboutPage,
-    ProfilePage,
 } from 'schema-dts';
 
 import {
@@ -91,18 +89,30 @@ const websiteNode: WebSite = {
 export const meta: MetaFunction = () => {
     const ogImage = 'piotr.jpg';
     const size = getImageSize(`${LOCAL_OG_IMAGES_DIRECTORY}${ogImage}`);
-    const portrait = {
+    const portrait: import('schema-dts').ImageObject = {
         '@type': 'ImageObject',
         '@id': PIOTR_IMAGE_ID,
         contentUrl: `${PRODUCTION_OG_IMAGES_DIRECTORY}${ogImage}`,
         url: `${PRODUCTION_OG_IMAGES_DIRECTORY}${ogImage}`,
-        width: size.width,
-        height: size.height,
+        width: {
+            '@type': 'QuantitativeValue',
+            value: size.width,
+            unitText: 'px',
+        },
+        height: {
+            '@type': 'QuantitativeValue',
+            value: size.height,
+            unitText: 'px',
+        },
         caption: 'Portrait photo of Piotr Piech.',
-    } as unknown as import('schema-dts').ImageObject;
+    };
 
-    const aboutWebPage: WebPage | (AboutPage & ProfilePage) = {
-        '@type': ['WebPage', 'AboutPage', 'ProfilePage'],
+    const aboutWebPage: WebPage = {
+        '@type': [
+            'WebPage',
+            'AboutPage',
+            'ProfilePage',
+        ] as unknown as 'WebPage',
         '@id': ABOUT_ID,
         url: 'https://piech.dev/',
         name: 'About Piotr Piech',
@@ -114,7 +124,7 @@ export const meta: MetaFunction = () => {
         image: { '@id': PIOTR_IMAGE_ID },
         datePublished: REPOSITORY_INFO['piech.dev']?.createdDatetime,
         dateModified: REPOSITORY_INFO['piech.dev']?.lastCommitDatetime,
-    } as unknown as WebPage;
+    };
 
     const personNode: Person = {
         ...PERSON,

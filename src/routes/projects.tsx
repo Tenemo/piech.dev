@@ -67,23 +67,31 @@ const breadcrumbList: BreadcrumbList = {
 export const meta: MetaFunction = () => {
     const ogImage = 'piech.dev_projects.jpg';
     const size = getImageSize(`${LOCAL_OG_IMAGES_DIRECTORY}${ogImage}`);
-    const imageObj = {
+    const imageObj: ImageObject = {
         '@type': 'ImageObject',
         '@id': 'https://piech.dev/projects/#main-image',
         contentUrl: `${PRODUCTION_OG_IMAGES_DIRECTORY}${ogImage}`,
         url: `${PRODUCTION_OG_IMAGES_DIRECTORY}${ogImage}`,
-        width: size.width,
-        height: size.height,
+        width: {
+            '@type': 'QuantitativeValue',
+            value: size.width,
+            unitText: 'px',
+        },
+        height: {
+            '@type': 'QuantitativeValue',
+            value: size.height,
+            unitText: 'px',
+        },
         caption: 'Preview image for piech.dev projects.',
-    } as unknown as ImageObject;
+    };
 
     const websiteNode: WebSite = {
         '@type': 'WebSite',
         '@id': WEBSITE_ID,
     };
 
-    const collectionPage = {
-        '@type': ['WebPage', 'CollectionPage'],
+    const collectionPage: WebPage = {
+        '@type': ['WebPage', 'CollectionPage'] as unknown as 'WebPage',
         '@id': 'https://piech.dev/projects/#page',
         url: 'https://piech.dev/projects/',
         name: 'Projects | piech.dev',
@@ -95,7 +103,7 @@ export const meta: MetaFunction = () => {
         mainEntity: projectsItemList,
         primaryImageOfPage: { '@id': 'https://piech.dev/projects/#main-image' },
         image: { '@id': 'https://piech.dev/projects/#main-image' },
-    } as unknown as WebPage;
+    };
 
     const graph: Graph = {
         '@context': 'https://schema.org',

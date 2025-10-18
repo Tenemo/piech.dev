@@ -104,7 +104,7 @@ export const meta: MetaFunction = () => {
             rel: 'canonical',
             href: 'https://piech.dev/contact/',
         },
-        { 'script:ld+json': JSON.stringify(graph) },
+        { 'script:ld+json': graph },
     ];
 };
 

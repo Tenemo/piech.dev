@@ -24,6 +24,7 @@ import { REPOSITORY_INFO } from 'utils/githubData';
 
 const projectsItemList: ItemList = {
     '@type': 'ItemList',
+    '@id': 'https://piech.dev/projects/#list',
     itemListOrder: 'https://schema.org/ItemListOrderAscending',
     numberOfItems: PROJECTS.length,
     itemListElement: PROJECTS.map<ListItem>(({ repoName, project }, i) => {
@@ -99,7 +100,7 @@ export const meta: MetaFunction = () => {
         primaryImageOfPage: { '@id': 'https://piech.dev/projects/#main-image' },
         image: { '@id': 'https://piech.dev/projects/#main-image' },
         datePublished: REPOSITORY_INFO['piech.dev']?.createdDatetime,
-        dateModified: new Date().toISOString(),
+        dateModified: REPOSITORY_INFO['piech.dev']?.lastCommitDatetime,
     };
 
     const graph: Graph = {

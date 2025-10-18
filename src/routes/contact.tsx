@@ -67,7 +67,7 @@ export const meta: MetaFunction = () => {
         primaryImageOfPage: { '@id': 'https://piech.dev/contact/#image' },
         image: { '@id': 'https://piech.dev/contact/#image' },
         datePublished: REPOSITORY_INFO['piech.dev']?.createdDatetime,
-        dateModified: new Date().toISOString(),
+        dateModified: REPOSITORY_INFO['piech.dev']?.lastCommitDatetime,
     };
 
     const graph: Graph = {

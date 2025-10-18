@@ -1,5 +1,12 @@
 import React from 'react';
 import type { MetaFunction } from 'react-router';
+import type {
+    CollectionPage,
+    ListItem,
+    SoftwareSourceCode,
+    WithContext,
+    ItemList,
+} from 'schema-dts';
 
 import {
     DEFAULT_KEYWORDS,
@@ -7,7 +14,36 @@ import {
     PRODUCTION_OG_IMAGES_DIRECTORY,
 } from 'app/appConstants';
 import Projects from 'features/Projects/Projects';
+import { PROJECTS } from 'features/Projects/projectsList';
 import { getImageSize } from 'utils/getImageSize';
+
+const projectsItemList: ItemList = {
+    '@type': 'ItemList',
+    itemListElement: PROJECTS.map<ListItem>(({ repoName, project }, i) => {
+        const name = repoName ?? project;
+        const code: SoftwareSourceCode = {
+            '@type': 'SoftwareSourceCode',
+            '@id': `https://piech.dev/projects/${name}#code`,
+            name,
+            url: `https://piech.dev/projects/${name}`,
+            codeRepository: `https://github.com/Tenemo/${name}`,
+            programmingLanguage: 'TypeScript',
+        };
+        return {
+            '@type': 'ListItem',
+            position: i + 1,
+            item: code,
+        };
+    }),
+};
+
+const collectionJsonLd: WithContext<CollectionPage> = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Projects | piech.dev',
+    url: 'https://piech.dev/projects/',
+    mainEntity: projectsItemList,
+};
 
 export const meta: MetaFunction = () => {
     const ogImage = 'piech.dev_projects.jpg';
@@ -43,6 +79,11 @@ export const meta: MetaFunction = () => {
             tagName: 'link',
             rel: 'canonical',
             href: 'https://piech.dev/projects/',
+        },
+        {
+            tagName: 'script',
+            type: 'application/ld+json',
+            children: JSON.stringify(collectionJsonLd),
         },
     ];
 };

@@ -1,5 +1,13 @@
 import React from 'react';
 import type { MetaFunction } from 'react-router';
+import type {
+    ContactPoint,
+    ContactPage,
+    WithContext,
+    Person,
+} from 'schema-dts';
+
+import { PERSON_ID } from './index';
 
 import {
     DEFAULT_KEYWORDS,
@@ -8,6 +16,45 @@ import {
 } from 'app/appConstants';
 import Contact from 'features/Contact/Contact';
 import { getImageSize } from 'utils/getImageSize';
+
+const contactPoints: ContactPoint[] = [
+    {
+        '@type': 'ContactPoint',
+        contactType: 'customer support',
+        email: 'piotr@piech.dev',
+    },
+    {
+        '@type': 'ContactPoint',
+        contactType: 'social',
+        url: 'https://www.linkedin.com/in/ppiech',
+    },
+    {
+        '@type': 'ContactPoint',
+        contactType: 'code repository',
+        url: 'https://github.com/Tenemo',
+    },
+    {
+        '@type': 'ContactPoint',
+        contactType: 'messaging',
+        url: 'https://t.me/tenemo',
+    },
+];
+
+const contactPageJsonLd: WithContext<ContactPage> = {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    '@id': 'https://piech.dev/contact/#page',
+    url: 'https://piech.dev/contact/',
+    name: 'Contact | piech.dev',
+    about: { '@id': PERSON_ID },
+};
+
+const personContactJsonLd: WithContext<Person> = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    '@id': PERSON_ID,
+    contactPoint: contactPoints,
+};
 
 export const meta: MetaFunction = () => {
     const ogImage = 'piech.dev_contact.jpg';
@@ -41,6 +88,16 @@ export const meta: MetaFunction = () => {
             tagName: 'link',
             rel: 'canonical',
             href: 'https://piech.dev/contact/',
+        },
+        {
+            tagName: 'script',
+            type: 'application/ld+json',
+            children: JSON.stringify(contactPageJsonLd),
+        },
+        {
+            tagName: 'script',
+            type: 'application/ld+json',
+            children: JSON.stringify(personContactJsonLd),
         },
     ];
 };

@@ -1,5 +1,6 @@
 import React from 'react';
 import type { MetaFunction } from 'react-router';
+import type { SoftwareSourceCode, WithContext } from 'schema-dts';
 
 import {
     DEFAULT_KEYWORDS,
@@ -10,6 +11,22 @@ import ProjectItem from 'features/Projects/ProjectItem/ProjectItem';
 import { PROJECTS } from 'features/Projects/projectsList';
 import { getImageSize } from 'utils/getImageSize';
 import { REPOSITORY_INFO } from 'utils/githubData';
+
+const buildProjectJsonLd = (
+    repo: string,
+    desc: string,
+    info?: { topics?: string[]; createdDatetime?: string },
+): WithContext<SoftwareSourceCode> => ({
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareSourceCode',
+    name: repo,
+    description: desc,
+    url: `https://piech.dev/projects/${repo}`,
+    codeRepository: `https://github.com/Tenemo/${repo}`,
+    programmingLanguage: 'TypeScript',
+    keywords: info?.topics,
+    dateCreated: info?.createdDatetime,
+});
 
 export const meta: MetaFunction = (args) => {
     const repo = args.params.repo ?? '';
@@ -33,6 +50,8 @@ export const meta: MetaFunction = (args) => {
     const ogImageAlt = projectEntry.ogImageAlt;
 
     const size = getImageSize(`${LOCAL_OG_IMAGES_DIRECTORY}${ogImage}`);
+    const jsonLd = buildProjectJsonLd(repo, desc, info);
+
     return [
         { title },
         { name: 'description', content: desc },
@@ -52,6 +71,11 @@ export const meta: MetaFunction = (args) => {
             tagName: 'link',
             rel: 'canonical',
             href: `https://piech.dev/projects/${repo}`,
+        },
+        {
+            tagName: 'script',
+            type: 'application/ld+json',
+            children: JSON.stringify(jsonLd),
         },
     ];
 };

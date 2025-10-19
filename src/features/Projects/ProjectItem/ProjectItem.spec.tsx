@@ -5,16 +5,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import ProjectItem from './ProjectItem';
 
 import { renderWithProviders } from 'utils/testUtils';
-// The app imports JSON via default import, so the mock must provide a default export
-vi.mock('../../../../temp/githubData', () => ({
-    default: {
-        README_CONTENT: {
-            'test-repo': '# Test Readme Content',
-            'cached-project': '# Cached Readme Content',
-            'new-content-project': '# New Readme Content',
-        },
-    },
-}));
 
 const mockUseParams = vi.fn().mockReturnValue({ repo: 'test-repo' });
 vi.mock('react-router', async () => {

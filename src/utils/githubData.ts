@@ -8,10 +8,9 @@
 
 /* eslint-disable */
 import githubData from '../../temp/githubData.json';
-import type { RepositoryInfo } from 'types/github-data';
+import type { GithubData, RepositoryInfo } from 'types/githubData';
 /* eslint-enable */
 
-export const REPOSITORY_INFO: Partial<Record<string, RepositoryInfo>> =
-    githubData.REPOSITORY_INFO;
-export const README_CONTENT: Partial<Record<string, string>> =
-    githubData.README_CONTENT;
+export const repositoriesData: Partial<Record<string, RepositoryInfo>> =
+    githubData.repositories;
+export const metadata: GithubData['metadata'] = githubData.metadata;

@@ -6,6 +6,5 @@ export default [
         route('projects', './routes/projects.tsx'),
         route('projects/:repo', './routes/project-item.tsx'),
         route('contact', './routes/contact.tsx'),
-        route('*', './routes/catchall.tsx'),
     ]),
 ] satisfies RouteConfig;

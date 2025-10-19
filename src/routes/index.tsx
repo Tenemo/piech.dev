@@ -19,7 +19,7 @@ import About from 'features/About/About';
 import { PROJECTS } from 'features/Projects/projectsList';
 import { TECHNOLOGIES } from 'features/Projects/technologies';
 import { getImageSize } from 'utils/getImageSize';
-import { REPOSITORY_INFO } from 'utils/githubData';
+import { repositoriesData } from 'utils/githubData';
 
 const alumniOf: EducationalOrganization = {
     '@type': 'EducationalOrganization',
@@ -66,7 +66,7 @@ export const PERSON: Person = {
     name: 'Piotr Piech',
     givenName: 'Piotr',
     familyName: 'Piech',
-    image: 'https://piech.dev/media/projects/og_images/piotr.jpg',
+    image: { '@id': PIOTR_IMAGE_ID },
     email: 'piotr@piech.dev',
     description:
         'Engineering Manager & Software Architect specializing in full-stack web development.',
@@ -116,8 +116,8 @@ export const WEBSITE: WebSite = {
     author: { '@id': PERSON_ID },
     publisher: { '@id': PERSON_ID },
     copyrightHolder: { '@id': PERSON_ID },
-    datePublished: REPOSITORY_INFO['piech.dev']?.createdDatetime,
-    dateModified: REPOSITORY_INFO['piech.dev']?.lastCommitDatetime,
+    datePublished: repositoriesData['piech.dev']?.createdDatetime,
+    dateModified: repositoriesData['piech.dev']?.lastCommitDatetime,
 };
 
 export const meta: MetaFunction = () => {
@@ -156,18 +156,13 @@ export const meta: MetaFunction = () => {
         mainEntity: { '@id': PERSON_ID },
         primaryImageOfPage: { '@id': PIOTR_IMAGE_ID },
         image: { '@id': PIOTR_IMAGE_ID },
-        datePublished: REPOSITORY_INFO['piech.dev']?.createdDatetime,
-        dateModified: REPOSITORY_INFO['piech.dev']?.lastCommitDatetime,
-    };
-
-    const personNode: Person = {
-        ...PERSON,
-        image: { '@id': PIOTR_IMAGE_ID },
+        datePublished: repositoriesData['piech.dev']?.createdDatetime,
+        dateModified: repositoriesData['piech.dev']?.lastCommitDatetime,
     };
 
     const graph: Graph = {
         '@context': 'https://schema.org',
-        '@graph': [WEBSITE, aboutWebPage, personNode, portrait],
+        '@graph': [WEBSITE, aboutWebPage, PERSON, portrait],
     };
 
     return [

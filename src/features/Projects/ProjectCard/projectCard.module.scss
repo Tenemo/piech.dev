@@ -9,6 +9,10 @@
     transition: box-shadow 0.3s ease;
     position: relative;
 
+    &:hover {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
     @media (max-width: 768px) {
         flex-direction: column !important;
         min-height: auto;

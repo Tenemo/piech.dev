@@ -11,7 +11,7 @@ My personal page. Over time it turned into a complex project itself:
 - GitHub's markdown from the projects' readmes is rendered within the page, including media.
 - Includes dynamic \<meta> tags for each project page, including individual og:image tags with sizes.
 - All routes have appropriate JSON-LD objects with all relevant information, even if Google or other search engines currently don't support some of them.
-- Thanks to the above and a bunch of other optimizations, all routes, including the heaviest /projects route, score a perfect 100/100/100/100 on [Google Lighthouse](https://pagespeed.web.dev/) mobile, which throttles to a slow 4G network connection.
+- Thanks to the above and a bunch of other optimizations, all routes, including the heaviest [projects/](https://piech.dev/projects/) route, score a perfect 100/100/100/100 on [Google Lighthouse](https://pagespeed.web.dev/) mobile, which throttles to a slow 4G network connection.
 
 _Not a single word of this readme was written with AI. Letting you know just in case you don't enjoy reading AI-generated documentation._
 
@@ -19,7 +19,7 @@ _Not a single word of this readme was written with AI. Letting you know just in 
 
 ## GitHub-based personal projects browser
 
-- The projects/ page is managed via minimal configuration, just based on repository names which are then fetched during the pre-build step. Projects metadata and READMEs are fetched directly from GitHub at build time.
+- The [projects/](https://piech.dev/projects/) page is managed via minimal configuration, just based on repository names which are then fetched during the pre-build step. Projects metadata and READMEs are fetched directly from GitHub at build time.
 - Markdown rendering transforms relative links to proper URLs and handles videos, so that you can see video previews of my projects without leaving my site.
 - GitHub repository topics automatically become \<meta> keywords.
 - GitHub information, as well as images are dynamically pulled to each project's \<head> into appropriate og: tags, allowing for custom preview card of each project in social media and on messengers.
@@ -79,7 +79,7 @@ Steps to follow when adding a new route to the app:
 
 ### Adding a new project
 
-Steps to follow when adding a new project to `/projects/`:
+Steps to follow when adding a new project to [projects/](https://piech.dev/projects/):
 
 1. Make sure the GitHub repo is publicly accessible, has topics ("keywords"/"tags"), repo description (the short, character-limited one), and a descriptive README.md, preferably with some media assets to make it more interesting.
 2. Add a video (preferable) or an image to `public/media/projects/` that will be project's preview on the project card.
@@ -87,6 +87,6 @@ Steps to follow when adding a new project to `/projects/`:
 4. If there are any new technologies used, add them to `src/features/Projects/technologies.ts`. Add their logos to `public/media/logos/`.
 5. Add the new project to `src/features/Projects/projectsList.ts`.
 
-The project should appear in the `/projects/` route at that point.
+The project should appear in the [projects/](https://piech.dev/projects/) route at that point.
 
 At the moment only GitHub-based projects are supported.

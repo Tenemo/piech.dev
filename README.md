@@ -46,6 +46,8 @@ This resulted in the project using the following post-build steps:
 5. Traversing `dist/client` to remove all .js files from it. Again, could not make Vite + React Router not output some .js files, even if they were unused and wouldn't be served to the users anyway. Why waste network traffic and time on deploying those?
 6. Generating a sitemap with an in-house script using the `sitemap` package. `vite-plugin-sitemap` doesn't work with URLs with dots, apparently, which some of my projects have in their paths, e.g. it truncates /aliases.sh to /aliases.
 
+Technically, I could also flatten the output directory from `dist/client` to `dist`, but it's solved with one line of Netlify config and is not bothering me enough to reconfigure all the build/post-build scripts and Netlify deployment configuration.
+
 ### Why use React at all?
 
 One might ask, if you don't want to bundle any JavaScript, why bother using React at all, just write HTML & CSS or use tools meant for the purpose.
@@ -58,7 +60,7 @@ Another reason is that I initially intended for the whole page to be hydrated - 
 
 ## Development
 
-Notes for myself (Piotr) to follow when making changes to the project. At the time of writing it seems a bit redundant, but there's a nonzero chance that future Piotr will be very grateful.
+Notes for myself (Piotr) to follow when making changes to the project. At the time of writing it seems super redundant and obvious, but there's a nonzero chance that future Piotr will be very grateful for the below sections.
 
 ### Adding a new route
 
@@ -85,6 +87,6 @@ Steps to follow when adding a new project to `/projects/`:
 4. If there are any new technologies used, add them to `src/features/Projects/technologies.ts`. Add their logos to `public/media/logos/`.
 5. Add the new project to `src/features/Projects/projectsList.ts`.
 
-The project should at that point appear in the `/projects/` route.
+The project should appear in the `/projects/` route at that point.
 
 At the moment only GitHub-based projects are supported.

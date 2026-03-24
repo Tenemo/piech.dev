@@ -1,32 +1,10 @@
 {
     "compilerOptions": {
-        "jsx": "react",
+        "baseUrl": "./src/",
+        "jsx": "react-jsx",
         "target": "esnext",
         "module": "esnext",
         "moduleResolution": "bundler",
-        "paths": {
-            "app/*": [
-                "./src/app/*"
-            ],
-            "components/*": [
-                "./src/components/*"
-            ],
-            "features/*": [
-                "./src/features/*"
-            ],
-            "mocks/*": [
-                "./src/mocks/*"
-            ],
-            "styles/*": [
-                "./src/styles/*"
-            ],
-            "types/*": [
-                "./src/types/*"
-            ],
-            "utils/*": [
-                "./src/utils/*"
-            ]
-        },
         "removeComments": true,
         "declaration": false,
         "allowSyntheticDefaultImports": true,
@@ -38,12 +16,14 @@
         "noEmit": true,
         "esModuleInterop": true,
         "isolatedModules": true,
+        "ignoreDeprecations": "6.0",
         "skipLibCheck": true,
         "noUnusedParameters": true,
         "noUnusedLocals": true
     },
     "include": [
         "src/**/*",
+        "scripts/**/*",
         "temp/**/*",
         "eslint.config.js",
         "vite.config.ts",

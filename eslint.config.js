@@ -1,3 +1,5 @@
+import { readdirSync } from 'node:fs';
+
 import { fixupConfigRules, fixupPluginRules } from '@eslint/compat';
 import eslint from '@eslint/js';
 import vitestPlugin from '@vitest/eslint-plugin';
@@ -20,6 +22,13 @@ import { plugin as tsPlugin, configs as tsConfigs } from 'typescript-eslint';
 
 const OFF = 0;
 const ERROR = 2;
+
+// eslint-disable-next-line security/detect-non-literal-fs-filename
+const srcAliasPattern = `^(${readdirSync(new URL('./src/', import.meta.url), {
+    withFileTypes: true,
+})
+    .map((direct) => direct.name.replace(/(\.ts){1}(x?)/, ''))
+    .join('|')})/`;
 
 export default defineConfig(
     eslint.configs.recommended,
@@ -53,6 +62,7 @@ export default defineConfig(
             react: {
                 version: 'detect',
             },
+            'import/internal-regex': srcAliasPattern,
             'import/resolver': {
                 typescript: {}, // eslint-import-resolver-typescript
             },

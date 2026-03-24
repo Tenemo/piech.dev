@@ -1,6 +1,5 @@
 import { screen } from '@testing-library/react';
 import type { Location as HistoryLocation } from 'history';
-import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 import { meta as projectsMeta } from '../../routes/projects';

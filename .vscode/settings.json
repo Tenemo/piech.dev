@@ -85,5 +85,6 @@
     ],
     "chat.tools.terminal.autoApprove": {
         "npm install": true
-    }
+    },
+    "chat.useAgentsMdFile": true
 }

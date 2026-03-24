@@ -74,6 +74,7 @@ export default defineConfig(({ mode, command }) => {
             sourcemap: false,
             outDir: 'dist',
             cssCodeSplit: true,
+            chunkSizeWarningLimit: 2_000,
 
             target: browserslistToEsbuild(),
             rollupOptions: {

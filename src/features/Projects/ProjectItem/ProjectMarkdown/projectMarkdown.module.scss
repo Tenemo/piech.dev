@@ -1,11 +1,11 @@
-@use "styles/variables";
+@use 'styles/variables';
 
 .markdownContainer {
     background-color: var(--secondary-bg-color);
     border-radius: 8px;
     padding: 1rem 2rem 1rem 2rem;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    font-family: "Open Sans", sans-serif;
+    font-family: 'Open Sans', sans-serif;
     line-height: 1.6;
     position: relative;
     @media (max-width: 768px) {

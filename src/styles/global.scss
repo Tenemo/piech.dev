@@ -1,4 +1,4 @@
-@use "styles/variables";
+@use 'styles/variables';
 
 html,
 #root,
@@ -7,7 +7,7 @@ body {
     font-size: 1rem;
     background-color: var(--background-color);
     color: var(--text-color);
-    font-family: "Open Sans", sans-serif;
+    font-family: 'Open Sans', sans-serif;
     height: 100%;
     overflow-y: auto;
 }
@@ -29,7 +29,7 @@ main {
 
 body.using-mouse {
     :focus,
-    [class$="-is-focused"] {
+    [class$='-is-focused'] {
         outline: none;
         box-shadow: initial;
     }

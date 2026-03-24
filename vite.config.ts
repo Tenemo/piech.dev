@@ -6,7 +6,6 @@ import browserslistToEsbuild from 'browserslist-to-esbuild';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, loadEnv } from 'vite';
 import { patchCssModules } from 'vite-css-modules';
-import tsconfigPaths from 'vite-tsconfig-paths';
 
 // Automatically pick up all directories in the src/ directory and add them as aliases later
 const absolutePathAliases: Record<string, string> = {};
@@ -33,7 +32,6 @@ export default defineConfig(({ mode, command }) => {
         base: '/',
         plugins: [
             reactRouter(),
-            tsconfigPaths(),
             patchCssModules({
                 generateSourceTypes: true,
             }),
@@ -62,6 +60,7 @@ export default defineConfig(({ mode, command }) => {
             },
         },
         resolve: {
+            tsconfigPaths: true,
             alias: {
                 ...absolutePathAliases,
             },
@@ -75,6 +74,7 @@ export default defineConfig(({ mode, command }) => {
             sourcemap: false,
             outDir: 'dist',
             cssCodeSplit: true,
+            chunkSizeWarningLimit: 2_000,
 
             target: browserslistToEsbuild(),
             rollupOptions: {

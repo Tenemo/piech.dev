@@ -14,13 +14,12 @@ import { PERSON, PERSON_ID, WEBSITE, WEBSITE_ID } from './index';
 
 import {
     DEFAULT_KEYWORDS,
-    LOCAL_OG_IMAGES_DIRECTORY,
     PRODUCTION_OG_IMAGES_DIRECTORY,
 } from 'app/appConstants';
 import Projects from 'features/Projects/Projects';
 import { PROJECTS } from 'features/Projects/projectsList';
-import { getImageSize } from 'utils/getImageSize';
 import { repositoriesData } from 'utils/githubData';
+import { getOgImageSize } from 'utils/ogImageSizes';
 
 const projectsItemList: ItemList = {
     '@type': 'ItemList',
@@ -67,7 +66,7 @@ const breadcrumbList: BreadcrumbList = {
 
 export const meta: MetaFunction = () => {
     const ogImage = 'piech.dev_projects.jpg';
-    const size = getImageSize(`${LOCAL_OG_IMAGES_DIRECTORY}${ogImage}`);
+    const size = getOgImageSize(ogImage);
     const imageObj: ImageObject = {
         '@type': 'ImageObject',
         '@id': 'https://piech.dev/projects/#main-image',

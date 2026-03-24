@@ -6,12 +6,11 @@ import { PERSON, PERSON_ID, WEBSITE, WEBSITE_ID } from './index';
 
 import {
     DEFAULT_KEYWORDS,
-    LOCAL_OG_IMAGES_DIRECTORY,
     PRODUCTION_OG_IMAGES_DIRECTORY,
 } from 'app/appConstants';
 import Contact from 'features/Contact/Contact';
-import { getImageSize } from 'utils/getImageSize';
 import { repositoriesData } from 'utils/githubData';
+import { getOgImageSize } from 'utils/ogImageSizes';
 
 const breadcrumbList: BreadcrumbList = {
     '@type': 'BreadcrumbList',
@@ -34,7 +33,7 @@ const breadcrumbList: BreadcrumbList = {
 
 export const meta: MetaFunction = () => {
     const ogImage = 'piech.dev_contact.jpg';
-    const size = getImageSize(`${LOCAL_OG_IMAGES_DIRECTORY}${ogImage}`);
+    const size = getOgImageSize(ogImage);
     const imageObj: ImageObject = {
         '@type': 'ImageObject',
         '@id': 'https://piech.dev/contact/#image',

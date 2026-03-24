@@ -1,4 +1,4 @@
-import React from 'react';
+import type { JSX } from 'react';
 import type { MetaFunction } from 'react-router';
 import type {
     EducationalOrganization,
@@ -12,14 +12,13 @@ import type {
 
 import {
     DEFAULT_KEYWORDS,
-    LOCAL_OG_IMAGES_DIRECTORY,
     PRODUCTION_OG_IMAGES_DIRECTORY,
 } from 'app/appConstants';
 import About from 'features/About/About';
 import { PROJECTS } from 'features/Projects/projectsList';
 import { TECHNOLOGIES } from 'features/Projects/technologies';
-import { getImageSize } from 'utils/getImageSize';
 import { repositoriesData } from 'utils/githubData';
+import { getOgImageSize } from 'utils/ogImageSizes';
 
 const alumniOf: EducationalOrganization = {
     '@type': 'EducationalOrganization',
@@ -122,7 +121,7 @@ export const WEBSITE: WebSite = {
 
 export const meta: MetaFunction = () => {
     const ogImage = 'piotr.jpg';
-    const size = getImageSize(`${LOCAL_OG_IMAGES_DIRECTORY}${ogImage}`);
+    const size = getOgImageSize(ogImage);
     const portrait: ImageObject = {
         '@type': 'ImageObject',
         '@id': PIOTR_IMAGE_ID,
@@ -188,10 +187,10 @@ export const meta: MetaFunction = () => {
             property: 'og:image:alt',
             content: 'Portrait photo of Piotr Piech.',
         },
-        { tagName: 'link', rel: 'canonical', href: 'https://piech.dev/' },
+        { tagName: 'link', rel: 'canonical', href: 'https://piech.dev' },
         { 'script:ld+json': graph },
     ];
 };
 
-const Route = (): React.JSX.Element => <About />;
+const Route = (): JSX.Element => <About />;
 export default Route;

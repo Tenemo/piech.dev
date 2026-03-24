@@ -82,5 +82,8 @@
         "threejs",
         "tseslint",
         "wojtekmaj"
-    ]
+    ],
+    "chat.tools.terminal.autoApprove": {
+        "npm install": true
+    }
 }

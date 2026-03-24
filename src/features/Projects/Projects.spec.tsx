@@ -90,7 +90,7 @@ describe('Projects page', () => {
             location,
             loaderData: {} as Record<string, never>,
             matches: [],
-        } as Parameters<typeof projectsMeta>[0]);
+        } as unknown as Parameters<typeof projectsMeta>[0]);
         expect(tags).toEqual(
             expect.arrayContaining([
                 { title: 'Projects | piech.dev' },

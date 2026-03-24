@@ -1,3 +1,4 @@
+import { fixupConfigRules, fixupPluginRules } from '@eslint/compat';
 import eslint from '@eslint/js';
 import vitestPlugin from '@vitest/eslint-plugin';
 import { defineConfig } from 'eslint/config';
@@ -24,26 +25,28 @@ export default defineConfig(
     eslint.configs.recommended,
     ...tsConfigs.strictTypeChecked,
     ...tsConfigs.stylisticTypeChecked,
-    importConfigs.recommended,
-    importConfigs.typescript,
-    importConfigs.react,
-    importConfigs.errors,
-    importConfigs.warnings,
+    ...fixupConfigRules([
+        importConfigs.recommended,
+        importConfigs.typescript,
+        importConfigs.react,
+        importConfigs.errors,
+        importConfigs.warnings,
+        reactPlugin.configs.flat.recommended,
+        reactPlugin.configs.flat['jsx-runtime'],
+        securityPlugin.configs.recommended,
+    ]),
     prettierPluginRecommended,
-    reactPlugin.configs.flat.recommended,
-    reactPlugin.configs.flat['jsx-runtime'],
-    securityPlugin.configs.recommended,
     {
         files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
         ...reactHooksPlugin.configs['recommended-latest'],
         plugins: {
             '@typescript-eslint': tsPlugin,
-            react: reactPlugin,
-            'react-hooks': reactHooksPlugin,
-            'jsx-a11y': jsxA11yPlugin,
+            react: fixupPluginRules(reactPlugin),
+            'react-hooks': fixupPluginRules(reactHooksPlugin),
+            'jsx-a11y': fixupPluginRules(jsxA11yPlugin),
             'only-error': errorOnlyPlugin,
             prettier: prettierPlugin,
-            security: securityPlugin,
+            security: fixupPluginRules(securityPlugin),
             'unused-imports': unusedImportsPlugin,
         },
         settings: {
@@ -60,7 +63,6 @@ export default defineConfig(
                 ecmaFeatures: {
                     jsx: true,
                 },
-                project: './tsconfig.json',
                 ecmaVersion: 2021,
                 projectService: true,
                 tsconfigRootDir: import.meta.dirname,

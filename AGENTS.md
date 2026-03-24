@@ -1,5 +1,6 @@
 ﻿# General
 
+- Before you begin, read my README.md file to understand what the project is doing and what are its goals.
 - Preserve existing styles and behavior unless asked otherwise. In general, make sure to never remove any existing features unless asked to.
 - Do not ignore/disable/hide errors, fix the underlying issue instead.
 - Never use any emojis anywhere, in code, comments, documentation, anywhere.

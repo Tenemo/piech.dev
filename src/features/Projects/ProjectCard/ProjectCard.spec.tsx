@@ -1,5 +1,4 @@
 import { screen } from '@testing-library/react';
-import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 import ProjectCard from './ProjectCard';
@@ -172,10 +171,13 @@ describe('ProjectCard', () => {
         // ensure it links to custom repo route
         const links = screen
             .getAllByRole('link')
-            .filter((l) => l.getAttribute('href')?.includes('/projects/'));
+            .filter((link: HTMLElement) =>
+                link.getAttribute('href')?.includes('/projects/'),
+            );
         expect(
             links.some(
-                (l) => l.getAttribute('href') === '/projects/custom-repo',
+                (link: HTMLElement) =>
+                    link.getAttribute('href') === '/projects/custom-repo',
             ),
         ).toBe(true);
     });
@@ -235,13 +237,13 @@ describe('ProjectCard', () => {
 
         const projectLinks = screen
             .getAllByRole('link')
-            .filter((link) =>
+            .filter((link: HTMLElement) =>
                 link.getAttribute('href')?.startsWith('/projects'),
             );
 
         expect(projectLinks.length).toBeGreaterThan(0);
 
-        projectLinks.forEach((link) => {
+        projectLinks.forEach((link: HTMLElement) => {
             expect(link).toHaveAttribute('href', '/projects/link-test');
         });
 

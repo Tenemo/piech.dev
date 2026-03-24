@@ -1,8 +1,8 @@
-@use "variables";
+@use 'variables';
 
-@use "global";
+@use 'global';
 
-@use "../components/Header/header.module";
-@use "../components/Footer/footer.module";
+@use '../components/Header/header.module';
+@use '../components/Footer/footer.module';
 
-@import "normalize.css";
+@import 'normalize.css';

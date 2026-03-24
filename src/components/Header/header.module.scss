@@ -1,4 +1,4 @@
-@use "styles/variables";
+@use 'styles/variables';
 
 .header {
     display: flex;
@@ -42,7 +42,7 @@
     }
 
     &::after {
-        content: "";
+        content: '';
         position: absolute;
         width: 0;
         height: 2px;

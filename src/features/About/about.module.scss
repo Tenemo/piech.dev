@@ -1,4 +1,4 @@
-@use "styles/variables";
+@use 'styles/variables';
 
 .main {
     display: flex;
@@ -31,7 +31,7 @@
 
     &::before,
     &::after {
-        content: "";
+        content: '';
         flex: 1;
         border-bottom: 1px solid var(--muted-color);
     }

@@ -1,6 +1,5 @@
 import { screen } from '@testing-library/react';
 import type { Location as HistoryLocation } from 'history';
-import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 import { meta as projectsMeta } from '../../routes/projects';
@@ -90,7 +89,7 @@ describe('Projects page', () => {
             location,
             loaderData: {} as Record<string, never>,
             matches: [],
-        } as Parameters<typeof projectsMeta>[0]);
+        } as unknown as Parameters<typeof projectsMeta>[0]);
         expect(tags).toEqual(
             expect.arrayContaining([
                 { title: 'Projects | piech.dev' },

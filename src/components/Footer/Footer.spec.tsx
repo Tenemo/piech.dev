@@ -32,9 +32,8 @@ describe('Footer', () => {
     });
 
     it('should render GitHub icon', () => {
-        renderWithProviders(<Footer />);
+        const { container } = renderWithProviders(<Footer />);
 
-        const githubIcon = screen.getByLabelText('GitHub repository');
-        expect(githubIcon).toBeInTheDocument();
+        expect(container.querySelector('svg')).toBeInTheDocument();
     });
 });

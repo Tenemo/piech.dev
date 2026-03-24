@@ -1,9 +1,8 @@
 import React from 'react';
 import { Links, Meta, Outlet, Scripts } from 'react-router';
 
+import { CONTACT_PATH, HOME_PATH, PROJECTS_PATH } from 'app/routePaths';
 import 'styles/main.scss';
-
-declare const __BUILD_DATE__: string;
 
 export const Layout = ({
     children,
@@ -57,18 +56,10 @@ export const Layout = ({
                     sizes="180x180"
                 />
                 <link href="/favicon/site.webmanifest" rel="manifest" />
-                {/* LCP image */}
-                <link
-                    as="image"
-                    fetchPriority="high"
-                    href="/media/projects/threshold-elgamal.webp"
-                    rel="preload"
-                    type="image/webp"
-                />
 
-                <link as="document" href="/" rel="prefetch" />
-                <link as="document" href="/projects/" rel="prefetch" />
-                <link as="document" href="/contact/" rel="prefetch" />
+                <link as="document" href={HOME_PATH} rel="prefetch" />
+                <link as="document" href={PROJECTS_PATH} rel="prefetch" />
+                <link as="document" href={CONTACT_PATH} rel="prefetch" />
                 <FrameworkReady>
                     <Meta />
                     <Links />
@@ -84,14 +75,22 @@ export const Layout = ({
 
 const Root = (): React.JSX.Element => {
     React.useEffect(() => {
-        document.body.addEventListener('mousedown', () => {
+        const handleMouseDown = (): void => {
             document.body.classList.add('using-mouse');
-        });
-        document.body.addEventListener('keydown', (event) => {
-            if (event.key === 'Tab')
+        };
+        const handleKeyDown = (event: KeyboardEvent): void => {
+            if (event.key === 'Tab') {
                 document.body.classList.remove('using-mouse');
-        });
-        console.log(`Build date: ${__BUILD_DATE__}`);
+            }
+        };
+
+        document.body.addEventListener('mousedown', handleMouseDown);
+        document.body.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.body.removeEventListener('mousedown', handleMouseDown);
+            document.body.removeEventListener('keydown', handleKeyDown);
+        };
     }, []);
 
     return <Outlet />;

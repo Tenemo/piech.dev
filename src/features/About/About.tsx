@@ -4,6 +4,8 @@ import { Link } from 'react-router';
 
 import styles from './about.module.scss';
 
+import { CONTACT_PATH, PROJECTS_PATH } from 'app/routePaths';
+
 const About = (): React.JSX.Element => {
     const workStartDate = new Date('2012-08-01');
     const managementStartDate = new Date('2018-06-01');
@@ -39,13 +41,13 @@ const About = (): React.JSX.Element => {
                     My entire career has been spent working remotely.
                 </p>
                 <div className={styles.buttonsContainer}>
-                    <Link className={styles.mainButton} to="/projects">
+                    <Link className={styles.mainButton} to={PROJECTS_PATH}>
                         Check out my projects
                     </Link>
 
                     <div className={styles.dividerText}>OR</div>
 
-                    <Link className={styles.contactButton} to="/contact">
+                    <Link className={styles.contactButton} to={CONTACT_PATH}>
                         Contact me
                     </Link>
                 </div>

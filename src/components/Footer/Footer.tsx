@@ -1,7 +1,9 @@
-import GitHubIcon from '@mui/icons-material/GitHub';
 import React from 'react';
 
 import styles from './footer.module.scss';
+
+import { SITE_LINKS } from 'app/siteLinks';
+import { GitHubIcon } from 'components/Icons';
 
 const Footer = (): React.JSX.Element => {
     return (
@@ -9,7 +11,7 @@ const Footer = (): React.JSX.Element => {
             <a
                 aria-label="GitHub repository"
                 className={styles.githubLink}
-                href="https://github.com/Tenemo/piech.dev"
+                href={SITE_LINKS.githubRepo}
                 rel="noopener noreferrer"
                 target="_blank"
             >

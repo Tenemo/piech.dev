@@ -5,7 +5,7 @@ npm-debug.log
 .tmp/
 sh.exe.stackdump
 debug.log
-
+.npm-cache/
 
 # Build
 dist/

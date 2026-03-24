@@ -1,19 +1,20 @@
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { format } from 'date-fns';
 import React from 'react';
 import { Link } from 'react-router';
 
+import { getProjectRepo, getProjectRoutePath } from '../projectUtils';
 import { TECHNOLOGIES } from '../technologies';
 
 import styles from './projectCard.module.scss';
 import ProjectTechnologies from './ProjectTechnologies/ProjectTechnologies';
 
+import { OpenInNewIcon } from 'components/Icons';
 import { repositoriesData } from 'utils/githubData';
 
 type ProjectCardProps = {
     projectPreview: string;
     imageOnRight?: boolean;
-    technologies: (keyof typeof TECHNOLOGIES)[];
+    technologies: readonly (keyof typeof TECHNOLOGIES)[];
     project: string;
     repoName?: string;
 };
@@ -25,7 +26,8 @@ const ProjectCard = ({
     project,
     repoName,
 }: ProjectCardProps): React.JSX.Element => {
-    const githubRepository = repoName ?? project;
+    const githubRepository = getProjectRepo({ project, repoName });
+    const projectPath = getProjectRoutePath({ project, repoName });
     const repositoryInfo = repositoriesData[githubRepository];
     const createdIso = repositoryInfo?.createdDatetime;
     const createdLabel = createdIso
@@ -47,7 +49,6 @@ const ProjectCard = ({
             <img
                 alt={`${project} preview`}
                 className={styles.image}
-                fetchPriority="high"
                 src={`/media/projects/${projectPreview}`}
             />
         );
@@ -55,7 +56,7 @@ const ProjectCard = ({
         return (
             <Link
                 aria-label={`View ${project} project details`}
-                to={`/projects/${githubRepository}`}
+                to={projectPath}
             >
                 {previewContent}
             </Link>
@@ -74,10 +75,7 @@ const ProjectCard = ({
         >
             <div className={styles.previewContainer}>{renderPreview()}</div>
             <div className={styles.content}>
-                <Link
-                    className={styles.description}
-                    to={`/projects/${githubRepository}`}
-                >
+                <Link className={styles.description} to={projectPath}>
                     {createdLabel && (
                         <time
                             aria-label={`Project kickoff month: ${createdLabel}`}
@@ -90,7 +88,7 @@ const ProjectCard = ({
                     )}
                     <h3 className={styles.projectTitle}>
                         {project}
-                        <OpenInNewIcon fontSize="small" />
+                        <OpenInNewIcon />
                     </h3>
                     {renderContent()}
                 </Link>

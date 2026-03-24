@@ -1,27 +1,53 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 
-const outDir = path.resolve(process.cwd(), 'dist/client');
-const imageSrcRegex = /src="(\/media\/(?:logos|projects)\/[^"]+)"/g;
-const preloadHrefRegex = /href="(\/media\/(?:logos|projects)\/[^"]+)"/g;
+import { JSDOM } from 'jsdom';
 
-const EXCLUDED_EXTENSIONS: string[] = ['.mp4'];
+const outDir = path.resolve(process.cwd(), 'dist/client');
+const EXCLUDED_EXTENSIONS = new Set(['.mp4', '.webm', '.ogg']);
+
 async function findHtmlFiles(dir: string): Promise<string[]> {
     // eslint-disable-next-line security/detect-non-literal-fs-filename
     const dirents = await fs.readdir(dir, { withFileTypes: true });
     const files = await Promise.all(
         dirents.map(async (dirent) => {
-            const res = path.resolve(dir, dirent.name);
+            const resolvedPath = path.resolve(dir, dirent.name);
+
             if (dirent.isDirectory()) {
-                return findHtmlFiles(res);
+                return findHtmlFiles(resolvedPath);
             }
-            if (res.endsWith('.html')) {
-                return [res];
-            }
-            return [] as string[];
+
+            return resolvedPath.endsWith('.html') ? [resolvedPath] : [];
         }),
     );
+
     return files.flat();
+}
+
+function getMediaAssetType(url: string): 'logo' | 'project' | null {
+    if (url.startsWith('/media/logos/')) {
+        return 'logo';
+    }
+
+    if (url.startsWith('/media/projects/')) {
+        return 'project';
+    }
+
+    return null;
+}
+
+function toNetlifyImageUrl(originalUrl: string): string {
+    const assetType = getMediaAssetType(originalUrl);
+    const width = assetType === 'logo' ? 96 : 600;
+
+    return `/.netlify/images?url=${originalUrl}&w=${width.toString()}`;
+}
+
+function shouldTransform(url: string): boolean {
+    const urlNoParams = url.split(/[?#]/, 1)[0];
+    const ext = path.extname(urlNoParams).toLowerCase();
+
+    return getMediaAssetType(url) !== null && !EXCLUDED_EXTENSIONS.has(ext);
 }
 
 async function transformImagePaths(): Promise<void> {
@@ -29,79 +55,52 @@ async function transformImagePaths(): Promise<void> {
 
     try {
         const htmlFiles = await findHtmlFiles(outDir);
+
         if (htmlFiles.length === 0) {
             console.warn('Netlify CDN: No HTML files found to process.');
             return;
         }
 
         let transformedCount = 0;
+
         for (const file of htmlFiles) {
             // eslint-disable-next-line security/detect-non-literal-fs-filename
-            let content = await fs.readFile(file, 'utf-8');
+            const content = await fs.readFile(file, 'utf-8');
+            const dom = new JSDOM(content);
+            const { document } = dom.window;
             let replacementsInFile = 0;
 
-            content = content.replace(
-                imageSrcRegex,
-                (_match, originalUrl: string) => {
-                    const urlNoParams = originalUrl.split(/[?#]/, 1)[0];
-                    const ext = path.extname(urlNoParams).toLowerCase();
-                    if (EXCLUDED_EXTENSIONS.includes(ext)) {
-                        // Skip transformation for excluded extensions
-                        return `src="${originalUrl}"`;
-                    }
+            for (const element of document.querySelectorAll('[src]')) {
+                const originalUrl = element.getAttribute('src');
 
-                    const isLogo = originalUrl.startsWith('/media/logos/');
-                    // Width rules:
-                    // - Default: 600px
-                    // - Logos: 96px
-                    const width = isLogo ? 96 : 600;
+                if (!originalUrl || !shouldTransform(originalUrl)) {
+                    continue;
+                }
 
-                    replacementsInFile += 1;
-                    const netlifyUrl = `/.netlify/images?url=${originalUrl}&w=${width.toString()}`;
-                    return `src="${netlifyUrl}"`;
-                },
-            );
+                element.setAttribute('src', toNetlifyImageUrl(originalUrl));
+                replacementsInFile += 1;
+            }
 
-            content = content.replace(
-                preloadHrefRegex,
-                (
-                    match: string,
-                    originalUrl: string,
-                    offset: number,
-                    full: string,
-                ) => {
-                    const tagStart = full.lastIndexOf('<', offset);
-                    const tagEnd = full.indexOf('>', offset);
-                    if (tagStart === -1 || tagEnd === -1) return match;
-                    const tag = full.slice(tagStart, tagEnd + 1);
+            for (const element of document.querySelectorAll(
+                'link[rel="preload"][as="image"][href]',
+            )) {
+                const originalUrl = element.getAttribute('href');
 
-                    const isLinkTag = /^<\s*link\b/i.test(tag);
-                    const hasPreload = /\brel=("|')preload\1/i.test(tag);
-                    const hasAsImage = /\bas=("|')image\1/i.test(tag);
-                    if (!isLinkTag || !hasPreload || !hasAsImage) return match;
+                if (!originalUrl || !shouldTransform(originalUrl)) {
+                    continue;
+                }
 
-                    const urlNoParams = originalUrl.split(/[?#]/, 1)[0];
-                    const ext = path.extname(urlNoParams).toLowerCase();
-                    if (EXCLUDED_EXTENSIONS.includes(ext)) {
-                        // Skip transformation for excluded extensions
-                        return `href="${originalUrl}"`;
-                    }
-
-                    const isLogo = originalUrl.startsWith('/media/logos/');
-                    const width = isLogo ? 96 : 600;
-
-                    replacementsInFile += 1;
-                    const netlifyUrl = `/.netlify/images?url=${originalUrl}&w=${width.toString()}`;
-                    return `href="${netlifyUrl}"`;
-                },
-            );
+                element.setAttribute('href', toNetlifyImageUrl(originalUrl));
+                replacementsInFile += 1;
+            }
 
             if (replacementsInFile > 0) {
                 // eslint-disable-next-line security/detect-non-literal-fs-filename
-                await fs.writeFile(file, content, 'utf-8');
+                await fs.writeFile(file, dom.serialize(), 'utf-8');
                 transformedCount += replacementsInFile;
             }
         }
+
         console.log(
             `Netlify CDN: Transformed ${transformedCount.toString()} image paths in ${htmlFiles.length.toString()} HTML files.\n`,
         );

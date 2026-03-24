@@ -42,11 +42,6 @@ export default defineConfig(({ mode, command }) => {
                 }),
         ],
         ssr: command === 'build' ? { noExternal: true } : {},
-        define: {
-            __BUILD_DATE__: JSON.stringify(
-                new Date().toISOString().split('T')[0],
-            ),
-        },
         css: {
             devSourcemap: true,
             preprocessorOptions: {

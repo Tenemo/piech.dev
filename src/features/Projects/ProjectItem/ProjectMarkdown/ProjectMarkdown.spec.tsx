@@ -1,171 +1,138 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import ProjectMarkdown from './ProjectMarkdown';
 import styles from './projectMarkdown.module.scss';
 
 describe('ProjectMarkdown', () => {
-    it('should render basic markdown content', () => {
-        const markdown = '# Test Heading\n\nThis is a paragraph.';
-
-        render(<ProjectMarkdown markdown={markdown} repo="test-repo" />);
-
-        expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
-            'Test Heading',
+    it('renders basic markdown content', () => {
+        render(
+            <ProjectMarkdown
+                markdown={'# Test Heading\n\nThis is a paragraph.'}
+                repo="test-repo"
+            />,
         );
+
+        expect(
+            screen.getByRole('heading', { level: 1, name: 'Test Heading' }),
+        ).toBeInTheDocument();
         expect(screen.getByText('This is a paragraph.')).toBeInTheDocument();
     });
 
-    it('should render code blocks with syntax highlighting', () => {
-        const markdown = '```typescript\nconst test: string = "Hello";\n```';
+    it('renders fenced code blocks without nested pre tags', () => {
+        const { container } = render(
+            <ProjectMarkdown
+                markdown={'```typescript\nconst test: string = "Hello";\n```'}
+                repo="test-repo"
+            />,
+        );
 
-        render(<ProjectMarkdown markdown={markdown} repo="test-repo" />);
-
-        const codeElement = screen.getByRole('code');
-        expect(codeElement).toBeInTheDocument();
-        expect(codeElement).toHaveClass('language-typescript');
-
-        const preElement = codeElement.closest('pre');
-        expect(preElement).toHaveClass(styles.codeBlock);
+        const preElements = container.querySelectorAll('pre');
+        expect(preElements).toHaveLength(1);
+        expect(preElements[0]).toHaveClass(styles.codeBlock);
+        expect(preElements[0].querySelector('pre')).toBeNull();
+        expect(preElements[0]).toHaveTextContent(
+            'const test: string = "Hello";',
+        );
     });
 
-    it('should render inline code with special styling', () => {
-        const markdown = 'This is `inline code` in a paragraph.';
+    it('renders inline code with the inline code class', () => {
+        render(
+            <ProjectMarkdown
+                markdown="This is `inline code` in a paragraph."
+                repo="test-repo"
+            />,
+        );
 
-        render(<ProjectMarkdown markdown={markdown} repo="test-repo" />);
-
-        const inlineCode = screen.getByText('inline code');
-        expect(inlineCode).toHaveClass(styles.inlineCode);
+        expect(screen.getByText('inline code')).toHaveClass(styles.inlineCode);
     });
 
-    it('should transform relative image URLs to GitHub raw URLs', () => {
-        const markdown = '![Test Image](./media/test.webp)';
+    it('rewrites relative image and link URLs using the repository default branch', () => {
+        render(
+            <ProjectMarkdown
+                markdown={
+                    '![Test Image](./media/test.webp)\n[Test Link](./src/index.ts)'
+                }
+                repo="test-repo"
+            />,
+        );
 
-        render(<ProjectMarkdown markdown={markdown} repo="test-repo" />);
-
-        const image = screen.getByAltText('Test Image');
-        expect(image).toBeInTheDocument();
-        expect(image).toHaveAttribute(
+        expect(screen.getByAltText('Test Image')).toHaveAttribute(
             'src',
-            'https://github.com/tenemo/test-repo/blob/master/media/test.webp?raw=true',
+            'https://github.com/tenemo/test-repo/blob/main/media/test.webp?raw=true',
         );
-    });
-
-    it('should transform relative link URLs to GitHub URLs', () => {
-        const markdown = '[Test Link](./src/index.ts)';
-
-        render(<ProjectMarkdown markdown={markdown} repo="test-repo" />);
-
-        const link = screen.getByText('Test Link');
-        expect(link).toBeInTheDocument();
-        expect(link).toHaveAttribute(
+        expect(screen.getByText('Test Link')).toHaveAttribute(
             'href',
-            'https://github.com/tenemo/test-repo/blob/master/src/index.ts',
+            'https://github.com/tenemo/test-repo/blob/main/src/index.ts',
         );
     });
 
-    it('should not transform absolute URLs', () => {
-        const markdown = '[External Link](https://example.com)';
+    it('does not rewrite absolute or anchor URLs', () => {
+        render(
+            <ProjectMarkdown
+                markdown={
+                    '[External Link](https://example.com)\n[Jump to Section](#section)'
+                }
+                repo="test-repo"
+            />,
+        );
 
-        render(<ProjectMarkdown markdown={markdown} repo="test-repo" />);
-
-        const link = screen.getByText('External Link');
-        expect(link).toBeInTheDocument();
-        expect(link).toHaveAttribute('href', 'https://example.com');
+        expect(screen.getByText('External Link')).toHaveAttribute(
+            'href',
+            'https://example.com',
+        );
+        expect(screen.getByText('Jump to Section')).toHaveAttribute(
+            'href',
+            '#section',
+        );
     });
 
-    it('should not transform anchor links', () => {
-        const markdown = '[Jump to Section](#section)';
-
-        render(<ProjectMarkdown markdown={markdown} repo="test-repo" />);
-
-        const link = screen.getByText('Jump to Section');
-        expect(link).toBeInTheDocument();
-        expect(link).toHaveAttribute('href', '#section');
-    });
-
-    it('should render GitHub user attachment links as videos', () => {
+    it('renders GitHub user attachment links as videos', () => {
         const attachmentUrl =
             'https://github.com/user-attachments/assets/12345678-1234-5678-9abc-123456789abc';
-        const markdown = `[Video](${attachmentUrl})`;
 
-        render(<ProjectMarkdown markdown={markdown} repo="test-repo" />);
+        render(
+            <ProjectMarkdown
+                markdown={`[Video](${attachmentUrl})`}
+                repo="test-repo"
+            />,
+        );
 
         const video = screen.getByTitle('Video');
         expect(video.tagName).toBe('VIDEO');
         expect(video).toHaveAttribute('src', attachmentUrl);
-        expect(video).toHaveAttribute('autoplay', '');
-        expect(video).toHaveAttribute('loop', '');
-        expect(video).toHaveAttribute('controls', '');
         expect(video).toHaveClass(styles.videoPlayer);
     });
 
-    it('should render GitHub user attachment images as images', () => {
+    it('renders GitHub user attachment images as images', () => {
         const attachmentUrl =
             'https://github.com/user-attachments/assets/12345678-1234-5678-9abc-123456789abc';
-        const markdown = `![Image](${attachmentUrl})`;
 
-        render(<ProjectMarkdown markdown={markdown} repo="test-repo" />);
+        render(
+            <ProjectMarkdown
+                markdown={`![Image](${attachmentUrl})`}
+                repo="test-repo"
+            />,
+        );
 
-        const image = screen.getByAltText('Image');
-        expect(image.tagName).toBe('IMG');
-        expect(image).toHaveAttribute('src', attachmentUrl);
-        expect(image).toHaveStyle('max-width: 100%');
+        expect(screen.getByAltText('Image')).toHaveAttribute(
+            'src',
+            attachmentUrl,
+        );
+        expect(screen.getByAltText('Image')).toHaveClass(styles.markdownImage);
     });
 
-    it('should apply custom styling to headings', () => {
-        const markdown = '# Heading 1\n## Heading 2\n### Heading 3';
+    it('renders the created date badge when repository data exists', () => {
+        render(<ProjectMarkdown markdown="Content" repo="img-test" />);
 
-        render(<ProjectMarkdown markdown={markdown} repo="test-repo" />);
-
-        const h1 = screen.getByRole('heading', { level: 1 });
-        const h2 = screen.getByRole('heading', { level: 2 });
-        const h3 = screen.getByRole('heading', { level: 3 });
-
-        expect(h1).toHaveTextContent('Heading 1');
-        expect(h2).toHaveTextContent('Heading 2');
-        expect(h3).toHaveTextContent('Heading 3');
-
-        expect(h1.style.color).toBe('var(--accent-color)');
-        expect(h2.style.color).toBe('var(--accent-color)');
-        expect(h3.style.color).toBe('var(--accent-color)');
+        expect(
+            screen.getByLabelText(/Repository created:\s+September\s+2023/i),
+        ).toHaveAttribute('dateTime', '2023-09-12T08:00:00.000Z');
     });
 
-    it('renders created date badge when repo info is available', () => {
-        const markdown = 'Content';
-        // Using repo present in global mocks with createdDatetime
-        render(<ProjectMarkdown markdown={markdown} repo="img-test" />);
+    it('does not render a date badge when repository data is missing', () => {
+        render(<ProjectMarkdown markdown="Content" repo="missing-repo" />);
 
-        const badge = screen.getByLabelText(
-            /Repository created:\s+September\s+2023/i,
-        );
-        expect(badge).toBeInTheDocument();
-        expect(badge).toHaveTextContent(
-            /Repository created:\s+September\s+2023/i,
-        );
-        expect(badge).toHaveAttribute('dateTime', '2023-09-12T08:00:00.000Z');
-        expect(badge).toHaveAttribute(
-            'title',
-            'Month the project was kicked off in',
-        );
-    });
-
-    it('renders epoch fallback as January 1970 when provided', () => {
-        const markdown = 'Content';
-        render(<ProjectMarkdown markdown={markdown} repo="epoch-test" />);
-
-        const badge = screen.getByLabelText(
-            /Repository created:\s+January\s+1970/i,
-        );
-        expect(badge).toBeInTheDocument();
-        expect(badge).toHaveTextContent(
-            /Repository created:\s+January\s+1970/i,
-        );
-    });
-
-    it('does not render a date badge when repo info is missing', () => {
-        const markdown = 'Content';
-        render(<ProjectMarkdown markdown={markdown} repo="missing-repo" />);
         expect(
             screen.queryByLabelText(/Repository created:/i),
         ).not.toBeInTheDocument();

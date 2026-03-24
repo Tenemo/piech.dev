@@ -1,7 +1,6 @@
 // vite-plugin-sitemap doesn't work with URLs with dots,
 // cuts off /piech.dev and aliases.sh to /piech and /aliases
 
-import 'dotenv/config';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { Readable } from 'node:stream';

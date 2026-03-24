@@ -13,7 +13,6 @@ import styles from './projectMarkdown.module.scss';
 import { repositoriesData } from 'utils/githubData';
 
 const OWNER = 'tenemo';
-const BRANCH = 'master';
 const GITHUB_USER_ATTACHMENT_PATTERN =
     /^https:\/\/github\.com\/user-attachments\/assets\/[a-f0-9-]+$/;
 
@@ -27,6 +26,7 @@ const ProjectMarkdown = ({
     repo,
 }: ProjectMarkdownProps): React.JSX.Element => {
     const createdIso = repositoriesData[repo]?.createdDatetime;
+    const defaultBranch = repositoriesData[repo]?.defaultBranch ?? 'master';
     const createdLabel = createdIso
         ? format(new Date(createdIso), 'MMMM yyyy')
         : undefined;
@@ -49,18 +49,21 @@ const ProjectMarkdown = ({
         }
 
         if (key === 'src' && repo) {
-            return `https://github.com/${OWNER}/${repo}/blob/${BRANCH}/${url}?raw=true`;
+            return `https://github.com/${OWNER}/${repo}/blob/${defaultBranch}/${url}?raw=true`;
         }
 
         if (key === 'href' && !url.startsWith('#') && repo) {
-            return `https://github.com/${OWNER}/${repo}/blob/${BRANCH}/${url}`;
+            return `https://github.com/${OWNER}/${repo}/blob/${defaultBranch}/${url}`;
         }
 
         return url;
     };
 
     const components: Components = {
-        code({ className, children, ...props }) {
+        pre({ children }) {
+            return <>{children}</>;
+        },
+        code({ node: _node, className, children, ...props }) {
             const match = /language-(\w+)/.exec(className ?? '');
             return match ? (
                 <SyntaxHighlighter
@@ -81,17 +84,21 @@ const ProjectMarkdown = ({
                 </code>
             );
         },
-        img({ src, alt, ...props }) {
+        img({ node: _node, className, src, alt, ...props }) {
             return (
                 <img
                     alt={alt}
+                    className={
+                        className
+                            ? `${styles.markdownImage} ${className}`
+                            : styles.markdownImage
+                    }
                     src={src}
                     {...props}
-                    style={{ maxWidth: '100%' }}
                 />
             );
         },
-        a({ href, children, ...props }) {
+        a({ node: _node, href, children, ...props }) {
             if (href && GITHUB_USER_ATTACHMENT_PATTERN.test(href)) {
                 return (
                     <video
@@ -111,34 +118,9 @@ const ProjectMarkdown = ({
                 );
             }
             return (
-                <a
-                    href={href}
-                    {...props}
-                    style={{ color: 'var(--link-color)' }}
-                >
+                <a href={href} {...props}>
                     {children}
                 </a>
-            );
-        },
-        h1({ children, ...props }) {
-            return (
-                <h1 {...props} style={{ color: 'var(--accent-color)' }}>
-                    {children}
-                </h1>
-            );
-        },
-        h2({ children, ...props }) {
-            return (
-                <h2 {...props} style={{ color: 'var(--accent-color)' }}>
-                    {children}
-                </h2>
-            );
-        },
-        h3({ children, ...props }) {
-            return (
-                <h3 {...props} style={{ color: 'var(--accent-color)' }}>
-                    {children}
-                </h3>
             );
         },
     };

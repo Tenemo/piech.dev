@@ -3,10 +3,12 @@ import { Link, NavLink } from 'react-router';
 
 import styles from './header.module.scss';
 
+import { CONTACT_PATH, HOME_PATH, PROJECTS_PATH } from 'app/routePaths';
+
 const Header = (): React.JSX.Element => {
     return (
         <header className={styles.header}>
-            <Link className={styles.logo} to="/">
+            <Link className={styles.logo} to={HOME_PATH}>
                 <h1>piech.dev</h1>
             </Link>
 
@@ -17,7 +19,7 @@ const Header = (): React.JSX.Element => {
                             ? `${styles.navLink} ${styles.activeLink}`
                             : styles.navLink
                     }
-                    to="/"
+                    to={HOME_PATH}
                 >
                     About me
                 </NavLink>
@@ -27,7 +29,7 @@ const Header = (): React.JSX.Element => {
                             ? `${styles.navLink} ${styles.activeLink}`
                             : styles.navLink
                     }
-                    to="/projects/"
+                    to={PROJECTS_PATH}
                 >
                     Projects
                 </NavLink>
@@ -37,7 +39,7 @@ const Header = (): React.JSX.Element => {
                             ? `${styles.navLink} ${styles.activeLink}`
                             : styles.navLink
                     }
-                    to="/contact/"
+                    to={CONTACT_PATH}
                 >
                     Contact
                 </NavLink>

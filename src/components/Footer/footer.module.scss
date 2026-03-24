@@ -12,12 +12,19 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    color: var(--text-color);
     text-decoration: none;
-    &:hover path {
-        fill: var(--link-hover-color) !important;
+
+    svg {
+        width: 1.5rem;
+        height: 1.5rem;
     }
 
-    &:visited path {
-        fill: var(--color-text);
+    &:hover {
+        color: var(--link-hover-color);
+    }
+
+    &:visited {
+        color: var(--text-color);
     }
 }

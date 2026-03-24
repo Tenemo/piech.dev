@@ -11,6 +11,7 @@
                  topics?: string[],
                  createdDatetime: string,
                  lastCommitDatetime: string,
+                 defaultBranch?: string,
                  license?: string,
                  readme_content: string,
              }
@@ -22,17 +23,13 @@ import fssync from 'node:fs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
+// eslint-disable-next-line import/extensions
+import { PROJECTS_DATA } from '../features/Projects/projectsData.ts';
+
 const OWNER = 'tenemo';
 const BRANCHES = ['master', 'main'] as const;
 const OUT_DIR = path.join(process.cwd(), 'temp');
 const OUT_PATH = path.join(OUT_DIR, 'githubData.json');
-const PROJECTS_FILE = path.join(
-    process.cwd(),
-    'src',
-    'features',
-    'Projects',
-    'projectsList.ts',
-);
 
 type RepoInfo = {
     name: string;
@@ -40,6 +37,7 @@ type RepoInfo = {
     topics?: string[];
     createdDatetime: string;
     lastCommitDatetime: string; // required
+    defaultBranch?: string;
     license?: string;
     readme_content: string;
 };
@@ -47,28 +45,6 @@ export type GithubData = {
     metadata: { fetchedDatetime: string };
     repositories: Record<string, RepoInfo>;
 };
-
-function parseReposFromProjectsFile(text: string): string[] {
-    const start = text.indexOf('[');
-    const end = text.lastIndexOf(']');
-    if (start === -1 || end === -1 || end <= start) return [];
-    const body = text.slice(start + 1, end);
-    const blocks = body
-        .split(/\},\s*\{/g)
-        .map((b, i, arr) =>
-            i === 0 ? b + '}' : i === arr.length - 1 ? '{' + b : '{' + b + '}',
-        );
-    const repos = new Set<string>();
-    for (const block of blocks) {
-        const projectMatch = /project:\s*'([^']+)'/.exec(block);
-        if (!projectMatch) continue;
-        const project = projectMatch[1];
-        const repoNameMatch = /repoName:\s*'([^']+)'/.exec(block);
-        const repo = repoNameMatch ? repoNameMatch[1] : project;
-        repos.add(repo);
-    }
-    return Array.from(repos);
-}
 
 async function fetchJson<T>(url: string, token?: string): Promise<T> {
     const headers: Record<string, string> = {
@@ -205,9 +181,16 @@ export async function fetchGithubData(options?: {
 }): Promise<void> {
     const refetch = Boolean(options?.refetch);
     const token = process.env.PERSONAL_GITHUB_TOKEN ?? process.env.GH_TOKEN;
+    const repos = Array.from(
+        new Set(
+            PROJECTS_DATA.map((project) => {
+                const repoName =
+                    'repoName' in project ? project.repoName : undefined;
 
-    const projectsText = await fs.readFile(PROJECTS_FILE, 'utf8');
-    const repos = parseReposFromProjectsFile(projectsText);
+                return repoName ?? project.project;
+            }),
+        ),
+    );
 
     if (fssync.existsSync(OUT_PATH)) {
         try {
@@ -308,6 +291,7 @@ export async function fetchGithubData(options?: {
                 createdDatetime: repoData.created_at ?? EPOCH_ISO,
                 lastCommitDatetime:
                     lastCommitDatetime ?? repoData.created_at ?? EPOCH_ISO,
+                defaultBranch: repoData.default_branch,
                 license,
                 readme_content: readmeContent,
                 topics:
@@ -339,6 +323,7 @@ export async function fetchGithubData(options?: {
                 // Fallback to epoch to make failures obvious
                 createdDatetime: EPOCH_ISO,
                 lastCommitDatetime: lastCommitDatetime ?? EPOCH_ISO,
+                defaultBranch: undefined,
                 license,
                 readme_content: readmeContent,
                 topics:

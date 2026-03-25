@@ -1,72 +1,50 @@
 import React from 'react';
 import type { MetaFunction } from 'react-router';
-import type { BreadcrumbList, Graph, WebPage, ImageObject } from 'schema-dts';
+import type { Graph, WebPage } from 'schema-dts';
+
+import {
+    createBreadcrumbList,
+    createImageObject,
+    createMetaTags,
+    getRepositoryDates,
+    getSiteUrl,
+} from './seo';
 
 import { PERSON, PERSON_ID, WEBSITE, WEBSITE_ID } from './index';
 
-import {
-    DEFAULT_KEYWORDS,
-    PRODUCTION_OG_IMAGES_DIRECTORY,
-} from 'app/appConstants';
+import { DEFAULT_KEYWORDS } from 'app/appConstants';
+import { CONTACT_PATH, HOME_PATH } from 'app/routePaths';
 import Contact from 'features/Contact/Contact';
-import { repositoriesData } from 'utils/githubData';
-import { getOgImageSize } from 'utils/ogImageSizes';
 
-const breadcrumbList: BreadcrumbList = {
-    '@type': 'BreadcrumbList',
-    '@id': 'https://piech.dev/contact/#breadcrumb',
-    itemListElement: [
-        {
-            '@type': 'ListItem',
-            position: 1,
-            name: 'Home',
-            item: 'https://piech.dev/',
-        },
-        {
-            '@type': 'ListItem',
-            position: 2,
-            name: 'Contact',
-            item: 'https://piech.dev/contact/',
-        },
+const breadcrumbList = createBreadcrumbList({
+    id: `${getSiteUrl(CONTACT_PATH)}#breadcrumb`,
+    items: [
+        { name: 'Home', path: HOME_PATH },
+        { name: 'Contact', path: CONTACT_PATH },
     ],
-};
+});
 
 export const meta: MetaFunction = () => {
-    const ogImage = 'piech.dev_contact.jpg';
-    const size = getOgImageSize(ogImage);
-    const imageObj: ImageObject = {
-        '@type': 'ImageObject',
-        '@id': 'https://piech.dev/contact/#image',
-        contentUrl: `${PRODUCTION_OG_IMAGES_DIRECTORY}${ogImage}`,
-        url: `${PRODUCTION_OG_IMAGES_DIRECTORY}${ogImage}`,
-        width: {
-            '@type': 'QuantitativeValue',
-            value: size.width,
-            unitText: 'px',
-        },
-        height: {
-            '@type': 'QuantitativeValue',
-            value: size.height,
-            unitText: 'px',
-        },
-        caption: 'Screenshot of contact links for Piotr Piech.',
-    };
+    const imageId = `${getSiteUrl(CONTACT_PATH)}#image`;
+    const imageObj = createImageObject({
+        id: imageId,
+        imageName: 'piech.dev_contact.jpg',
+        alt: 'Screenshot of contact links for Piotr Piech.',
+    });
 
-    const pageId = 'https://piech.dev/contact/#page';
     const contactPage: WebPage = {
         '@type': ['WebPage', 'ContactPage'] as unknown as 'WebPage',
-        '@id': pageId,
-        url: 'https://piech.dev/contact/',
+        '@id': `${getSiteUrl(CONTACT_PATH)}#page`,
+        url: getSiteUrl(CONTACT_PATH),
         name: 'Contact | piech.dev',
         description: 'Contact Piotr Piech (email, LinkedIn, GitHub, Telegram).',
         inLanguage: 'en',
         isPartOf: { '@id': WEBSITE_ID },
         mainEntity: { '@id': PERSON_ID },
-        breadcrumb: { '@id': 'https://piech.dev/contact/#breadcrumb' },
-        primaryImageOfPage: { '@id': 'https://piech.dev/contact/#image' },
-        image: { '@id': 'https://piech.dev/contact/#image' },
-        datePublished: repositoriesData['piech.dev']?.createdDatetime,
-        dateModified: repositoriesData['piech.dev']?.lastCommitDatetime,
+        breadcrumb: { '@id': `${getSiteUrl(CONTACT_PATH)}#breadcrumb` },
+        primaryImageOfPage: { '@id': imageId },
+        image: { '@id': imageId },
+        ...getRepositoryDates(),
     };
 
     const graph: Graph = {
@@ -74,37 +52,16 @@ export const meta: MetaFunction = () => {
         '@graph': [WEBSITE, contactPage, breadcrumbList, PERSON, imageObj],
     };
 
-    return [
-        { title: 'Contact | piech.dev' },
-        {
-            name: 'description',
-            content: 'Contact Piotr Piech (email, LinkedIn, GitHub, Telegram).',
-        },
-        { name: 'keywords', content: DEFAULT_KEYWORDS },
-        { property: 'og:title', content: 'Contact | piech.dev' },
-        {
-            property: 'og:description',
-            content: 'Contact Piotr Piech (email, LinkedIn, GitHub, Telegram).',
-        },
-        { property: 'og:type', content: 'website' },
-        {
-            property: 'og:image',
-            content: `${PRODUCTION_OG_IMAGES_DIRECTORY}${ogImage}`,
-        },
-        { property: 'og:image:width', content: String(size.width) },
-        { property: 'og:image:height', content: String(size.height) },
-        {
-            property: 'og:image:alt',
-            content: 'Screenshot of contact links for Piotr Piech.',
-        },
-        { property: 'og:url', content: 'https://piech.dev/contact/' },
-        {
-            tagName: 'link',
-            rel: 'canonical',
-            href: 'https://piech.dev/contact/',
-        },
-        { 'script:ld+json': graph },
-    ];
+    return createMetaTags({
+        title: 'Contact | piech.dev',
+        description: 'Contact Piotr Piech (email, LinkedIn, GitHub, Telegram).',
+        keywords: DEFAULT_KEYWORDS,
+        type: 'website',
+        path: CONTACT_PATH,
+        imageName: 'piech.dev_contact.jpg',
+        imageAlt: 'Screenshot of contact links for Piotr Piech.',
+        graph,
+    });
 };
 
 const Route = (): React.JSX.Element => <Contact />;

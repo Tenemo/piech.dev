@@ -7,6 +7,9 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, loadEnv } from 'vite';
 import { patchCssModules } from 'vite-css-modules';
 
+import { suppressChromeDevtoolsProbePlugin } from './src/utils/suppressChromeDevtoolsProbePlugin';
+import { trailingSlashRedirectsPlugin } from './src/utils/trailingSlashRedirectsPlugin';
+
 // Automatically pick up all directories in the src/ directory and add them as aliases later
 const absolutePathAliases: Record<string, string> = {};
 const srcPath = path.resolve('./src/');
@@ -31,6 +34,8 @@ export default defineConfig(({ mode, command }) => {
     return {
         base: '/',
         plugins: [
+            suppressChromeDevtoolsProbePlugin(),
+            trailingSlashRedirectsPlugin(),
             reactRouter(),
             patchCssModules({
                 generateSourceTypes: true,
@@ -42,11 +47,6 @@ export default defineConfig(({ mode, command }) => {
                 }),
         ],
         ssr: command === 'build' ? { noExternal: true } : {},
-        define: {
-            __BUILD_DATE__: JSON.stringify(
-                new Date().toISOString().split('T')[0],
-            ),
-        },
         css: {
             devSourcemap: true,
             preprocessorOptions: {
@@ -68,7 +68,7 @@ export default defineConfig(({ mode, command }) => {
         server: {
             port: 3000,
             strictPort: true,
-            open: true,
+            open: false,
         },
         build: {
             sourcemap: false,

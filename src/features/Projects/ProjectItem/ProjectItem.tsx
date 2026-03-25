@@ -1,11 +1,12 @@
-import ArrowBack from '@mui/icons-material/ArrowBack';
-import GitHub from '@mui/icons-material/GitHub';
 import React from 'react';
 import { Link, useParams } from 'react-router';
 
 import styles from './projectItem.module.scss';
 import ProjectMarkdown from './ProjectMarkdown/ProjectMarkdown';
 
+import { PROJECTS_PATH } from 'app/routePaths';
+import { SITE_LINKS } from 'app/siteLinks';
+import { ArrowBackIcon, GitHubIcon } from 'components/Icons';
 import { repositoriesData } from 'utils/githubData';
 
 const ProjectItemDetails: React.FC = (): React.JSX.Element => {
@@ -20,21 +21,22 @@ const ProjectItemDetails: React.FC = (): React.JSX.Element => {
     }
 
     const markdown = repositoriesData[repo]?.readme_content ?? '';
+    const repositoryUrl = `${SITE_LINKS.githubProfile}/${repo}`;
 
     return (
         <main className={styles.container}>
             <div className={styles.topBar}>
-                <Link to="/projects">
-                    <ArrowBack /> Back to Projects
+                <Link to={PROJECTS_PATH}>
+                    <ArrowBackIcon /> Back to Projects
                 </Link>
                 <a
                     className={styles.githubLink}
-                    href={`https://github.com/tenemo/${repo}`}
+                    href={repositoryUrl}
                     rel="noopener noreferrer"
                     target="_blank"
                     title={`View ${repo} on GitHub`}
                 >
-                    <GitHub /> github.com/tenemo/{repo}
+                    <GitHubIcon /> github.com/tenemo/{repo}
                 </a>
             </div>
             <ProjectMarkdown markdown={markdown} repo={repo} />

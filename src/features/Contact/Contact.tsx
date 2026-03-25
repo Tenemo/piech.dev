@@ -1,10 +1,53 @@
-import EmailIcon from '@mui/icons-material/AlternateEmail';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import TelegramIcon from '@mui/icons-material/Telegram';
 import React from 'react';
 
 import styles from './contact.module.scss';
+
+import { SITE_LINKS } from 'app/siteLinks';
+import {
+    EmailIcon,
+    GitHubIcon,
+    LinkedInIcon,
+    TelegramIcon,
+} from 'components/Icons';
+
+type ContactItem = {
+    icon: typeof EmailIcon;
+    label: string;
+    href: string;
+    text: string;
+    external?: boolean;
+};
+
+const CONTACT_ITEMS: readonly ContactItem[] = [
+    {
+        icon: EmailIcon,
+        label: 'email',
+        href: SITE_LINKS.email,
+        text: SITE_LINKS.emailAddress,
+        external: false,
+    },
+    {
+        icon: LinkedInIcon,
+        label: 'linkedin',
+        href: SITE_LINKS.linkedin,
+        text: '/ppiech',
+        external: true,
+    },
+    {
+        icon: GitHubIcon,
+        label: 'github',
+        href: SITE_LINKS.githubProfile,
+        text: '/Tenemo',
+        external: true,
+    },
+    {
+        icon: TelegramIcon,
+        label: 'telegram',
+        href: SITE_LINKS.telegram,
+        text: '@tenemo',
+        external: true,
+    },
+] as const;
 
 const Contact = (): React.JSX.Element => {
     return (
@@ -26,44 +69,31 @@ const Contact = (): React.JSX.Element => {
                     speak it, unfortunately.
                 </p>
                 <div className={styles.contactItemsContainer}>
-                    <div className={styles.contactItem}>
-                        <EmailIcon />
-                        email:
-                        <a href="mailto:piotr@piech.dev">piotr@piech.dev</a>
-                    </div>
-                    <div className={styles.contactItem}>
-                        <LinkedInIcon />
-                        linkedin:
-                        <a
-                            href="https://www.linkedin.com/in/ppiech"
-                            rel="noopener noreferrer"
-                            target="_blank"
-                        >
-                            /ppiech
-                        </a>
-                    </div>
-                    <div className={styles.contactItem}>
-                        <GitHubIcon />
-                        github:
-                        <a
-                            href="https://github.com/Tenemo"
-                            rel="noopener noreferrer"
-                            target="_blank"
-                        >
-                            /Tenemo
-                        </a>
-                    </div>
-                    <div className={styles.contactItem}>
-                        <TelegramIcon />
-                        telegram:
-                        <a
-                            href="https://t.me/tenemo"
-                            rel="noopener noreferrer"
-                            target="_blank"
-                        >
-                            @tenemo
-                        </a>
-                    </div>
+                    {CONTACT_ITEMS.map(
+                        ({
+                            icon: Icon,
+                            label,
+                            href,
+                            text,
+                            external = false,
+                        }) => (
+                            <div className={styles.contactItem} key={label}>
+                                <Icon />
+                                {label}:
+                                <a
+                                    href={href}
+                                    rel={
+                                        external
+                                            ? 'noopener noreferrer'
+                                            : undefined
+                                    }
+                                    target={external ? '_blank' : undefined}
+                                >
+                                    {text}
+                                </a>
+                            </div>
+                        ),
+                    )}
                 </div>
             </div>
         </main>

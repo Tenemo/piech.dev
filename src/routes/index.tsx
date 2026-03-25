@@ -1,58 +1,61 @@
 import type { JSX } from 'react';
 import type { MetaFunction } from 'react-router';
 import type {
-    EducationalOrganization,
-    Person,
-    WebSite,
-    Graph,
-    WebPage,
     ContactPoint,
-    ImageObject,
+    EducationalOrganization,
+    Graph,
+    Person,
+    WebPage,
+    WebSite,
 } from 'schema-dts';
 
 import {
-    DEFAULT_KEYWORDS,
-    PRODUCTION_OG_IMAGES_DIRECTORY,
-} from 'app/appConstants';
+    createImageObject,
+    createMetaTags,
+    getRepositoryDates,
+    getSiteUrl,
+} from './seo';
+
+import { DEFAULT_KEYWORDS } from 'app/appConstants';
+import { HOME_PATH } from 'app/routePaths';
+import { SITE_LINKS } from 'app/siteLinks';
 import About from 'features/About/About';
 import { PROJECTS } from 'features/Projects/projectsList';
 import { TECHNOLOGIES } from 'features/Projects/technologies';
-import { repositoriesData } from 'utils/githubData';
-import { getOgImageSize } from 'utils/ogImageSizes';
 
 const alumniOf: EducationalOrganization = {
     '@type': 'EducationalOrganization',
     name: 'Lublin University of Technology',
 };
 
-export const PERSON_ID = 'https://piech.dev/#person';
-export const WEBSITE_ID = 'https://piech.dev/#website';
-export const ABOUT_ID = 'https://piech.dev/#about';
-export const PIOTR_IMAGE_ID = 'https://piech.dev/#piotr-image';
+export const PERSON_ID = `${SITE_LINKS.home}#person`;
+export const WEBSITE_ID = `${SITE_LINKS.home}#website`;
+export const ABOUT_ID = `${SITE_LINKS.home}#about`;
+export const PIOTR_IMAGE_ID = `${SITE_LINKS.home}#piotr-image`;
 
 const CONTACT_POINTS: ContactPoint[] = [
     {
         '@type': 'ContactPoint',
         contactType: 'general inquiries',
-        email: 'piotr@piech.dev',
+        email: SITE_LINKS.emailAddress,
         availableLanguage: ['en', 'pl', 'ru'],
     },
     {
         '@type': 'ContactPoint',
         contactType: 'social',
-        url: 'https://www.linkedin.com/in/ppiech',
+        url: SITE_LINKS.linkedin,
         availableLanguage: ['en', 'pl', 'ru'],
     },
     {
         '@type': 'ContactPoint',
         contactType: 'code repositories',
-        url: 'https://github.com/Tenemo',
+        url: SITE_LINKS.githubProfile,
         availableLanguage: ['en', 'pl', 'ru'],
     },
     {
         '@type': 'ContactPoint',
         contactType: 'general inquiries',
-        url: 'https://t.me/tenemo',
+        url: SITE_LINKS.telegram,
         availableLanguage: ['en', 'pl', 'ru'],
     },
 ];
@@ -60,20 +63,20 @@ const CONTACT_POINTS: ContactPoint[] = [
 export const PERSON: Person = {
     '@type': 'Person',
     '@id': PERSON_ID,
-    url: 'https://piech.dev/',
+    url: SITE_LINKS.home,
     jobTitle: 'Engineering Manager',
     name: 'Piotr Piech',
     givenName: 'Piotr',
     familyName: 'Piech',
     image: { '@id': PIOTR_IMAGE_ID },
-    email: 'piotr@piech.dev',
+    email: SITE_LINKS.emailAddress,
     description:
         'Engineering Manager & Software Architect specializing in full-stack web development.',
     alumniOf,
     sameAs: [
-        'https://github.com/Tenemo',
-        'https://www.linkedin.com/in/ppiech',
-        'https://t.me/tenemo',
+        SITE_LINKS.githubProfile,
+        SITE_LINKS.linkedin,
+        SITE_LINKS.telegram,
     ],
     address: {
         '@type': 'PostalAddress',
@@ -83,8 +86,8 @@ export const PERSON: Person = {
     knowsLanguage: ['en', 'pl', 'ru'],
     knowsAbout: Array.from(
         new Set(
-            PROJECTS.flatMap((p) => p.technologies).map(
-                (t) => TECHNOLOGIES[t].fullName,
+            PROJECTS.flatMap((project) => project.technologies).map(
+                (technology) => TECHNOLOGIES[technology].fullName,
             ),
         ),
     ),
@@ -108,37 +111,22 @@ export const WEBSITE: WebSite = {
     '@type': 'WebSite',
     '@id': WEBSITE_ID,
     name: 'piech.dev',
-    alternateName: 'Piotr Piech — piech.dev',
-    url: 'https://piech.dev/',
+    alternateName: 'Piotr Piech - piech.dev',
+    url: SITE_LINKS.home,
     inLanguage: 'en',
     description: "Piotr's personal page.",
     author: { '@id': PERSON_ID },
     publisher: { '@id': PERSON_ID },
     copyrightHolder: { '@id': PERSON_ID },
-    datePublished: repositoriesData['piech.dev']?.createdDatetime,
-    dateModified: repositoriesData['piech.dev']?.lastCommitDatetime,
+    ...getRepositoryDates(),
 };
 
 export const meta: MetaFunction = () => {
-    const ogImage = 'piotr.jpg';
-    const size = getOgImageSize(ogImage);
-    const portrait: ImageObject = {
-        '@type': 'ImageObject',
-        '@id': PIOTR_IMAGE_ID,
-        contentUrl: `${PRODUCTION_OG_IMAGES_DIRECTORY}${ogImage}`,
-        url: `${PRODUCTION_OG_IMAGES_DIRECTORY}${ogImage}`,
-        width: {
-            '@type': 'QuantitativeValue',
-            value: size.width,
-            unitText: 'px',
-        },
-        height: {
-            '@type': 'QuantitativeValue',
-            value: size.height,
-            unitText: 'px',
-        },
-        caption: 'Portrait photo of Piotr Piech.',
-    };
+    const portrait = createImageObject({
+        id: PIOTR_IMAGE_ID,
+        imageName: 'piotr.jpg',
+        alt: 'Portrait photo of Piotr Piech.',
+    });
 
     const aboutWebPage: WebPage = {
         '@type': [
@@ -147,7 +135,7 @@ export const meta: MetaFunction = () => {
             'ProfilePage',
         ] as unknown as 'WebPage',
         '@id': ABOUT_ID,
-        url: 'https://piech.dev/',
+        url: getSiteUrl(HOME_PATH),
         name: 'About Piotr Piech',
         description: "Piotr's personal page.",
         inLanguage: 'en',
@@ -155,8 +143,7 @@ export const meta: MetaFunction = () => {
         mainEntity: { '@id': PERSON_ID },
         primaryImageOfPage: { '@id': PIOTR_IMAGE_ID },
         image: { '@id': PIOTR_IMAGE_ID },
-        datePublished: repositoriesData['piech.dev']?.createdDatetime,
-        dateModified: repositoriesData['piech.dev']?.lastCommitDatetime,
+        ...getRepositoryDates(),
     };
 
     const graph: Graph = {
@@ -164,32 +151,20 @@ export const meta: MetaFunction = () => {
         '@graph': [WEBSITE, aboutWebPage, PERSON, portrait],
     };
 
-    return [
-        { title: 'piech.dev' },
-        { name: 'description', content: "Piotr's personal page." },
-        {
-            name: 'keywords',
-            content: DEFAULT_KEYWORDS,
-        },
-        { property: 'og:title', content: 'piech.dev' },
-        { property: 'og:description', content: "Piotr's personal page." },
-        { property: 'og:type', content: 'profile' },
-        { property: 'profile:first_name', content: 'Piotr' },
-        { property: 'profile:last_name', content: 'Piech' },
-        { property: 'og:url', content: 'https://piech.dev/' },
-        {
-            property: 'og:image',
-            content: `${PRODUCTION_OG_IMAGES_DIRECTORY}${ogImage}`,
-        },
-        { property: 'og:image:width', content: String(size.width) },
-        { property: 'og:image:height', content: String(size.height) },
-        {
-            property: 'og:image:alt',
-            content: 'Portrait photo of Piotr Piech.',
-        },
-        { tagName: 'link', rel: 'canonical', href: 'https://piech.dev' },
-        { 'script:ld+json': graph },
-    ];
+    return createMetaTags({
+        title: 'piech.dev',
+        description: "Piotr's personal page.",
+        keywords: DEFAULT_KEYWORDS,
+        type: 'profile',
+        path: HOME_PATH,
+        imageName: 'piotr.jpg',
+        imageAlt: 'Portrait photo of Piotr Piech.',
+        extra: [
+            { property: 'profile:first_name', content: 'Piotr' },
+            { property: 'profile:last_name', content: 'Piech' },
+        ],
+        graph,
+    });
 };
 
 const Route = (): JSX.Element => <About />;

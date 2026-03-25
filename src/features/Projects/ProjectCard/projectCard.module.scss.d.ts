@@ -15,9 +15,6 @@ declare const content: string;
 declare const projectTitle: string;
 declare const imageRight: string;
 declare const imageLeft: string;
-declare const loadingContainer: string;
-declare const errorContainer: string;
-declare const errorMessage: string;
 
 export {
 	card,
@@ -28,10 +25,7 @@ export {
 	content,
 	projectTitle,
 	imageRight,
-	imageLeft,
-	loadingContainer,
-	errorContainer,
-	errorMessage
+	imageLeft
 };
 
 declare const __default_export__: {
@@ -44,8 +38,5 @@ declare const __default_export__: {
 	projectTitle: typeof projectTitle;
 	imageRight: typeof imageRight;
 	imageLeft: typeof imageLeft;
-	loadingContainer: typeof loadingContainer;
-	errorContainer: typeof errorContainer;
-	errorMessage: typeof errorMessage;
 };
 export default __default_export__;

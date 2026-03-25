@@ -1,36 +1,15 @@
 import { screen } from '@testing-library/react';
-import type { Location as HistoryLocation } from 'history';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
 import { meta as projectsMeta } from '../../routes/projects';
 
 import ProjectPage from './Projects';
 import styles from './projects.module.scss';
 
+import { PROJECTS_PATH } from 'app/routePaths';
 import { renderWithProviders } from 'utils/testUtils';
 
-vi.mock('global', async () => {
-    const actual = await vi.importActual('global');
-    return {
-        ...(actual as object),
-        fetch: vi.fn(() =>
-            Promise.resolve({
-                ok: true,
-                json: () =>
-                    Promise.resolve({
-                        name: 'test-package',
-                        description: 'Test description',
-                    }),
-            }),
-        ),
-    };
-});
-
 describe('Projects page', () => {
-    beforeEach(() => {
-        vi.clearAllMocks();
-    });
-
     it('should render projects heading and divider', () => {
         renderWithProviders(<ProjectPage />);
 
@@ -75,24 +54,31 @@ describe('Projects page', () => {
     });
 
     it('exposes correct meta for Projects route', () => {
-        const location: HistoryLocation = {
-            pathname: '/projects',
-            search: '',
-            hash: '',
-            state: null,
-            key: 'test',
-        };
-
-        const tags = projectsMeta({
+        const metaArgs = {
             params: {},
             data: null,
-            location,
+            location: {
+                pathname: PROJECTS_PATH,
+                search: '',
+                hash: '',
+                state: null,
+                key: 'test',
+                unstable_mask: undefined,
+            },
             loaderData: {} as Record<string, never>,
             matches: [],
-        } as unknown as Parameters<typeof projectsMeta>[0]);
+        } satisfies Parameters<typeof projectsMeta>[0];
+
+        const tags = projectsMeta(metaArgs);
+
         expect(tags).toEqual(
             expect.arrayContaining([
                 { title: 'Projects | piech.dev' },
+                expect.objectContaining({
+                    tagName: 'link',
+                    rel: 'canonical',
+                    href: 'https://piech.dev/projects/',
+                }),
                 expect.objectContaining({ name: 'description' }),
             ]),
         );

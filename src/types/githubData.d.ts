@@ -4,6 +4,7 @@ export type RepositoryInfo = {
     topics?: string[];
     createdDatetime: string;
     lastCommitDatetime: string;
+    defaultBranch?: string;
     license?: string;
     readme_content: string;
 };

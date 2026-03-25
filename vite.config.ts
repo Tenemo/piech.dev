@@ -1,11 +1,14 @@
 import { readdirSync } from 'fs';
 import path from 'path';
 
-import { reactRouter } from '@react-router/dev/vite';
 import browserslistToEsbuild from 'browserslist-to-esbuild';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, loadEnv } from 'vite';
 import { patchCssModules } from 'vite-css-modules';
+
+import { reactRouterVite8Compat } from './src/utils/reactRouterVite8Compat';
+import { suppressChromeDevtoolsProbePlugin } from './src/utils/suppressChromeDevtoolsProbePlugin';
+import { trailingSlashRedirectsPlugin } from './src/utils/trailingSlashRedirectsPlugin';
 
 // Automatically pick up all directories in the src/ directory and add them as aliases later
 const absolutePathAliases: Record<string, string> = {};
@@ -31,7 +34,9 @@ export default defineConfig(({ mode, command }) => {
     return {
         base: '/',
         plugins: [
-            reactRouter(),
+            suppressChromeDevtoolsProbePlugin(),
+            trailingSlashRedirectsPlugin(),
+            reactRouterVite8Compat(),
             patchCssModules({
                 generateSourceTypes: true,
             }),
@@ -63,7 +68,7 @@ export default defineConfig(({ mode, command }) => {
         server: {
             port: 3000,
             strictPort: true,
-            open: true,
+            open: false,
         },
         build: {
             sourcemap: false,

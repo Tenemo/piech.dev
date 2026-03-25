@@ -43,7 +43,7 @@ describe('ProjectCard', () => {
         });
         const image = screen.getByAltText('img-test preview');
 
-        expect(previewLink).toHaveAttribute('href', '/projects/img-test');
+        expect(previewLink).toHaveAttribute('href', '/projects/img-test/');
         expect(image).toHaveAttribute('src', '/media/projects/test.webp');
         expect(image).not.toHaveAttribute('fetchpriority');
     });
@@ -63,7 +63,7 @@ describe('ProjectCard', () => {
         });
         const source = document.querySelector('video source');
 
-        expect(previewLink).toHaveAttribute('href', '/projects/video-test');
+        expect(previewLink).toHaveAttribute('href', '/projects/video-test/');
         expect(source).toHaveAttribute('src', '/media/projects/test.mp4');
     });
 
@@ -105,7 +105,7 @@ describe('ProjectCard', () => {
         expect(
             projectLinks.every(
                 (link: HTMLElement) =>
-                    link.getAttribute('href') === '/projects/custom-repo',
+                    link.getAttribute('href') === '/projects/custom-repo/',
             ),
         ).toBe(true);
     });

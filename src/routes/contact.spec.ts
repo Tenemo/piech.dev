@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest';
 
-import { meta as projectItemMeta } from './project-item';
+import { meta as contactMeta } from './contact';
 
-describe('project-item route meta', () => {
-    it('uses a trailing-slash canonical URL for project routes', () => {
+describe('contact route meta', () => {
+    it('uses a trailing-slash canonical URL for the contact route', () => {
         const metaArgs = {
-            params: { repo: 'sealed-vote-web' },
+            params: {},
             data: null,
             location: {
-                pathname: '/projects/sealed-vote-web/',
+                pathname: '/contact/',
                 search: '',
                 hash: '',
                 state: null,
@@ -17,21 +17,20 @@ describe('project-item route meta', () => {
             },
             loaderData: {} as Record<string, never>,
             matches: [],
-        } satisfies Parameters<typeof projectItemMeta>[0];
+        } satisfies Parameters<typeof contactMeta>[0];
 
-        const tags = projectItemMeta(metaArgs);
+        const tags = contactMeta(metaArgs);
 
         expect(tags).toEqual(
             expect.arrayContaining([
-                { title: 'sealed.vote | piech.dev' },
                 expect.objectContaining({
                     tagName: 'link',
                     rel: 'canonical',
-                    href: 'https://piech.dev/projects/sealed-vote-web/',
+                    href: 'https://piech.dev/contact/',
                 }),
                 expect.objectContaining({
                     property: 'og:url',
-                    content: 'https://piech.dev/projects/sealed-vote-web/',
+                    content: 'https://piech.dev/contact/',
                 }),
             ]),
         );

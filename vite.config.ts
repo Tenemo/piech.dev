@@ -7,8 +7,7 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, loadEnv } from 'vite';
 import { patchCssModules } from 'vite-css-modules';
 
-import { suppressChromeDevtoolsProbePlugin } from './src/utils/suppressChromeDevtoolsProbePlugin';
-import { trailingSlashRedirectsPlugin } from './src/utils/trailingSlashRedirectsPlugin';
+import { suppressChromeDevtoolsProbePlugin } from './src/utils/vite/suppressChromeDevtoolsProbePlugin';
 
 // Automatically pick up all directories in the src/ directory and add them as aliases later
 const absolutePathAliases: Record<string, string> = {};
@@ -35,7 +34,6 @@ export default defineConfig(({ mode, command }) => {
         base: '/',
         plugins: [
             suppressChromeDevtoolsProbePlugin(),
-            trailingSlashRedirectsPlugin(),
             reactRouter(),
             patchCssModules({
                 generateSourceTypes: true,

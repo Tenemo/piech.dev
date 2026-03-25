@@ -74,25 +74,6 @@ export const Layout = ({
 };
 
 const Root = (): React.JSX.Element => {
-    React.useEffect(() => {
-        const handleMouseDown = (): void => {
-            document.body.classList.add('using-mouse');
-        };
-        const handleKeyDown = (event: KeyboardEvent): void => {
-            if (event.key === 'Tab') {
-                document.body.classList.remove('using-mouse');
-            }
-        };
-
-        document.body.addEventListener('mousedown', handleMouseDown);
-        document.body.addEventListener('keydown', handleKeyDown);
-
-        return () => {
-            document.body.removeEventListener('mousedown', handleMouseDown);
-            document.body.removeEventListener('keydown', handleKeyDown);
-        };
-    }, []);
-
     return <Outlet />;
 };
 

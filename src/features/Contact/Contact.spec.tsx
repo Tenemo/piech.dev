@@ -3,11 +3,11 @@ import { describe, it, expect } from 'vitest';
 
 import Contact from './Contact';
 
-import { renderWithProviders } from 'utils/testUtils';
+import { renderApp } from 'utils/testing/renderApp';
 
 describe('Contact', () => {
     it('should render the heading and general structure', () => {
-        renderWithProviders(<Contact />);
+        renderApp(<Contact />);
 
         expect(
             screen.getByRole('heading', { level: 2, name: /contact/i }),
@@ -19,7 +19,7 @@ describe('Contact', () => {
     });
 
     it('should render contact links with correct attributes', () => {
-        renderWithProviders(<Contact />);
+        renderApp(<Contact />);
 
         const emailLink = screen.getByRole('link', {
             name: /piotr@piech.dev/i,

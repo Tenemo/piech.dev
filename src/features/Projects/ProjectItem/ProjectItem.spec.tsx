@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import ProjectItem from './ProjectItem';
 
-import { renderWithProviders } from 'utils/testUtils';
+import { renderApp } from 'utils/testing/renderApp';
 
 const mockUseParams = vi.fn().mockReturnValue({ repo: 'test-repo' });
 
@@ -23,7 +23,7 @@ describe('ProjectItem', () => {
     });
 
     it('renders the markdown content and navigation links', async () => {
-        renderWithProviders(<ProjectItem />, { withRouter: true });
+        renderApp(<ProjectItem />, { withRouter: true });
 
         expect(
             await screen.findByRole('heading', {
@@ -44,7 +44,7 @@ describe('ProjectItem', () => {
     it('renders an error when the route param is missing', async () => {
         mockUseParams.mockReturnValue({});
 
-        renderWithProviders(<ProjectItem />, { withRouter: true });
+        renderApp(<ProjectItem />, { withRouter: true });
 
         expect(
             await screen.findByText(/error loading repository/i),
@@ -57,7 +57,7 @@ describe('ProjectItem', () => {
     it('renders an empty markdown area when repository content is missing', () => {
         mockUseParams.mockReturnValue({ repo: 'missing-repo' });
 
-        renderWithProviders(<ProjectItem />, { withRouter: true });
+        renderApp(<ProjectItem />, { withRouter: true });
 
         expect(screen.getByRole('main')).toBeInTheDocument();
         expect(

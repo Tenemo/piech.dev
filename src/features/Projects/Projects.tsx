@@ -2,7 +2,7 @@ import React from 'react';
 
 import ProjectCard from './ProjectCard/ProjectCard';
 import styles from './projects.module.scss';
-import { PROJECTS } from './projectsList';
+import { PROJECTS } from './projectsData';
 
 const Project = (): React.JSX.Element => {
     return (
@@ -13,16 +13,13 @@ const Project = (): React.JSX.Element => {
             <div className={'divider'} />
             <div className={styles.projectsItemsContainer}>
                 {PROJECTS.map(
-                    (
-                        { projectPreview, project, repoName, technologies },
-                        index,
-                    ) => (
-                        <React.Fragment key={project}>
+                    ({ name, projectPreview, repo, technologies }, index) => (
+                        <React.Fragment key={repo}>
                             <ProjectCard
                                 imageOnRight={index % 2 === 1}
-                                project={project}
+                                name={name}
                                 projectPreview={projectPreview}
-                                repoName={repoName}
+                                repo={repo}
                                 technologies={technologies}
                             />
                             <div className="divider" />

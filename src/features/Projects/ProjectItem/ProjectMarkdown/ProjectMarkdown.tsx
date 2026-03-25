@@ -6,15 +6,76 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 // eslint-disable-next-line import/extensions
 import vscDarkPlus from 'react-syntax-highlighter/dist/esm/styles/prism/vsc-dark-plus.js';
 import rehypeRaw from 'rehype-raw';
+import rehypeSanitize, {
+    defaultSchema,
+    type Options as RehypeSanitizeSchema,
+} from 'rehype-sanitize';
 import remarkGfm from 'remark-gfm';
 
 import styles from './projectMarkdown.module.scss';
 
-import { repositoriesData } from 'utils/githubData';
+import { repositoriesData } from 'utils/data/githubData';
 
 const OWNER = 'tenemo';
 const GITHUB_USER_ATTACHMENT_PATTERN =
     /^https:\/\/github\.com\/user-attachments\/assets\/[a-f0-9-]+$/;
+const sanitizedMarkdownSchema: RehypeSanitizeSchema = {
+    ...defaultSchema,
+    tagNames: [...(defaultSchema.tagNames ?? []), 'source', 'video'],
+    attributes: {
+        ...defaultSchema.attributes,
+        a: [...(defaultSchema.attributes?.a ?? []), 'rel', 'target', 'title'],
+        img: [
+            ...(defaultSchema.attributes?.img ?? []),
+            'height',
+            'title',
+            'width',
+        ],
+        source: ['src', 'type'],
+        video: [
+            'autoPlay',
+            'controls',
+            'height',
+            'loop',
+            'muted',
+            'playsInline',
+            'poster',
+            'preload',
+            'src',
+            'title',
+            'width',
+        ],
+    },
+};
+
+const hasUrlScheme = (url: string): boolean =>
+    /^[a-z][a-z\d+\-.]*:/i.test(url) || url.startsWith('//');
+
+const isGithubUserAttachmentUrl = (url: string): boolean =>
+    GITHUB_USER_ATTACHMENT_PATTERN.test(url);
+
+const toRepositoryAssetUrl = ({
+    url,
+    repo,
+    defaultBranch,
+    key,
+}: {
+    url: string;
+    repo: string;
+    defaultBranch: string;
+    key: string;
+}): string => {
+    if (hasUrlScheme(url) || url.startsWith('#')) {
+        return url;
+    }
+
+    const repositoryUrl = new URL(
+        url,
+        `https://github.com/${OWNER}/${repo}/blob/${defaultBranch}/`,
+    ).toString();
+
+    return key === 'src' ? `${repositoryUrl}?raw=true` : repositoryUrl;
+};
 
 type ProjectMarkdownProps = {
     markdown: string;
@@ -30,33 +91,18 @@ const ProjectMarkdown = ({
     const createdLabel = createdIso
         ? format(new Date(createdIso), 'MMMM yyyy')
         : undefined;
+
     const urlTransform = (
         url: string,
         key: string,
         _node: { type?: string } | null,
     ): string => {
-        if (url.startsWith('http')) {
-            // Don't transform GitHub user-attachment URLs in urlTransform
-            // We'll handle them in the component rendering
-            if (GITHUB_USER_ATTACHMENT_PATTERN.test(url)) {
-                return url;
-            }
-            return url;
-        }
-
-        if (url.startsWith('./') || url.startsWith('../')) {
-            url = url.replace(/^\.\//g, '');
-        }
-
-        if (key === 'src' && repo) {
-            return `https://github.com/${OWNER}/${repo}/blob/${defaultBranch}/${url}?raw=true`;
-        }
-
-        if (key === 'href' && !url.startsWith('#') && repo) {
-            return `https://github.com/${OWNER}/${repo}/blob/${defaultBranch}/${url}`;
-        }
-
-        return url;
+        return toRepositoryAssetUrl({
+            defaultBranch,
+            key,
+            repo,
+            url,
+        });
     };
 
     const components: Components = {
@@ -99,7 +145,7 @@ const ProjectMarkdown = ({
             );
         },
         a({ node: _node, href, children, ...props }) {
-            if (href && GITHUB_USER_ATTACHMENT_PATTERN.test(href)) {
+            if (href && isGithubUserAttachmentUrl(href)) {
                 return (
                     <video
                         autoPlay
@@ -139,7 +185,10 @@ const ProjectMarkdown = ({
             )}
             <ReactMarkdown
                 components={components}
-                rehypePlugins={[rehypeRaw]}
+                rehypePlugins={[
+                    rehypeRaw,
+                    [rehypeSanitize, sanitizedMarkdownSchema],
+                ]}
                 remarkPlugins={[remarkGfm]}
                 urlTransform={urlTransform}
             >

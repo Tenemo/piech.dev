@@ -12,7 +12,13 @@ export const suppressChromeDevtoolsProbePlugin = (): Plugin => ({
                 return;
             }
 
-            const url = new URL(request.url, 'http://localhost');
+            let url: URL;
+            try {
+                url = new URL(request.url, 'http://localhost');
+            } catch {
+                next();
+                return;
+            }
 
             if (url.pathname !== CHROME_DEVTOOLS_PROBE_PATH) {
                 next();

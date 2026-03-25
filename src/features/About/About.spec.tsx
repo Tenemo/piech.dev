@@ -4,11 +4,11 @@ import { describe, it, expect } from 'vitest';
 import About from './About';
 import styles from './about.module.scss';
 
-import { renderWithProviders } from 'utils/testUtils';
+import { renderApp } from 'utils/testing/renderApp';
 
 describe('About', () => {
     it('should render the heading and general structure', () => {
-        renderWithProviders(<About />);
+        renderApp(<About />);
 
         expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument();
 
@@ -19,7 +19,7 @@ describe('About', () => {
     });
 
     it('should render navigation buttons', () => {
-        renderWithProviders(<About />);
+        renderApp(<About />);
 
         const projectsLink = screen.getByRole('link', { name: /projects/i });
         expect(projectsLink).toBeInTheDocument();

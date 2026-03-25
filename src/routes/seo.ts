@@ -2,8 +2,8 @@ import type { BreadcrumbList, Graph, ImageObject } from 'schema-dts';
 
 import { PRODUCTION_OG_IMAGES_DIRECTORY } from 'app/appConstants';
 import { SITE_LINKS } from 'app/siteLinks';
-import { repositoriesData } from 'utils/githubData';
-import { getOgImageSize } from 'utils/ogImageSizes';
+import { repositoriesData } from 'utils/data/githubData';
+import { getOgImageSize } from 'utils/media/ogImageSizes';
 
 type BreadcrumbItem = {
     name: string;

@@ -14,7 +14,7 @@ export type GithubData = {
     repositories: Partial<Record<string, RepositoryInfo>>;
 };
 
-declare module '../../temp/githubData.json' {
+declare module '../../../temp/githubData.json' {
     const value: GithubData;
     export default value;
 }

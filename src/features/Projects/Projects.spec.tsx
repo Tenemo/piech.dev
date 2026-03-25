@@ -45,6 +45,18 @@ describe('Projects page', () => {
         expect(getHeading(/aliases\.sh/i)).toBeInTheDocument();
     });
 
+    it('prioritizes only the first project grid image', () => {
+        renderApp(<ProjectPage />);
+
+        const lcpImage = screen.getByAltText('threshold-elgamal preview');
+        const laterImage = screen.getByAltText('reactplate preview');
+
+        expect(lcpImage).toHaveAttribute('fetchpriority', 'high');
+        expect(lcpImage).not.toHaveAttribute('loading');
+        expect(laterImage).toHaveAttribute('loading', 'lazy');
+        expect(laterImage).toHaveAttribute('decoding', 'async');
+    });
+
     it('should include a divider between project items', () => {
         const { container } = renderApp(<ProjectPage />);
 

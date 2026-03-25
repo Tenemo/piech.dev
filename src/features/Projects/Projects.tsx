@@ -18,6 +18,7 @@ const Project = (): React.JSX.Element => {
                             <ProjectCard
                                 imageOnRight={index % 2 === 1}
                                 name={name}
+                                prioritizePreview={index === 0}
                                 projectPreview={projectPreview}
                                 repo={repo}
                                 technologies={technologies}

@@ -18,7 +18,7 @@
         "dev": "react-router dev",
         "prebuild": "npm run generate:og-image-sizes && node --experimental-strip-types src/utils/build/fetchGithubData.ts && npm run lint && npm run tsc && npm test",
         "build": "react-router build",
-        "postbuild": "node --experimental-strip-types src/utils/build/transformImagePaths.ts && node --experimental-strip-types src/utils/build/inlineCss.ts && rimraf dist/server && rimraf dist/client/assets && rimraf --glob \"dist/client/**/*.js\" && node --experimental-strip-types src/utils/build/generateSitemap.ts",
+        "postbuild": "node --experimental-strip-types src/utils/build/transformImagePaths.ts && node --experimental-strip-types src/utils/build/inlineCss.ts && rimraf dist/server && rimraf dist/client/assets && rimraf --glob \"dist/client/**/*.js\" && node --experimental-strip-types src/utils/build/generateSitemap.ts && node --experimental-strip-types src/utils/build/validateBuiltHtmlCsp.ts",
         "prebuild:skip": "npm run generate:og-image-sizes && node --experimental-strip-types src/utils/build/fetchGithubData.ts",
         "build:skip": "react-router build",
         "postbuild:skip": "npm run postbuild",

@@ -44,13 +44,19 @@
     }
 }
 
+.previewLink {
+    display: block;
+    width: 100%;
+}
+
 .image {
+    display: block;
+    height: auto;
     object-fit: contain;
     width: 100%;
 }
 
 video.image {
-    height: 100%;
     background-color: var(--secondary-bg-color);
 }
 

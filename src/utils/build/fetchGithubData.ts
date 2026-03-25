@@ -23,6 +23,7 @@ import fssync from 'node:fs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
+import 'dotenv/config';
 import { Octokit } from 'octokit';
 
 // eslint-disable-next-line import/extensions
@@ -51,6 +52,20 @@ export type GithubData = {
     metadata: { fetchedDatetime: string };
     repositories: Record<string, RepoInfo>;
 };
+
+function isFallbackRepositoryInfo(
+    repoInfo: Partial<RepoInfo> | undefined,
+): boolean {
+    if (!repoInfo) {
+        return true;
+    }
+
+    return (
+        repoInfo.readme_content === README_UNAVAILABLE ||
+        repoInfo.createdDatetime === EPOCH_ISO ||
+        repoInfo.lastCommitDatetime === EPOCH_ISO
+    );
+}
 
 function stringifyReason(reason: unknown): string {
     if (reason instanceof Error) {
@@ -248,10 +263,14 @@ export async function fetchGithubData(options?: {
                     : fileMtimeMs;
             const ONE_DAY_MS = 24 * 60 * 60 * 1000;
             const olderThanOneDay = Date.now() - effectiveTimeMs > ONE_DAY_MS;
-            const infoKeys = Object.keys(current.repositories ?? {});
+            const repositories = current.repositories ?? {};
+            const infoKeys = Object.keys(repositories);
             const complete = repos.every((repo) => infoKeys.includes(repo));
+            const hasFallbackData = repos.some((repo) =>
+                isFallbackRepositoryInfo(repositories[repo]),
+            );
 
-            if (!refetch && complete && !olderThanOneDay) {
+            if (!refetch && complete && !olderThanOneDay && !hasFallbackData) {
                 console.log(
                     '[githubData] Up-to-date and fresh file found, skipping.',
                 );
@@ -261,6 +280,12 @@ export async function fetchGithubData(options?: {
             if (olderThanOneDay) {
                 console.log(
                     '[githubData] Existing file is older than a day; refetching.',
+                );
+            }
+
+            if (hasFallbackData) {
+                console.log(
+                    '[githubData] Existing file contains fallback GitHub data; refetching.',
                 );
             }
         } catch {

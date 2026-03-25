@@ -4,6 +4,8 @@ import { describe, expect, it } from 'vitest';
 import ProjectMarkdown from './ProjectMarkdown';
 import styles from './projectMarkdown.module.scss';
 
+import { SILENT_CAPTIONS_TRACK_PATH } from 'app/appConstants';
+
 describe('ProjectMarkdown', () => {
     it('renders basic markdown content', () => {
         render(
@@ -99,9 +101,12 @@ describe('ProjectMarkdown', () => {
         );
 
         const video = screen.getByTitle('Video');
+        const track = document.querySelector('video track[kind="captions"]');
         expect(video.tagName).toBe('VIDEO');
         expect(video).toHaveAttribute('src', attachmentUrl);
+        expect(video).toHaveAttribute('preload', 'metadata');
         expect(video).toHaveClass(styles.videoPlayer);
+        expect(track).toHaveAttribute('src', SILENT_CAPTIONS_TRACK_PATH);
     });
 
     it('renders GitHub user attachment images as images', () => {
@@ -119,7 +124,29 @@ describe('ProjectMarkdown', () => {
             'src',
             attachmentUrl,
         );
+        expect(screen.getByAltText('Image')).toHaveAttribute(
+            'decoding',
+            'async',
+        );
         expect(screen.getByAltText('Image')).toHaveClass(styles.markdownImage);
+    });
+
+    it('adds an empty captions track to raw HTML videos without one', () => {
+        render(
+            <ProjectMarkdown
+                markdown={
+                    '<video controls src="https://example.com/demo.mp4"></video>'
+                }
+                repo="test-repo"
+            />,
+        );
+
+        const video = document.querySelector('video');
+        const track = document.querySelector('video track[kind="captions"]');
+
+        expect(video).toHaveAttribute('preload', 'metadata');
+        expect(video).toHaveClass(styles.videoPlayer);
+        expect(track).toHaveAttribute('src', SILENT_CAPTIONS_TRACK_PATH);
     });
 
     it('sanitizes raw HTML while preserving safe markup', () => {

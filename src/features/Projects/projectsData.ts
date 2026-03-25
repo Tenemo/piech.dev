@@ -1,9 +1,15 @@
 import type { TechnologyName } from './technologies';
 
+export type ProjectPreviewAsset = {
+    fileName: string;
+    width: number;
+    height: number;
+};
+
 export type ProjectDefinition = {
     name: string;
     repo: string;
-    projectPreview: string;
+    projectPreview: ProjectPreviewAsset;
     ogImage: string;
     ogImageAlt: string;
     programmingLanguage: string;
@@ -14,7 +20,11 @@ export const PROJECTS = [
     {
         name: 'threshold-elgamal',
         repo: 'threshold-elgamal',
-        projectPreview: 'threshold-elgamal.webp',
+        projectPreview: {
+            fileName: 'threshold-elgamal.webp',
+            width: 1196,
+            height: 683,
+        },
         ogImage: 'threshold-elgamal_preview.jpg',
         ogImageAlt:
             'npm package page for threshold-elgamal with the Readme header, install command and repository links.',
@@ -24,7 +34,11 @@ export const PROJECTS = [
     {
         name: 'sealed.vote',
         repo: 'sealed-vote-web',
-        projectPreview: 'sealed.vote.mp4',
+        projectPreview: {
+            fileName: 'sealed.vote.mp4',
+            width: 2542,
+            height: 1264,
+        },
         ogImage: 'sealed.vote_preview.jpg',
         ogImageAlt:
             'sealed.vote ranked-choice voting UI with 1-10 rating buttons and a panel indicating the poll is waiting to be closed.',
@@ -44,7 +58,11 @@ export const PROJECTS = [
     {
         name: 'bob',
         repo: 'bob',
-        projectPreview: 'bob-demo-movement.mp4',
+        projectPreview: {
+            fileName: 'bob-demo-movement.mp4',
+            width: 1280,
+            height: 720,
+        },
         ogImage: 'bob_preview.jpg',
         ogImageAlt:
             'Close-up photo of the bob hexapod breadboard-on-legs robot with ESP32-S3 board, OV2640 camera module and SG90 servos.',
@@ -62,7 +80,11 @@ export const PROJECTS = [
     {
         name: 'reactplate',
         repo: 'reactplate',
-        projectPreview: 'reactplate_lighthouse.webp',
+        projectPreview: {
+            fileName: 'reactplate_lighthouse.webp',
+            width: 1353,
+            height: 882,
+        },
         ogImage: 'reactplate_preview.jpg',
         ogImageAlt:
             'Reactplate demo and a Chrome Lighthouse audit scoring 100/100/100/100.',
@@ -82,7 +104,11 @@ export const PROJECTS = [
     {
         name: 'piech.dev',
         repo: 'piech.dev',
-        projectPreview: 'piech.dev.webp',
+        projectPreview: {
+            fileName: 'piech.dev.webp',
+            width: 1235,
+            height: 990,
+        },
         ogImage: 'piech.dev_projects.jpg',
         ogImageAlt:
             'Screenshot of the piech.dev Projects page with project cards.',
@@ -100,7 +126,11 @@ export const PROJECTS = [
     {
         name: 'expressplate',
         repo: 'expressplate',
-        projectPreview: 'expressplate.webp',
+        projectPreview: {
+            fileName: 'expressplate.webp',
+            width: 682,
+            height: 290,
+        },
         ogImage: 'expressplate_preview.jpg',
         ogImageAlt:
             'Terminal screenshot running expressplate in development with nodemon and tsx.',
@@ -118,7 +148,11 @@ export const PROJECTS = [
     {
         name: 'aliases.sh',
         repo: 'aliases.sh',
-        projectPreview: 'aliases.sh.webp',
+        projectPreview: {
+            fileName: 'aliases.sh.webp',
+            width: 833,
+            height: 622,
+        },
         ogImage: 'aliases.sh_preview.jpg',
         ogImageAlt:
             'Screenshot of aliases.sh showing bash aliases for npm and git, with sections for packages and git checkout commands.',
@@ -128,7 +162,11 @@ export const PROJECTS = [
     {
         name: 'tiles.town',
         repo: 'tiles-town',
-        projectPreview: 'tiles-town_full-game_dark-mode.mp4',
+        projectPreview: {
+            fileName: 'tiles-town_full-game_dark-mode.mp4',
+            width: 1274,
+            height: 716,
+        },
         ogImage: 'tiles.town_preview.jpg',
         ogImageAlt:
             'Tiles.town puzzle game board with orange and gray squares, controls on the right and a high-scores table.',
@@ -146,7 +184,11 @@ export const PROJECTS = [
     {
         name: 'particle.golf',
         repo: 'particle-golf',
-        projectPreview: 'particle-golf_demo.mp4',
+        projectPreview: {
+            fileName: 'particle-golf_demo.mp4',
+            width: 1442,
+            height: 720,
+        },
         ogImage: 'particle-golf_preview.jpg',
         ogImageAlt:
             'particle.golf web app showing multi-colored parametric particle trajectories with a control panel listing particles and equations.',

@@ -1,6 +1,6 @@
-type ImageSize = { width: number; height: number };
+type OgImageSize = { width: number; height: number };
 
-const ogImageSizes: Partial<Record<string, ImageSize>> = {
+export const OG_IMAGE_SIZES: Partial<Record<string, OgImageSize>> = {
     'aliases.sh_preview.jpg': { width: 833, height: 622 },
     'bob_preview.jpg': { width: 1542, height: 720 },
     'expressplate_preview.jpg': { width: 682, height: 290 },
@@ -13,12 +13,3 @@ const ogImageSizes: Partial<Record<string, ImageSize>> = {
     'threshold-elgamal_preview.jpg': { width: 1196, height: 683 },
     'tiles.town_preview.jpg': { width: 1274, height: 716 },
 };
-
-export function getOgImageSize(imageName: string): ImageSize {
-    const imageSize = ogImageSizes[imageName];
-    if (imageSize) {
-        return imageSize;
-    }
-
-    throw new Error(`Missing OG image size for "${imageName}"`);
-}

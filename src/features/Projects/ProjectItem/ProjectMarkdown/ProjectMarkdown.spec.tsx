@@ -122,6 +122,26 @@ describe('ProjectMarkdown', () => {
         expect(screen.getByAltText('Image')).toHaveClass(styles.markdownImage);
     });
 
+    it('sanitizes raw HTML while preserving safe markup', () => {
+        const { container } = render(
+            <ProjectMarkdown
+                markdown={
+                    '<script>alert("xss")</script><img alt="Safe image" src="./media/test.webp" onerror="alert(1)" width="500" />'
+                }
+                repo="test-repo"
+            />,
+        );
+
+        expect(container.querySelector('script')).not.toBeInTheDocument();
+        expect(screen.getByAltText('Safe image')).toHaveAttribute(
+            'src',
+            'https://github.com/tenemo/test-repo/blob/main/media/test.webp?raw=true',
+        );
+        expect(screen.getByAltText('Safe image')).not.toHaveAttribute(
+            'onerror',
+        );
+    });
+
     it('renders the created date badge when repository data exists', () => {
         render(<ProjectMarkdown markdown="Content" repo="img-test" />);
 

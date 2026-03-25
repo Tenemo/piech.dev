@@ -75,7 +75,7 @@ Steps to follow when adding a new route to the app:
 7. `netlify.toml`:
     - If the route replaces any previous route, add a legacy redirect.
     - If there are new media assets for the new route, add appropriate headers.
-8. Add files to sitemap extensions in `src/utils/generateSitemap.ts` if needed.
+8. Add files to sitemap extensions in `src/utils/build/generateSitemap.ts` if needed.
 
 ### Adding a new project
 
@@ -85,7 +85,7 @@ Steps to follow when adding a new project to [projects/](https://piech.dev/proje
 2. Add a video (preferable) or an image to `public/media/projects/` that will be project's preview on the project card.
 3. Add an image to be used for og:image and in JSON-LD to `public/media/projects/og_images/`.
 4. If there are any new technologies used, add them to `src/features/Projects/technologies.ts`. Add their logos to `public/media/logos/`.
-5. Add the new project to `src/features/Projects/projectsList.ts`.
+5. Add the new project to `src/features/Projects/projectsData.ts`.
 
 The project should appear in the [projects/](https://piech.dev/projects/) route at that point.
 

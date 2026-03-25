@@ -39,8 +39,12 @@ function getMediaAssetType(url: string): 'logo' | 'project' | null {
 function toNetlifyImageUrl(originalUrl: string): string {
     const assetType = getMediaAssetType(originalUrl);
     const width = assetType === 'logo' ? 96 : 600;
+    const query = new URLSearchParams({
+        url: originalUrl,
+        w: width.toString(),
+    });
 
-    return `/.netlify/images?url=${originalUrl}&w=${width.toString()}`;
+    return `/.netlify/images?${query.toString()}`;
 }
 
 function shouldTransform(url: string): boolean {

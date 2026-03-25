@@ -27,4 +27,4 @@ Before you declare a set of tasks is done:
 2. Make sure `npm run tsc` doesn't return any errors or warnings.
 3. Make sure eslint passes with no errors.
 4. Make sure stylelint passes.
-5. Make sure the page builds for production with no errors.
+5. Make sure the page builds with `npm run build` for production with no errors.

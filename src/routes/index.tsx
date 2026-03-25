@@ -20,7 +20,7 @@ import { DEFAULT_KEYWORDS } from 'app/appConstants';
 import { HOME_PATH } from 'app/routePaths';
 import { SITE_LINKS } from 'app/siteLinks';
 import About from 'features/About/About';
-import { PROJECTS } from 'features/Projects/projectsList';
+import { PROJECTS } from 'features/Projects/projectsData';
 import { TECHNOLOGIES } from 'features/Projects/technologies';
 
 const alumniOf: EducationalOrganization = {

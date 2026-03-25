@@ -3,11 +3,11 @@ import { describe, it, expect } from 'vitest';
 
 import Header from './Header';
 
-import { renderWithProviders } from 'utils/testUtils';
+import { renderApp } from 'utils/testing/renderApp';
 
 describe('Header', () => {
     it('should render header with piech.dev title', () => {
-        renderWithProviders(<Header />);
+        renderApp(<Header />);
 
         const headingElement = screen.getByRole('heading', {
             level: 1,
@@ -18,7 +18,7 @@ describe('Header', () => {
     });
 
     it('should render navigation links', () => {
-        renderWithProviders(<Header />);
+        renderApp(<Header />);
 
         const projectsLink = screen.getByText(/projects/i);
         const aboutLink = screen.getByText(/about me/i);

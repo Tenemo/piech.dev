@@ -4,7 +4,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 
 import App from './App';
 
-import { renderWithProviders } from 'utils/testUtils';
+import { renderApp } from 'utils/testing/renderApp';
 
 describe('App', () => {
     beforeEach(() => {
@@ -15,7 +15,7 @@ describe('App', () => {
     });
 
     it('should render header and footer on all routes', () => {
-        renderWithProviders(
+        renderApp(
             <MemoryRouter initialEntries={['/']}>
                 <App />
             </MemoryRouter>,

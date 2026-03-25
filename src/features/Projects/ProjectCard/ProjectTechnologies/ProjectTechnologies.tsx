@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { TECHNOLOGIES } from '../../technologies';
+import { TECHNOLOGIES, type TechnologyName } from '../../technologies';
 
 import styles from './projectTechnologies.module.scss';
 
 type ProjectTechnologiesProps = {
-    technologies: readonly (keyof typeof TECHNOLOGIES)[];
+    technologies: readonly TechnologyName[];
 };
 
 const ProjectTechnologies = ({

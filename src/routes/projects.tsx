@@ -23,11 +23,8 @@ import { DEFAULT_KEYWORDS } from 'app/appConstants';
 import { HOME_PATH, PROJECTS_PATH } from 'app/routePaths';
 import { SITE_LINKS } from 'app/siteLinks';
 import Projects from 'features/Projects/Projects';
-import { PROJECTS } from 'features/Projects/projectsList';
-import {
-    getProjectRepo,
-    getProjectRoutePath,
-} from 'features/Projects/projectUtils';
+import { PROJECTS } from 'features/Projects/projectsData';
+import { getProjectRoutePath } from 'features/Projects/projectUtils';
 
 const projectsItemList: ItemList = {
     '@type': 'ItemList',
@@ -35,15 +32,14 @@ const projectsItemList: ItemList = {
     itemListOrder: 'https://schema.org/ItemListOrderAscending',
     numberOfItems: PROJECTS.length,
     itemListElement: PROJECTS.map<ListItem>((project, index) => {
-        const repo = getProjectRepo(project);
-        const url = getSiteUrl(getProjectRoutePath(project));
+        const url = getSiteUrl(getProjectRoutePath(project.repo));
         const code: SoftwareSourceCode = {
             '@type': 'SoftwareSourceCode',
             '@id': `${url}#code`,
-            name: repo,
+            name: project.name,
             url,
-            codeRepository: `${SITE_LINKS.githubProfile}/${repo}`,
-            programmingLanguage: 'TypeScript',
+            codeRepository: `${SITE_LINKS.githubProfile}/${project.repo}`,
+            programmingLanguage: project.programmingLanguage,
             author: { '@id': PERSON_ID },
         };
 

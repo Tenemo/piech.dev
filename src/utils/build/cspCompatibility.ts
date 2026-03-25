@@ -8,6 +8,7 @@ export type ResourceKind =
 type AllowedOriginPattern = 'data:' | 'self' | `https://${string}`;
 
 const SITE_ORIGIN = 'https://piech.dev';
+const BADGE_FURY_RUNTIME_ORIGIN = 'https://d25lcipzij17d.cloudfront.net';
 const GITHUB_USER_ATTACHMENT_RUNTIME_ORIGIN =
     'https://github-production-user-asset-6210df.s3.amazonaws.com';
 const ALLOWED_ORIGIN_PATTERNS: Record<
@@ -20,6 +21,7 @@ const ALLOWED_ORIGIN_PATTERNS: Record<
         'data:',
         'https://api.netlify.com',
         'https://badge.fury.io',
+        BADGE_FURY_RUNTIME_ORIGIN,
         'https://github.com',
         'https://raw.githubusercontent.com',
         GITHUB_USER_ATTACHMENT_RUNTIME_ORIGIN,

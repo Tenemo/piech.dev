@@ -38,6 +38,12 @@ describe('cspCompatibility', () => {
         ).toBe(true);
         expect(
             isAllowedResourceUrl(
+                'https://d25lcipzij17d.cloudfront.net/badge.svg?c=example',
+                'image',
+            ),
+        ).toBe(true);
+        expect(
+            isAllowedResourceUrl(
                 'https://private-user-images.githubusercontent.com/example',
                 'image',
             ),

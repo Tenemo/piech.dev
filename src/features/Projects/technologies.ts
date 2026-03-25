@@ -120,3 +120,5 @@ export const TECHNOLOGIES = {
         wideLogo: true,
     },
 } as const;
+
+export type TechnologyName = keyof typeof TECHNOLOGIES;

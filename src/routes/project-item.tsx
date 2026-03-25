@@ -16,12 +16,11 @@ import { getProjectPath, HOME_PATH, PROJECTS_PATH } from 'app/routePaths';
 import { SITE_LINKS } from 'app/siteLinks';
 import ProjectItem from 'features/Projects/ProjectItem/ProjectItem';
 import { findProjectByRepo } from 'features/Projects/projectUtils';
-import { repositoriesData } from 'utils/githubData';
+import { repositoriesData } from 'utils/data/githubData';
 
 export const meta: MetaFunction = ({ params }) => {
     const repo = params.repo ?? '';
     const info = repositoriesData[repo];
-    const title = `${repo} | piech.dev`;
     const description =
         info?.description ??
         `Project details for ${repo} from github.com/tenemo/${repo}`;
@@ -37,6 +36,7 @@ export const meta: MetaFunction = ({ params }) => {
 
     const projectPath = getProjectPath(repo);
     const pageUrl = getSiteUrl(projectPath);
+    const title = `${projectEntry.name} | piech.dev`;
     const imageId = `${pageUrl}#image`;
     const breadcrumbId = `${pageUrl}#breadcrumb`;
     const pageId = `${pageUrl}#page`;
@@ -53,18 +53,18 @@ export const meta: MetaFunction = ({ params }) => {
         items: [
             { name: 'Home', path: HOME_PATH },
             { name: 'Projects', path: PROJECTS_PATH },
-            { name: repo, path: projectPath },
+            { name: projectEntry.name, path: projectPath },
         ],
     });
 
     const codeNode: SoftwareSourceCode = {
         '@type': 'SoftwareSourceCode',
         '@id': codeId,
-        name: repo,
+        name: projectEntry.name,
         description,
         url: pageUrl,
         codeRepository: `${SITE_LINKS.githubProfile}/${repo}`,
-        programmingLanguage: 'TypeScript',
+        programmingLanguage: projectEntry.programmingLanguage,
         image: { '@id': imageId },
         keywords: info?.topics,
         dateCreated: info?.createdDatetime,

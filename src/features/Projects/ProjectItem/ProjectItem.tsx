@@ -7,7 +7,7 @@ import ProjectMarkdown from './ProjectMarkdown/ProjectMarkdown';
 import { PROJECTS_PATH } from 'app/routePaths';
 import { SITE_LINKS } from 'app/siteLinks';
 import { ArrowBackIcon, GitHubIcon } from 'components/Icons';
-import { repositoriesData } from 'utils/githubData';
+import { repositoriesData } from 'utils/data/githubData';
 
 const ProjectItemDetails: React.FC = (): React.JSX.Element => {
     const { repo } = useParams<{ repo: string }>();

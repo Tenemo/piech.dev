@@ -7,11 +7,11 @@ import ProjectPage from './Projects';
 import styles from './projects.module.scss';
 
 import { PROJECTS_PATH } from 'app/routePaths';
-import { renderWithProviders } from 'utils/testUtils';
+import { renderApp } from 'utils/testing/renderApp';
 
 describe('Projects page', () => {
     it('should render projects heading and divider', () => {
-        renderWithProviders(<ProjectPage />);
+        renderApp(<ProjectPage />);
 
         expect(
             screen.getByRole('heading', { name: /projects/i }),
@@ -20,7 +20,7 @@ describe('Projects page', () => {
     });
 
     it('should render the main projects container with correct class', () => {
-        const { container } = renderWithProviders(<ProjectPage />);
+        const { container } = renderApp(<ProjectPage />);
 
         const mainElement = container.querySelector('main');
         expect(mainElement).toBeInTheDocument();
@@ -33,7 +33,7 @@ describe('Projects page', () => {
     });
 
     it('should render all project items', () => {
-        renderWithProviders(<ProjectPage />);
+        renderApp(<ProjectPage />);
 
         const getHeading = (name: RegExp): HTMLElement =>
             screen.getByRole('heading', { level: 3, name });
@@ -46,7 +46,7 @@ describe('Projects page', () => {
     });
 
     it('should include a divider between project items', () => {
-        const { container } = renderWithProviders(<ProjectPage />);
+        const { container } = renderApp(<ProjectPage />);
 
         const dividers = container.querySelectorAll('.divider');
 

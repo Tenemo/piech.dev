@@ -2,33 +2,32 @@ import { format } from 'date-fns';
 import React from 'react';
 import { Link } from 'react-router';
 
-import { getProjectRepo, getProjectRoutePath } from '../projectUtils';
-import { TECHNOLOGIES } from '../technologies';
+import { getProjectRoutePath } from '../projectUtils';
+import type { TechnologyName } from '../technologies';
 
 import styles from './projectCard.module.scss';
 import ProjectTechnologies from './ProjectTechnologies/ProjectTechnologies';
 
 import { OpenInNewIcon } from 'components/Icons';
-import { repositoriesData } from 'utils/githubData';
+import { repositoriesData } from 'utils/data/githubData';
 
 type ProjectCardProps = {
+    name: string;
+    repo: string;
     projectPreview: string;
     imageOnRight?: boolean;
-    technologies: readonly (keyof typeof TECHNOLOGIES)[];
-    project: string;
-    repoName?: string;
+    technologies: readonly TechnologyName[];
 };
 
 const ProjectCard = ({
+    name,
+    repo,
     projectPreview,
     imageOnRight = false,
     technologies,
-    project,
-    repoName,
 }: ProjectCardProps): React.JSX.Element => {
-    const githubRepository = getProjectRepo({ project, repoName });
-    const projectPath = getProjectRoutePath({ project, repoName });
-    const repositoryInfo = repositoriesData[githubRepository];
+    const projectPath = getProjectRoutePath(repo);
+    const repositoryInfo = repositoriesData[repo];
     const createdIso = repositoryInfo?.createdDatetime;
     const createdLabel = createdIso
         ? format(new Date(createdIso), 'MMMM yyyy')
@@ -47,17 +46,14 @@ const ProjectCard = ({
             </video>
         ) : (
             <img
-                alt={`${project} preview`}
+                alt={`${name} preview`}
                 className={styles.image}
                 src={`/media/projects/${projectPreview}`}
             />
         );
 
         return (
-            <Link
-                aria-label={`View ${project} project details`}
-                to={projectPath}
-            >
+            <Link aria-label={`View ${name} project details`} to={projectPath}>
                 {previewContent}
             </Link>
         );
@@ -87,7 +83,7 @@ const ProjectCard = ({
                         </time>
                     )}
                     <h3 className={styles.projectTitle}>
-                        {project}
+                        {name}
                         <OpenInNewIcon />
                     </h3>
                     {renderContent()}

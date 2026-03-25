@@ -4,11 +4,11 @@ import { describe, it, expect } from 'vitest';
 import Footer from './Footer';
 import styles from './footer.module.scss';
 
-import { renderWithProviders } from 'utils/testUtils';
+import { renderApp } from 'utils/testing/renderApp';
 
 describe('Footer', () => {
     it('should render footer element', () => {
-        const { container } = renderWithProviders(<Footer />);
+        const { container } = renderApp(<Footer />);
         const footerElement = container.querySelector('footer');
 
         expect(footerElement).toBeInTheDocument();
@@ -16,7 +16,7 @@ describe('Footer', () => {
     });
 
     it('should render GitHub link with correct attributes', () => {
-        renderWithProviders(<Footer />);
+        renderApp(<Footer />);
 
         const githubLink = screen.getByRole('link', {
             name: /github repository/i,
@@ -32,7 +32,7 @@ describe('Footer', () => {
     });
 
     it('should render GitHub icon', () => {
-        const { container } = renderWithProviders(<Footer />);
+        const { container } = renderApp(<Footer />);
 
         expect(container.querySelector('svg')).toBeInTheDocument();
     });

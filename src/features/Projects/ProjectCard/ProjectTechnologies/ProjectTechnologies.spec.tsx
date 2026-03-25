@@ -3,7 +3,7 @@ import { describe, it, expect, vi } from 'vitest';
 
 import ProjectTechnologies from './ProjectTechnologies';
 
-import { renderWithProviders } from 'utils/testUtils';
+import { renderApp } from 'utils/testing/renderApp';
 
 vi.mock('features/Projects/technologies', () => ({
     TECHNOLOGIES: {
@@ -21,14 +21,14 @@ vi.mock('features/Projects/technologies', () => ({
 
 describe('ProjectTechnologies', () => {
     it('should render nothing when technologies array is empty', () => {
-        const { container } = renderWithProviders(
+        const { container } = renderApp(
             <ProjectTechnologies technologies={[]} />,
         );
         expect(container.firstChild).toBeNull();
     });
 
     it('should render all provided technologies', () => {
-        renderWithProviders(
+        renderApp(
             <ProjectTechnologies technologies={['react', 'typescript']} />,
         );
 
@@ -48,7 +48,7 @@ describe('ProjectTechnologies', () => {
     });
 
     it('should apply different classes based on wideLogo property', () => {
-        const { container } = renderWithProviders(
+        const { container } = renderApp(
             <ProjectTechnologies technologies={['react', 'typescript']} />,
         );
 
@@ -61,7 +61,7 @@ describe('ProjectTechnologies', () => {
     });
 
     it('should have correct href and title attributes on links', () => {
-        renderWithProviders(
+        renderApp(
             <ProjectTechnologies technologies={['react', 'typescript']} />,
         );
 
@@ -80,7 +80,7 @@ describe('ProjectTechnologies', () => {
     });
 
     it('should have correct attributes on images', () => {
-        const { container } = renderWithProviders(
+        const { container } = renderApp(
             <ProjectTechnologies technologies={['react']} />,
         );
 

@@ -4,14 +4,15 @@ import { describe, expect, it } from 'vitest';
 import ProjectCard from './ProjectCard';
 import styles from './projectCard.module.scss';
 
-import { renderWithProviders } from 'utils/testUtils';
+import { renderApp } from 'utils/testing/renderApp';
 
 describe('ProjectCard', () => {
     it('renders the expected card structure', () => {
-        const { container } = renderWithProviders(
+        const { container } = renderApp(
             <ProjectCard
-                project="test-project"
+                name="test-project"
                 projectPreview="test.webp"
+                repo="test-project"
                 technologies={['typescript', 'react']}
             />,
             { withRouter: true },
@@ -29,10 +30,11 @@ describe('ProjectCard', () => {
     });
 
     it('renders an image preview for image files', () => {
-        renderWithProviders(
+        renderApp(
             <ProjectCard
-                project="img-test"
+                name="img-test"
                 projectPreview="test.webp"
+                repo="img-test"
                 technologies={['typescript']}
             />,
             { withRouter: true },
@@ -49,10 +51,11 @@ describe('ProjectCard', () => {
     });
 
     it('renders a video preview for video files', () => {
-        renderWithProviders(
+        renderApp(
             <ProjectCard
-                project="video-test"
+                name="video-test"
                 projectPreview="test.mp4"
+                repo="video-test"
                 technologies={['typescript']}
             />,
             { withRouter: true },
@@ -68,10 +71,11 @@ describe('ProjectCard', () => {
     });
 
     it('renders the project kickoff badge when repository data exists', () => {
-        const { container } = renderWithProviders(
+        const { container } = renderApp(
             <ProjectCard
-                project="img-test"
+                name="img-test"
                 projectPreview="test.webp"
+                repo="img-test"
                 technologies={['typescript']}
             />,
             { withRouter: true },
@@ -85,16 +89,20 @@ describe('ProjectCard', () => {
         expect(badge).toHaveAttribute('dateTime', '2023-09-12T08:00:00.000Z');
     });
 
-    it('uses the custom repository name when provided', () => {
-        renderWithProviders(
+    it('uses the repository slug for route generation and the display name for visible text', () => {
+        renderApp(
             <ProjectCard
-                project="display-name"
+                name="display-name"
                 projectPreview="test.webp"
-                repoName="custom-repo"
+                repo="custom-repo"
                 technologies={['typescript']}
             />,
             { withRouter: true },
         );
+
+        expect(
+            screen.getByRole('heading', { level: 3, name: /display-name/i }),
+        ).toBeInTheDocument();
 
         const projectLinks = screen
             .getAllByRole('link')
@@ -111,10 +119,11 @@ describe('ProjectCard', () => {
     });
 
     it('falls back to the static description when repository data is missing', () => {
-        renderWithProviders(
+        renderApp(
             <ProjectCard
-                project="missing-repo"
+                name="missing-repo"
                 projectPreview="test.webp"
+                repo="missing-repo"
                 technologies={['typescript']}
             />,
             { withRouter: true },

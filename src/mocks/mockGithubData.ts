@@ -72,4 +72,3 @@ const data: GithubData = {
 };
 
 export const REPOSITORIES = data.repositories;
-export default data;

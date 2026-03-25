@@ -44,7 +44,19 @@ describe('cspCompatibility', () => {
         ).toBe(true);
         expect(
             isAllowedResourceUrl(
-                'https://github.com/user-attachments/assets/example',
+                'https://github.com/user-attachments/assets/12345678-1234-5678-9abc-123456789abc',
+                'media',
+            ),
+        ).toBe(true);
+        expect(
+            isAllowedResourceUrl(
+                'https://github-production-user-asset-6210df.s3.amazonaws.com/example.mp4',
+                'media',
+            ),
+        ).toBe(true);
+        expect(
+            isAllowedResourceUrl(
+                'https://raw.githubusercontent.com/tenemo/test-repo/main/demo.mp4',
                 'media',
             ),
         ).toBe(true);

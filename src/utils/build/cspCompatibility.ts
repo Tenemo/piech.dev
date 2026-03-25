@@ -8,6 +8,8 @@ export type ResourceKind =
 type AllowedOriginPattern = 'data:' | 'self' | `https://${string}`;
 
 const SITE_ORIGIN = 'https://piech.dev';
+const GITHUB_USER_ATTACHMENT_RUNTIME_ORIGIN =
+    'https://github-production-user-asset-6210df.s3.amazonaws.com';
 const ALLOWED_ORIGIN_PATTERNS: Record<
     ResourceKind,
     readonly AllowedOriginPattern[]
@@ -20,14 +22,35 @@ const ALLOWED_ORIGIN_PATTERNS: Record<
         'https://badge.fury.io',
         'https://github.com',
         'https://raw.githubusercontent.com',
+        GITHUB_USER_ATTACHMENT_RUNTIME_ORIGIN,
         'https://*.githubusercontent.com',
     ],
     manifest: ['self'],
-    media: ['self', 'https://github.com', 'https://*.githubusercontent.com'],
+    media: [
+        'self',
+        'https://github.com',
+        'https://raw.githubusercontent.com',
+        GITHUB_USER_ATTACHMENT_RUNTIME_ORIGIN,
+        'https://*.githubusercontent.com',
+    ],
     style: ['self'],
 };
 
 const NON_EXECUTABLE_SCRIPT_TYPES = new Set(['application/ld+json']);
+
+function isGithubUserAttachmentUrl(url: string): boolean {
+    try {
+        const parsedUrl = new URL(url);
+
+        return (
+            parsedUrl.protocol === 'https:' &&
+            parsedUrl.hostname === 'github.com' &&
+            parsedUrl.pathname.startsWith('/user-attachments/assets/')
+        );
+    } catch {
+        return false;
+    }
+}
 
 export function isExecutableScript({
     src,
@@ -52,6 +75,10 @@ export function isExecutableScript({
 export function normalizeResourceOrigin(url: string): string {
     if (url.startsWith('data:')) {
         return 'data:';
+    }
+
+    if (isGithubUserAttachmentUrl(url)) {
+        return GITHUB_USER_ATTACHMENT_RUNTIME_ORIGIN;
     }
 
     if (url.startsWith('/')) {

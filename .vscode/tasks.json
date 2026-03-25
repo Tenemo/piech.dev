@@ -8,12 +8,6 @@
             "problemMatcher": ["$tsc", "$eslint-stylish"]
         },
         {
-            "label": "Run tests",
-            "type": "shell",
-            "command": "npm test --silent",
-            "problemMatcher": ["$tsc", "$eslint-stylish"]
-        },
-        {
             "label": "Typecheck",
             "type": "shell",
             "command": "npm run tsc --silent"

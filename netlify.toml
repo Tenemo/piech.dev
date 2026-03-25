@@ -42,9 +42,10 @@ status = 301
 force = true
 
 # Contact routes
+# Keep the external profile URLs in sync with src/app/siteLinks.ts.
 [[redirects]]
 from = "/linkedin"
-to = "https://www.linkedin.com/in/ppiech/"
+to = "https://www.linkedin.com/in/ppiech"
 status = 301
 
 [[redirects]]

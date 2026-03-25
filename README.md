@@ -13,7 +13,7 @@ My personal page. Over time it turned into a complex project itself:
 - All routes have appropriate JSON-LD objects with all relevant information, even if Google or other search engines currently don't support some of them.
 - Thanks to the above and a bunch of other optimizations, all routes, including the heaviest [projects/](https://piech.dev/projects/) route, score a perfect 100/100/100/100 on [Google Lighthouse](https://pagespeed.web.dev/) mobile, which throttles to a slow 4G network connection.
 
-_Not a single word of this readme was written with AI. Letting you know just in case you don't enjoy reading AI-generated documentation._
+_Not a single word of this readme was generated or even reviewed by LLMs ("AI"). Letting you know just in case you don't enjoy reading AI-generated documentation._
 
 <img src="public/media/projects/piech.dev.webp" alt="Projects page of piech.dev" title="Projects page of piech.dev" width="500" />
 

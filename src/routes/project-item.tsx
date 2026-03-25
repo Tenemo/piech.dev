@@ -1,99 +1,71 @@
 import type { JSX } from 'react';
 import type { MetaFunction } from 'react-router';
-import type {
-    BreadcrumbList,
-    SoftwareSourceCode,
-    Graph,
-    WebPage,
-    ImageObject,
-} from 'schema-dts';
+import type { Graph, SoftwareSourceCode, WebPage } from 'schema-dts';
+
+import {
+    createBreadcrumbList,
+    createImageObject,
+    createMetaTags,
+    getSiteUrl,
+} from './seo';
 
 import { PERSON, PERSON_ID, WEBSITE, WEBSITE_ID } from './index';
 
-import {
-    DEFAULT_KEYWORDS,
-    PRODUCTION_OG_IMAGES_DIRECTORY,
-} from 'app/appConstants';
+import { DEFAULT_KEYWORDS } from 'app/appConstants';
+import { getProjectPath, HOME_PATH, PROJECTS_PATH } from 'app/routePaths';
+import { SITE_LINKS } from 'app/siteLinks';
 import ProjectItem from 'features/Projects/ProjectItem/ProjectItem';
-import { PROJECTS } from 'features/Projects/projectsList';
+import { findProjectByRepo } from 'features/Projects/projectUtils';
 import { repositoriesData } from 'utils/githubData';
-import { getOgImageSize } from 'utils/ogImageSizes';
 
-export const meta: MetaFunction = (args) => {
-    const repo = args.params.repo ?? '';
+export const meta: MetaFunction = ({ params }) => {
+    const repo = params.repo ?? '';
     const info = repositoriesData[repo];
     const title = `${repo} | piech.dev`;
-    const desc =
+    const description =
         info?.description ??
         `Project details for ${repo} from github.com/tenemo/${repo}`;
     const keywords =
         info?.topics && info.topics.length > 0
             ? info.topics.join(', ')
             : DEFAULT_KEYWORDS;
+    const projectEntry = findProjectByRepo(repo);
 
-    const projectEntry = PROJECTS.find(
-        (p) => (p.repoName ?? p.project) === repo,
-    );
     if (!projectEntry) {
         throw new Error(`Project entry not found for repo "${repo}"`);
     }
-    const ogImage = projectEntry.ogImage;
-    const ogImageAlt = projectEntry.ogImageAlt;
 
-    const size = getOgImageSize(ogImage);
-    const imageObj: ImageObject = {
-        '@type': 'ImageObject',
-        '@id': `https://piech.dev/projects/${repo}#image`,
-        contentUrl: `${PRODUCTION_OG_IMAGES_DIRECTORY}${ogImage}`,
-        url: `${PRODUCTION_OG_IMAGES_DIRECTORY}${ogImage}`,
-        width: {
-            '@type': 'QuantitativeValue',
-            value: size.width,
-            unitText: 'px',
-        },
-        height: {
-            '@type': 'QuantitativeValue',
-            value: size.height,
-            unitText: 'px',
-        },
-        caption: ogImageAlt,
-    };
+    const projectPath = getProjectPath(repo);
+    const pageUrl = getSiteUrl(projectPath);
+    const imageId = `${pageUrl}#image`;
+    const breadcrumbId = `${pageUrl}#breadcrumb`;
+    const pageId = `${pageUrl}#page`;
+    const codeId = `${pageUrl}#code`;
 
-    const breadcrumbList: BreadcrumbList = {
-        '@type': 'BreadcrumbList',
-        '@id': `https://piech.dev/projects/${repo}#breadcrumb`,
-        itemListElement: [
-            {
-                '@type': 'ListItem',
-                position: 1,
-                name: 'Home',
-                item: 'https://piech.dev/',
-            },
-            {
-                '@type': 'ListItem',
-                position: 2,
-                name: 'Projects',
-                item: 'https://piech.dev/projects/',
-            },
-            {
-                '@type': 'ListItem',
-                position: 3,
-                name: repo,
-                item: `https://piech.dev/projects/${repo}`,
-            },
+    const imageObj = createImageObject({
+        id: imageId,
+        imageName: projectEntry.ogImage,
+        alt: projectEntry.ogImageAlt,
+    });
+
+    const breadcrumbList = createBreadcrumbList({
+        id: breadcrumbId,
+        items: [
+            { name: 'Home', path: HOME_PATH },
+            { name: 'Projects', path: PROJECTS_PATH },
+            { name: repo, path: projectPath },
         ],
-    };
+    });
 
-    const codeId = `https://piech.dev/projects/${repo}#code`;
     const codeNode: SoftwareSourceCode = {
         '@type': 'SoftwareSourceCode',
         '@id': codeId,
         name: repo,
-        description: desc,
-        url: `https://piech.dev/projects/${repo}`,
-        codeRepository: `https://github.com/Tenemo/${repo}`,
+        description,
+        url: pageUrl,
+        codeRepository: `${SITE_LINKS.githubProfile}/${repo}`,
         programmingLanguage: 'TypeScript',
-        image: { '@id': `https://piech.dev/projects/${repo}#image` },
+        image: { '@id': imageId },
         keywords: info?.topics,
         dateCreated: info?.createdDatetime,
         dateModified: info?.lastCommitDatetime,
@@ -101,23 +73,21 @@ export const meta: MetaFunction = (args) => {
         author: { '@id': PERSON_ID },
         creator: { '@id': PERSON_ID },
         maintainer: { '@id': PERSON_ID },
-        mainEntityOfPage: { '@id': `https://piech.dev/projects/${repo}#page` },
+        mainEntityOfPage: { '@id': pageId },
     };
 
     const itemPage: WebPage = {
         '@type': ['WebPage', 'ItemPage'] as unknown as 'WebPage',
-        '@id': `https://piech.dev/projects/${repo}#page`,
-        url: `https://piech.dev/projects/${repo}`,
-        name: `${repo} | piech.dev`,
-        description: desc,
+        '@id': pageId,
+        url: pageUrl,
+        name: title,
+        description,
         inLanguage: 'en',
         isPartOf: { '@id': WEBSITE_ID },
         mainEntity: { '@id': codeId },
-        breadcrumb: { '@id': `https://piech.dev/projects/${repo}#breadcrumb` },
-        primaryImageOfPage: {
-            '@id': `https://piech.dev/projects/${repo}#image`,
-        },
-        image: { '@id': `https://piech.dev/projects/${repo}#image` },
+        breadcrumb: { '@id': breadcrumbId },
+        primaryImageOfPage: { '@id': imageId },
+        image: { '@id': imageId },
         datePublished: info?.createdDatetime,
         dateModified: info?.lastCommitDatetime,
     };
@@ -134,28 +104,16 @@ export const meta: MetaFunction = (args) => {
         ],
     };
 
-    return [
-        { title },
-        { name: 'description', content: desc },
-        { name: 'keywords', content: keywords },
-        { property: 'og:title', content: title },
-        { property: 'og:description', content: desc },
-        { property: 'og:type', content: 'article' },
-        { property: 'og:url', content: `https://piech.dev/projects/${repo}` },
-        {
-            property: 'og:image',
-            content: `${PRODUCTION_OG_IMAGES_DIRECTORY}${ogImage}`,
-        },
-        { property: 'og:image:width', content: String(size.width) },
-        { property: 'og:image:height', content: String(size.height) },
-        { property: 'og:image:alt', content: ogImageAlt },
-        {
-            tagName: 'link',
-            rel: 'canonical',
-            href: `https://piech.dev/projects/${repo}/`,
-        },
-        { 'script:ld+json': graph },
-    ];
+    return createMetaTags({
+        title,
+        description,
+        keywords,
+        type: 'article',
+        path: projectPath,
+        imageName: projectEntry.ogImage,
+        imageAlt: projectEntry.ogImageAlt,
+        graph,
+    });
 };
 
 const Route = (): JSX.Element => <ProjectItem />;

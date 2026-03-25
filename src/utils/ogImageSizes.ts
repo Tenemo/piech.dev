@@ -1,4 +1,4 @@
-import type { ImageSize } from './getImageSize';
+type ImageSize = { width: number; height: number };
 
 const ogImageSizes: Partial<Record<string, ImageSize>> = {
     'aliases.sh_preview.jpg': { width: 833, height: 622 },

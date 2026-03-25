@@ -5,7 +5,7 @@ import { TECHNOLOGIES } from '../../technologies';
 import styles from './projectTechnologies.module.scss';
 
 type ProjectTechnologiesProps = {
-    technologies: (keyof typeof TECHNOLOGIES)[];
+    technologies: readonly (keyof typeof TECHNOLOGIES)[];
 };
 
 const ProjectTechnologies = ({
@@ -19,10 +19,8 @@ const ProjectTechnologies = ({
         <div className={styles.technologiesContainer}>
             {technologies.map((technologyName) => {
                 const technologyInfo = TECHNOLOGIES[technologyName];
-                const isWideLogo = Object.prototype.hasOwnProperty.call(
-                    technologyInfo,
-                    'wideLogo',
-                );
+                const isWideLogo =
+                    'wideLogo' in technologyInfo && technologyInfo.wideLogo;
 
                 return (
                     <a

@@ -11,6 +11,7 @@ declare const description: string;
 declare const dateBadge: string;
 declare const previewContainer: string;
 declare const image: string;
+declare const previewLink: string;
 declare const content: string;
 declare const projectTitle: string;
 declare const imageRight: string;
@@ -22,6 +23,7 @@ export {
 	dateBadge,
 	previewContainer,
 	image,
+	previewLink,
 	content,
 	projectTitle,
 	imageRight,
@@ -34,6 +36,7 @@ declare const __default_export__: {
 	dateBadge: typeof dateBadge;
 	previewContainer: typeof previewContainer;
 	image: typeof image;
+	previewLink: typeof previewLink;
 	content: typeof content;
 	projectTitle: typeof projectTitle;
 	imageRight: typeof imageRight;

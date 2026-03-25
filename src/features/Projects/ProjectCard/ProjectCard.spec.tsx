@@ -4,14 +4,26 @@ import { describe, expect, it } from 'vitest';
 import ProjectCard from './ProjectCard';
 import styles from './projectCard.module.scss';
 
+import { SILENT_CAPTIONS_TRACK_PATH } from 'app/appConstants';
 import { renderApp } from 'utils/testing/renderApp';
+
+const IMAGE_PREVIEW = {
+    fileName: 'test.webp',
+    width: 1200,
+    height: 800,
+};
+const VIDEO_PREVIEW = {
+    fileName: 'test.mp4',
+    width: 1280,
+    height: 720,
+};
 
 describe('ProjectCard', () => {
     it('renders the expected card structure', () => {
         const { container } = renderApp(
             <ProjectCard
                 name="test-project"
-                projectPreview="test.webp"
+                projectPreview={IMAGE_PREVIEW}
                 repo="test-project"
                 technologies={['typescript', 'react']}
             />,
@@ -29,11 +41,11 @@ describe('ProjectCard', () => {
         ).toBeInTheDocument();
     });
 
-    it('renders an image preview for image files', () => {
+    it('renders a lazy-loaded image preview for non-LCP image files', () => {
         renderApp(
             <ProjectCard
                 name="img-test"
-                projectPreview="test.webp"
+                projectPreview={IMAGE_PREVIEW}
                 repo="img-test"
                 technologies={['typescript']}
             />,
@@ -47,14 +59,37 @@ describe('ProjectCard', () => {
 
         expect(previewLink).toHaveAttribute('href', '/projects/img-test/');
         expect(image).toHaveAttribute('src', '/media/projects/test.webp');
+        expect(image).toHaveAttribute('loading', 'lazy');
+        expect(image).toHaveAttribute('decoding', 'async');
+        expect(image).toHaveAttribute('width', '1200');
+        expect(image).toHaveAttribute('height', '800');
         expect(image).not.toHaveAttribute('fetchpriority');
+    });
+
+    it('prioritizes the LCP image when requested', () => {
+        renderApp(
+            <ProjectCard
+                name="priority-test"
+                prioritizePreview={true}
+                projectPreview={IMAGE_PREVIEW}
+                repo="img-test"
+                technologies={['typescript']}
+            />,
+            { withRouter: true },
+        );
+
+        const image = screen.getByAltText('priority-test preview');
+
+        expect(image).toHaveAttribute('fetchpriority', 'high');
+        expect(image).not.toHaveAttribute('loading');
+        expect(image).not.toHaveAttribute('decoding');
     });
 
     it('renders a video preview for video files', () => {
         renderApp(
             <ProjectCard
                 name="video-test"
-                projectPreview="test.mp4"
+                projectPreview={VIDEO_PREVIEW}
                 repo="video-test"
                 technologies={['typescript']}
             />,
@@ -64,17 +99,23 @@ describe('ProjectCard', () => {
         const previewLink = screen.getByRole('link', {
             name: /view video-test project details/i,
         });
+        const video = document.querySelector('video');
         const source = document.querySelector('video source');
+        const track = document.querySelector('video track[kind="captions"]');
 
         expect(previewLink).toHaveAttribute('href', '/projects/video-test/');
         expect(source).toHaveAttribute('src', '/media/projects/test.mp4');
+        expect(video).toHaveAttribute('preload', 'metadata');
+        expect(video).toHaveAttribute('width', '1280');
+        expect(video).toHaveAttribute('height', '720');
+        expect(track).toHaveAttribute('src', SILENT_CAPTIONS_TRACK_PATH);
     });
 
     it('renders the project kickoff badge when repository data exists', () => {
         const { container } = renderApp(
             <ProjectCard
                 name="img-test"
-                projectPreview="test.webp"
+                projectPreview={IMAGE_PREVIEW}
                 repo="img-test"
                 technologies={['typescript']}
             />,
@@ -93,7 +134,7 @@ describe('ProjectCard', () => {
         renderApp(
             <ProjectCard
                 name="display-name"
-                projectPreview="test.webp"
+                projectPreview={IMAGE_PREVIEW}
                 repo="custom-repo"
                 technologies={['typescript']}
             />,
@@ -122,7 +163,7 @@ describe('ProjectCard', () => {
         renderApp(
             <ProjectCard
                 name="missing-repo"
-                projectPreview="test.webp"
+                projectPreview={IMAGE_PREVIEW}
                 repo="missing-repo"
                 technologies={['typescript']}
             />,

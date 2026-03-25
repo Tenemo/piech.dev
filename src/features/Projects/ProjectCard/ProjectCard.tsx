@@ -2,20 +2,23 @@ import { format } from 'date-fns';
 import React from 'react';
 import { Link } from 'react-router';
 
+import type { ProjectPreviewAsset } from '../projectsData';
 import { getProjectRoutePath } from '../projectUtils';
 import type { TechnologyName } from '../technologies';
 
 import styles from './projectCard.module.scss';
 import ProjectTechnologies from './ProjectTechnologies/ProjectTechnologies';
 
+import { SILENT_CAPTIONS_TRACK_PATH } from 'app/appConstants';
 import { OpenInNewIcon } from 'components/Icons';
 import { repositoriesData } from 'utils/data/githubData';
 
 type ProjectCardProps = {
     name: string;
     repo: string;
-    projectPreview: string;
+    projectPreview: ProjectPreviewAsset;
     imageOnRight?: boolean;
+    prioritizePreview?: boolean;
     technologies: readonly TechnologyName[];
 };
 
@@ -24,6 +27,7 @@ const ProjectCard = ({
     repo,
     projectPreview,
     imageOnRight = false,
+    prioritizePreview = false,
     technologies,
 }: ProjectCardProps): React.JSX.Element => {
     const projectPath = getProjectRoutePath(repo);
@@ -33,14 +37,32 @@ const ProjectCard = ({
         ? format(new Date(createdIso), 'MMMM yyyy')
         : undefined;
 
-    const isVideo = /\.(mp4|webm|ogg)$/i.test(projectPreview.toLowerCase());
+    const previewSrc = `/media/projects/${projectPreview.fileName}`;
+    const previewFileExtension =
+        projectPreview.fileName.split('.').pop()?.toLowerCase() ?? '';
+    const isVideo = /\.(mp4|webm|ogg)$/i.test(projectPreview.fileName);
 
     const renderPreview = (): React.ReactNode => {
         const previewContent = isVideo ? (
-            <video autoPlay className={styles.image} loop muted playsInline>
+            <video
+                autoPlay
+                className={styles.image}
+                height={projectPreview.height}
+                loop
+                muted
+                playsInline
+                preload="metadata"
+                width={projectPreview.width}
+            >
                 <source
-                    src={`/media/projects/${projectPreview}`}
-                    type={`video/${projectPreview.split('.').pop() ?? ''}`}
+                    src={previewSrc}
+                    type={`video/${previewFileExtension}`}
+                />
+                <track
+                    kind="captions"
+                    label="No spoken audio"
+                    src={SILENT_CAPTIONS_TRACK_PATH}
+                    srcLang="en"
                 />
                 Your browser does not support the video tag.
             </video>
@@ -48,12 +70,21 @@ const ProjectCard = ({
             <img
                 alt={`${name} preview`}
                 className={styles.image}
-                src={`/media/projects/${projectPreview}`}
+                decoding={prioritizePreview ? undefined : 'async'}
+                fetchPriority={prioritizePreview ? 'high' : undefined}
+                height={projectPreview.height}
+                loading={prioritizePreview ? undefined : 'lazy'}
+                src={previewSrc}
+                width={projectPreview.width}
             />
         );
 
         return (
-            <Link aria-label={`View ${name} project details`} to={projectPath}>
+            <Link
+                aria-label={`View ${name} project details`}
+                className={styles.previewLink}
+                to={projectPath}
+            >
                 {previewContent}
             </Link>
         );

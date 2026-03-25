@@ -14,6 +14,7 @@ import remarkGfm from 'remark-gfm';
 
 import styles from './projectMarkdown.module.scss';
 
+import { SILENT_CAPTIONS_TRACK_PATH } from 'app/appConstants';
 import { repositoriesData } from 'utils/data/githubData';
 
 const OWNER = 'tenemo';
@@ -21,7 +22,7 @@ const GITHUB_USER_ATTACHMENT_PATTERN =
     /^https:\/\/github\.com\/user-attachments\/assets\/[a-f0-9-]+$/;
 const sanitizedMarkdownSchema: RehypeSanitizeSchema = {
     ...defaultSchema,
-    tagNames: [...(defaultSchema.tagNames ?? []), 'source', 'video'],
+    tagNames: [...(defaultSchema.tagNames ?? []), 'source', 'track', 'video'],
     attributes: {
         ...defaultSchema.attributes,
         a: [...(defaultSchema.attributes?.a ?? []), 'rel', 'target', 'title'],
@@ -32,6 +33,7 @@ const sanitizedMarkdownSchema: RehypeSanitizeSchema = {
             'width',
         ],
         source: ['src', 'type'],
+        track: ['default', 'kind', 'label', 'src', 'srclang'],
         video: [
             'autoPlay',
             'controls',
@@ -139,9 +141,39 @@ const ProjectMarkdown = ({
                             ? `${styles.markdownImage} ${className}`
                             : styles.markdownImage
                     }
+                    decoding="async"
                     src={src}
                     {...props}
                 />
+            );
+        },
+        video({ node: _node, className, children, preload, ...props }) {
+            const videoChildren = React.Children.toArray(children);
+            const hasTrackChild = videoChildren.some(
+                (child) =>
+                    React.isValidElement(child) && child.type === 'track',
+            );
+
+            return (
+                <video
+                    className={
+                        className
+                            ? `${styles.videoPlayer} ${className}`
+                            : styles.videoPlayer
+                    }
+                    preload={preload ?? 'metadata'}
+                    {...props}
+                >
+                    {children}
+                    {!hasTrackChild && (
+                        <track
+                            kind="captions"
+                            label="No spoken audio"
+                            src={SILENT_CAPTIONS_TRACK_PATH}
+                            srcLang="en"
+                        />
+                    )}
+                </video>
             );
         },
         a({ node: _node, href, children, ...props }) {
@@ -154,13 +186,21 @@ const ProjectMarkdown = ({
                         loop
                         muted
                         playsInline
+                        preload="metadata"
                         src={href}
                         title={
                             typeof children === 'string'
                                 ? children
                                 : 'Video attachment'
                         }
-                    />
+                    >
+                        <track
+                            kind="captions"
+                            label="No spoken audio"
+                            src={SILENT_CAPTIONS_TRACK_PATH}
+                            srcLang="en"
+                        />
+                    </video>
                 );
             }
             return (

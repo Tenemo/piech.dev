@@ -90,14 +90,3 @@ Steps to follow when adding a new project to [projects/](https://piech.dev/proje
 The project should appear in the [projects/](https://piech.dev/projects/) route at that point.
 
 At the moment only GitHub-based projects are supported.
-
-### End-to-end tests
-
-Playwright runs against the final production output served from `dist/client`, not the dev server.
-
-- Install browser binaries once locally with `npx playwright install`.
-- Run the full e2e suite with `npm run test:e2e`.
-- Use `npm run test:e2e:headed` or `npm run test:e2e:ui` when debugging locally.
-- Open the last HTML report with `npx playwright show-report`.
-
-GitHub Actions runs the same suite for pull requests in the dedicated `Playwright E2E` workflow and uploads the HTML report on every run.

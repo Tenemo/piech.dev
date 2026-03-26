@@ -12,7 +12,7 @@ const Header = (): React.JSX.Element => {
                 <h1>piech.dev</h1>
             </Link>
 
-            <nav className={styles.navigation}>
+            <nav aria-label="Primary" className={styles.navigation}>
                 <NavLink
                     className={({ isActive }) =>
                         isActive

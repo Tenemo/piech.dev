@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 
 import styles from './about.module.scss';
 
+import { MAIN_CONTENT_ID } from 'app/accessibility';
 import { CONTACT_PATH, PROJECTS_PATH } from 'app/routePaths';
 
 const About = (): React.JSX.Element => {
@@ -18,7 +19,7 @@ const About = (): React.JSX.Element => {
     );
 
     return (
-        <main className={styles.main}>
+        <main className={styles.main} id={MAIN_CONTENT_ID} tabIndex={-1}>
             <h2>About me</h2>
             <div className={'divider'} />
             <p className={'smallHeadline'}>

@@ -28,3 +28,4 @@ Before you declare a set of tasks is done:
 3. Make sure eslint passes with no errors.
 4. Make sure stylelint passes.
 5. Make sure the page builds with `npm run build` for production with no errors.
+6. Make sure Playwright E2E tests pass.

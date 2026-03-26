@@ -4,6 +4,8 @@ import {
     type ReporterDescription,
 } from '@playwright/test';
 
+import { E2E_BASE_URL, E2E_PORT } from './src/utils/testing/e2eConfig';
+
 const reporters: ReporterDescription[] = process.env.CI
     ? [
           ['dot'],
@@ -14,6 +16,9 @@ const reporters: ReporterDescription[] = process.env.CI
           ['list'],
           ['html', { open: 'never', outputFolder: 'playwright-report' }],
       ];
+const galaxyS24 = devices['Galaxy S24'];
+const { defaultBrowserType: _defaultBrowserType, ...galaxyS24Device } =
+    galaxyS24;
 
 export default defineConfig({
     testDir: './e2e',
@@ -22,7 +27,7 @@ export default defineConfig({
     retries: process.env.CI ? 1 : 0,
     reporter: reporters,
     use: {
-        baseURL: 'http://127.0.0.1:4173',
+        baseURL: E2E_BASE_URL,
         screenshot: 'only-on-failure',
         trace: 'retain-on-failure',
         video: 'retain-on-failure',
@@ -40,11 +45,34 @@ export default defineConfig({
             name: 'Desktop Safari',
             use: { ...devices['Desktop Safari'] },
         },
+        {
+            name: 'Mobile Chrome (Galaxy S24)',
+            use: { ...devices['Galaxy S24'] },
+        },
+        {
+            name: 'Mobile Safari (iPhone 15)',
+            use: { ...devices['iPhone 15'] },
+        },
+        {
+            name: 'Mobile Firefox (Galaxy S24)',
+            use: {
+                ...galaxyS24Device,
+                browserName: 'firefox',
+                // Playwright documents `isMobile` as unsupported in Firefox.
+                isMobile: false,
+                userAgent:
+                    'Mozilla/5.0 (Android 14; Mobile; rv:147.0) Gecko/147.0 Firefox/147.0',
+            },
+        },
     ],
     webServer: {
         command: 'npm run serve:e2e',
+        env: {
+            ...process.env,
+            PORT: String(E2E_PORT),
+        },
         reuseExistingServer: !process.env.CI,
         timeout: 120 * 1000,
-        url: 'http://127.0.0.1:4173',
+        url: E2E_BASE_URL,
     },
 });

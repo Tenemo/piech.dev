@@ -2,8 +2,8 @@ import { expect, test } from '@playwright/test';
 
 import { SITE_LINKS } from '../src/app/siteLinks';
 import { PROJECTS } from '../src/features/Projects/projectsData';
+import { E2E_BASE_URL } from '../src/utils/testing/e2eConfig';
 
-const BASE_ORIGIN = 'http://127.0.0.1:4173';
 const REPRESENTATIVE_ROUTES = [
     '/',
     '/projects/',
@@ -82,7 +82,7 @@ test('projects list opens a project detail page', async ({ page }) => {
         .click();
 
     await expect(page).toHaveURL(
-        `${BASE_ORIGIN}/projects/${firstProject.repo}/`,
+        `${E2E_BASE_URL}/projects/${firstProject.repo}/`,
     );
     await expect(
         page.getByRole('link', { name: 'Back to Projects' }),
@@ -149,7 +149,7 @@ test('representative pages make no same-origin javascript requests', async ({
         const requestUrl = new URL(request.url());
 
         if (
-            requestUrl.origin === BASE_ORIGIN &&
+            requestUrl.origin === E2E_BASE_URL &&
             requestUrl.pathname.endsWith('.js')
         ) {
             sameOriginJavaScriptRequests.push(requestUrl.pathname);
@@ -178,7 +178,7 @@ test('representative pages make no same-origin javascript requests', async ({
                                     url.pathname.endsWith('.js'),
                             )
                             .map((url) => url.pathname),
-                    BASE_ORIGIN,
+                    E2E_BASE_URL,
                 );
 
             expect(

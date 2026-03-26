@@ -2,11 +2,9 @@ import fs from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
 
-const DIST_ROOT = path.resolve(process.cwd(), 'dist', 'client');
-const HOST = '127.0.0.1';
-const PORT = Number(process.env.PORT ?? '4173');
-const SERVER_ORIGIN = `http://${HOST}:${String(PORT)}`;
+import { E2E_BASE_URL, E2E_HOST, E2E_PORT } from './e2eConfig.ts';
 
+const DIST_ROOT = path.resolve(process.cwd(), 'dist', 'client');
 const MIME_TYPES = new Map<string, string>([
     ['.css', 'text/css; charset=utf-8'],
     ['.html', 'text/html; charset=utf-8'],
@@ -26,7 +24,7 @@ const MIME_TYPES = new Map<string, string>([
 ]);
 
 function resolveRequestPath(requestUrl: string | undefined): string {
-    const url = new URL(requestUrl ?? '/', SERVER_ORIGIN);
+    const url = new URL(requestUrl ?? '/', E2E_BASE_URL);
     const relativePath = url.pathname.replace(/^\/+/, '');
     const candidatePath = path.normalize(path.join(DIST_ROOT, relativePath));
 
@@ -99,8 +97,8 @@ const server = http.createServer((request, response) => {
     }
 });
 
-server.listen(PORT, HOST, () => {
-    console.log(`Serving dist/client at ${SERVER_ORIGIN}`);
+server.listen(E2E_PORT, E2E_HOST, () => {
+    console.log(`Serving dist/client at ${E2E_BASE_URL}`);
 });
 
 const shutdown = (): void => {

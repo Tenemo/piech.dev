@@ -30,8 +30,6 @@ const SITE_URL = 'https://piech.dev'.replace(/\/+$/, '');
 const IGNORE_FILE_NAMES = new Set(['404.html', '__spa-fallback.html']);
 
 async function getHtmlFiles(dir: string): Promise<string[]> {
-    // Dynamic path is expected here; safe in our controlled build output directory.
-    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const entries = await fs.readdir(dir, { withFileTypes: true });
     const found: string[] = [];
     for (const entry of entries) {
@@ -73,8 +71,6 @@ async function main(): Promise<void> {
         // skip internal/temporary routes if any slipped through
         if (url.includes('/__') || url.includes('/_internal')) continue;
 
-        // Dynamic path is expected in our build output.
-        // eslint-disable-next-line security/detect-non-literal-fs-filename
         const stat = await fs.stat(file);
         links.push({
             url,

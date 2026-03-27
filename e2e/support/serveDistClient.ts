@@ -38,17 +38,11 @@ function resolveDistPath(relativePath: string): string {
 
 function toFilePath(candidatePath: string): string {
     let filePath = candidatePath;
-    // Path traversal is checked above, so the remaining filesystem access is constrained to dist/client.
-    // eslint-disable-next-line security/detect-non-literal-fs-filename
     if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
         filePath = path.join(filePath, 'index.html');
     } else if (
         !path.extname(filePath) ||
-        // Path traversal is checked above, so the remaining filesystem access is constrained to dist/client.
-        // eslint-disable-next-line security/detect-non-literal-fs-filename
         (!fs.existsSync(filePath) &&
-            // Path traversal is checked above, so the remaining filesystem access is constrained to dist/client.
-            // eslint-disable-next-line security/detect-non-literal-fs-filename
             fs.existsSync(path.join(filePath, 'index.html')))
     ) {
         filePath = path.join(filePath, 'index.html');
@@ -102,8 +96,6 @@ const server = http.createServer((request, response) => {
     }
 
     try {
-        // Path traversal is checked above, so the remaining filesystem access is constrained to dist/client.
-        // eslint-disable-next-line security/detect-non-literal-fs-filename
         if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
             send404(response);
             return;
@@ -118,8 +110,6 @@ const server = http.createServer((request, response) => {
             'content-type': contentType,
         });
 
-        // Path traversal is checked above, so the remaining filesystem access is constrained to dist/client.
-        // eslint-disable-next-line security/detect-non-literal-fs-filename
         const stream = fs.createReadStream(filePath);
 
         stream.on('error', () => {

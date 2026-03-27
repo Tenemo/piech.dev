@@ -4,6 +4,10 @@ import { Links, Meta, Outlet, Scripts } from 'react-router';
 import { CONTACT_PATH, HOME_PATH, PROJECTS_PATH } from 'app/routePaths';
 import 'styles/main.scss';
 
+type ReactRouterWindow = Window & {
+    __reactRouterContext?: unknown;
+};
+
 export const Layout = ({
     children,
 }: {
@@ -17,8 +21,9 @@ export const Layout = ({
             return frameworkChildren as React.JSX.Element;
         // In the browser, ensure React Router framework context has been injected
         // before rendering framework-bound components like <Meta/>, <Links/>, etc.
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
-        const hasContext = Boolean((window as any).__reactRouterContext);
+        const hasContext = Boolean(
+            (window as ReactRouterWindow).__reactRouterContext,
+        );
         return hasContext ? (frameworkChildren as React.JSX.Element) : null;
     };
     return (

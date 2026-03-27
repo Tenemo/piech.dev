@@ -23,7 +23,6 @@ import { plugin as tsPlugin, configs as tsConfigs } from 'typescript-eslint';
 const OFF = 0;
 const ERROR = 2;
 
-// eslint-disable-next-line security/detect-non-literal-fs-filename
 const srcAliasPattern = `^(${readdirSync(new URL('./src/', import.meta.url), {
     withFileTypes: true,
 })
@@ -208,6 +207,16 @@ export default defineConfig(
             'prettier/prettier': OFF,
             '@typescript-eslint/consistent-type-definitions': OFF,
             '@typescript-eslint/no-empty-object-type': OFF,
+        },
+    },
+    {
+        files: [
+            'eslint.config.js',
+            'src/utils/build/**/*.ts',
+            'e2e/support/serveDistClient.ts',
+        ],
+        rules: {
+            'security/detect-non-literal-fs-filename': OFF,
         },
     },
     {

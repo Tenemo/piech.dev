@@ -23,7 +23,6 @@ async function fileExists(filePath: string): Promise<boolean> {
 }
 
 async function findHtmlFiles(dir: string): Promise<string[]> {
-    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const dirents = await fs.readdir(dir, { withFileTypes: true });
     const files = await Promise.all(
         dirents.map(async (dirent) => {
@@ -92,7 +91,6 @@ async function inlineCss(): Promise<void> {
     }
 
     for (const file of htmlFiles) {
-        // eslint-disable-next-line security/detect-non-literal-fs-filename
         const html = await fs.readFile(file, 'utf8');
         const dom = new JSDOM(html);
         const { document } = dom.window;
@@ -117,7 +115,6 @@ async function inlineCss(): Promise<void> {
 
         if (stylesheetLinks.length === 0) {
             if (changed) {
-                // eslint-disable-next-line security/detect-non-literal-fs-filename
                 await fs.writeFile(file, dom.serialize(), 'utf8');
                 totalHtmlChanged += 1;
             }
@@ -144,7 +141,6 @@ async function inlineCss(): Promise<void> {
 
             let css: string;
             try {
-                // eslint-disable-next-line security/detect-non-literal-fs-filename
                 css = await fs.readFile(cssPath, 'utf8');
             } catch {
                 console.warn(`Could not read CSS at ${cssPath} (from ${file})`);
@@ -166,7 +162,6 @@ async function inlineCss(): Promise<void> {
         }
 
         if (changed) {
-            // eslint-disable-next-line security/detect-non-literal-fs-filename
             await fs.writeFile(file, dom.serialize(), 'utf8');
             totalHtmlChanged += 1;
         }

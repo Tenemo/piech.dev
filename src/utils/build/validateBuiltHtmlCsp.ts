@@ -13,7 +13,6 @@ const outDir = path.resolve(process.cwd(), 'dist/client');
 const BANNED_SELECTORS = ['iframe', 'object', 'embed'] as const;
 
 async function findHtmlFiles(dir: string): Promise<string[]> {
-    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const dirents = await fs.readdir(dir, { withFileTypes: true });
     const files = await Promise.all(
         dirents.map(async (dirent) => {
@@ -89,7 +88,6 @@ async function validateBuiltHtmlCsp(): Promise<void> {
         const violations: string[] = [];
 
         for (const file of htmlFiles) {
-            // eslint-disable-next-line security/detect-non-literal-fs-filename
             const content = await fs.readFile(file, 'utf8');
             const dom = new JSDOM(content);
             const { document } = dom.window;

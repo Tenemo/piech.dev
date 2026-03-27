@@ -129,6 +129,11 @@
     background-color: rgba(0, 0, 0, 0.2);
     border-radius: 4px;
     overflow-x: auto;
+
+    &:focus-visible {
+        outline: 2px solid var(--accent-color);
+        outline-offset: 2px;
+    }
 }
 
 .inlineCode {

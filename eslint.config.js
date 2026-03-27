@@ -211,6 +211,21 @@ export default defineConfig(
         },
     },
     {
+        files: ['src/utils/testing/serveDistClient.ts'],
+        rules: {
+            'import/extensions': [
+                ERROR,
+                'ignorePackages',
+                {
+                    js: 'never',
+                    jsx: 'never',
+                    ts: 'always',
+                    tsx: 'never',
+                },
+            ],
+        },
+    },
+    {
         files: [
             '**/*.spec.tsx',
             '**/*.spec.js',

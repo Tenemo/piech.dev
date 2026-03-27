@@ -4,7 +4,7 @@ import {
     type ReporterDescription,
 } from '@playwright/test';
 
-import { E2E_BASE_URL, E2E_PORT } from './src/utils/testing/e2eConfig';
+import { E2E_BASE_URL, E2E_PORT } from './e2e/support/e2eConfig';
 
 const reporters: ReporterDescription[] = process.env.CI
     ? [

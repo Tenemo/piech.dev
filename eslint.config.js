@@ -211,7 +211,11 @@ export default defineConfig(
         },
     },
     {
-        files: ['src/utils/testing/serveDistClient.ts'],
+        files: [
+            'src/utils/build/fetchGithubData.ts',
+            'src/utils/build/validateBuiltHtmlCsp.ts',
+            'e2e/support/serveDistClient.ts',
+        ],
         rules: {
             'import/extensions': [
                 ERROR,
@@ -220,6 +224,23 @@ export default defineConfig(
                     js: 'never',
                     jsx: 'never',
                     ts: 'always',
+                    tsx: 'never',
+                },
+            ],
+        },
+    },
+    {
+        files: [
+            'src/features/Projects/ProjectItem/ProjectMarkdown/ProjectMarkdown.tsx',
+        ],
+        rules: {
+            'import/extensions': [
+                ERROR,
+                'ignorePackages',
+                {
+                    js: 'always',
+                    jsx: 'never',
+                    ts: 'never',
                     tsx: 'never',
                 },
             ],

@@ -54,14 +54,14 @@ describe('ProjectItem', () => {
         ).toBeInTheDocument();
     });
 
-    it('renders an empty markdown area when repository content is missing', () => {
+    it('renders a fallback page heading when repository content is missing', () => {
         mockUseParams.mockReturnValue({ repo: 'missing-repo' });
 
         renderApp(<ProjectItem />, { withRouter: true });
 
         expect(screen.getByRole('main')).toBeInTheDocument();
         expect(
-            screen.queryByRole('heading', { level: 1 }),
-        ).not.toBeInTheDocument();
+            screen.getByRole('heading', { level: 1, name: 'missing-repo' }),
+        ).toBeInTheDocument();
     });
 });

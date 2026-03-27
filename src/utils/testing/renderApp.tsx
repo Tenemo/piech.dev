@@ -1,17 +1,15 @@
-// eslint-plugin-import mis-detects this named export in the installed version.
-// eslint-disable-next-line import/named
-import { render, RenderOptions } from '@testing-library/react';
+import * as TestingLibraryReact from '@testing-library/react';
 import React, { ReactElement } from 'react';
 import { BrowserRouter } from 'react-router';
 
 type CustomRenderOptions = {
     withRouter?: boolean;
-} & Omit<RenderOptions, 'wrapper'>;
+} & Omit<TestingLibraryReact.RenderOptions, 'wrapper'>;
 
 export const renderApp = (
     ui: ReactElement,
     { withRouter = true, ...renderOptions }: CustomRenderOptions = {},
-): ReturnType<typeof render> => {
+): ReturnType<typeof TestingLibraryReact.render> => {
     const Wrapper = ({
         children,
     }: {
@@ -23,5 +21,8 @@ export const renderApp = (
             <>{children}</>
         );
 
-    return render(ui, { wrapper: Wrapper, ...renderOptions });
+    return TestingLibraryReact.render(ui, {
+        wrapper: Wrapper,
+        ...renderOptions,
+    });
 };

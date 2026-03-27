@@ -25,7 +25,7 @@ Before you declare a set of tasks is done:
 
 1. Make sure npm installs correctly.
 2. Make sure `npm run tsc` doesn't return any errors or warnings.
-3. Make sure eslint passes with no errors.
+3. Make sure eslint passes with no errors. Use `npm run eslint:fix` liberally, instead of fixing minor formatting errors yourself.
 4. Make sure stylelint passes.
 5. Make sure the page builds with `npm run build` for production with no errors.
 6. Make sure Playwright E2E tests pass.

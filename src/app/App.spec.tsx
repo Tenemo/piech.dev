@@ -1,19 +1,13 @@
 import { screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
+import { MAIN_CONTENT_ID } from './accessibility';
 import App from './App';
 
 import { renderApp } from 'utils/testing/renderApp';
 
 describe('App', () => {
-    beforeEach(() => {
-        Object.defineProperty(window, 'location', {
-            value: { pathname: '/' },
-            writable: true,
-        });
-    });
-
     it('should render header and footer on all routes', () => {
         renderApp(
             <MemoryRouter initialEntries={['/']}>
@@ -30,5 +24,18 @@ describe('App', () => {
         expect(footerElement).toBeInTheDocument();
         const githubLink = screen.getByLabelText('GitHub repository');
         expect(githubLink).toBeInTheDocument();
+    });
+
+    it('targets the skip link at the current route instead of the base URL', () => {
+        renderApp(
+            <MemoryRouter initialEntries={['/projects/']}>
+                <App />
+            </MemoryRouter>,
+            { withRouter: false },
+        );
+
+        expect(
+            screen.getByRole('link', { name: /skip to main content/i }),
+        ).toHaveAttribute('href', `/projects/#${MAIN_CONTENT_ID}`);
     });
 });

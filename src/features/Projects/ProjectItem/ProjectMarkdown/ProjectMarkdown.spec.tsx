@@ -21,6 +21,26 @@ describe('ProjectMarkdown', () => {
         expect(screen.getByText('This is a paragraph.')).toBeInTheDocument();
     });
 
+    it('uses the configured project name as the page heading and strips a redundant README title', () => {
+        render(
+            <ProjectMarkdown
+                markdown={'# sealed-vote-web\n\nOverview paragraph.'}
+                repo="sealed-vote-web"
+            />,
+        );
+
+        expect(
+            screen.getByRole('heading', { level: 1, name: 'sealed.vote' }),
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByRole('heading', {
+                level: 1,
+                name: 'sealed-vote-web',
+            }),
+        ).not.toBeInTheDocument();
+        expect(screen.getByText('Overview paragraph.')).toBeInTheDocument();
+    });
+
     it('renders fenced code blocks without nested pre tags', () => {
         const { container } = render(
             <ProjectMarkdown
@@ -188,5 +208,8 @@ describe('ProjectMarkdown', () => {
         expect(
             screen.queryByLabelText(/Repository created:/i),
         ).not.toBeInTheDocument();
+        expect(
+            screen.getByRole('heading', { level: 1, name: 'missing-repo' }),
+        ).toBeInTheDocument();
     });
 });

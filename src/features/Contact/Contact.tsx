@@ -2,6 +2,7 @@ import React from 'react';
 
 import styles from './contact.module.scss';
 
+import { MAIN_CONTENT_ID } from 'app/accessibility';
 import { SITE_LINKS } from 'app/siteLinks';
 import {
     EmailIcon,
@@ -51,7 +52,7 @@ const CONTACT_ITEMS: readonly ContactItem[] = [
 
 const Contact = (): React.JSX.Element => {
     return (
-        <main className={styles.main}>
+        <main className={styles.main} id={MAIN_CONTENT_ID} tabIndex={-1}>
             <h2>Contact</h2>
             <div className={'divider'} />
             <div className={styles.contactInfoContainer}>

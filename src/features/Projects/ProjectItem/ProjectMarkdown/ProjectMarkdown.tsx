@@ -115,13 +115,17 @@ const ProjectMarkdown = ({
             const match = /language-(\w+)/.exec(className ?? '');
             return match ? (
                 <SyntaxHighlighter
+                    {...props}
+                    aria-label={
+                        match[1] ? `${match[1]} code example` : 'Code example'
+                    }
                     className={styles.codeBlock}
                     language={match[1]}
                     // @ts-expect-error react-syntax-highlighter style typings are inaccurate
                     style={vscDarkPlus}
+                    tabIndex={0}
                     wrapLines={true}
                     wrapLongLines={true}
-                    {...props}
                 >
                     {/* eslint-disable-next-line @typescript-eslint/no-base-to-string */}
                     {String(children).replace(/\n$/, '')}

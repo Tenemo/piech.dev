@@ -32,6 +32,11 @@ describe('ProjectMarkdown', () => {
         const preElements = container.querySelectorAll('pre');
         expect(preElements).toHaveLength(1);
         expect(preElements[0]).toHaveClass(styles.codeBlock);
+        expect(preElements[0]).toHaveAttribute('tabIndex', '0');
+        expect(preElements[0]).toHaveAttribute(
+            'aria-label',
+            'typescript code example',
+        );
         expect(preElements[0].querySelector('pre')).toBeNull();
         expect(preElements[0]).toHaveTextContent(
             'const test: string = "Hello";',

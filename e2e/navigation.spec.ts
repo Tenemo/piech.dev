@@ -1,65 +1,45 @@
 import { expect, test } from '@playwright/test';
 
-import {
-    FOOTER_REPOSITORY_URL,
-    HOME_CTA_CONTRACTS,
-    HOME_PAGE,
-    TOP_LEVEL_PAGES,
-} from './support/siteContracts';
-import { expectTopLevelPageLoaded } from './support/siteSupport';
+test.describe('navigation chrome', () => {
+    test('skip link targets the current route instead of the site root', async ({
+        page,
+    }) => {
+        await page.goto('/projects/', { waitUntil: 'load' });
 
-test('header navigation reaches each top-level section', async ({ page }) => {
-    await page.goto(HOME_PAGE.route);
+        await expect(
+            page.getByRole('link', { name: 'Skip to main content' }),
+        ).toHaveAttribute('href', '/projects/#main-content');
+    });
 
-    const navigation = page.getByRole('navigation', { name: 'Primary' });
+    test('projects is highlighted on the projects listing route', async ({
+        page,
+    }) => {
+        await page.goto('/projects/', { waitUntil: 'load' });
+        const primaryNav = page.getByRole('navigation', { name: 'Primary' });
 
-    for (const destination of TOP_LEVEL_PAGES) {
-        await test.step(destination.navigationLinkName, async () => {
-            await navigation
-                .getByRole('link', { name: destination.navigationLinkName })
-                .click();
+        await expect(
+            primaryNav.getByRole('link', { exact: true, name: 'Projects' }),
+        ).toHaveAttribute('aria-current', 'page');
+        await expect(
+            primaryNav.getByRole('link', { exact: true, name: 'About me' }),
+        ).not.toHaveAttribute('aria-current', 'page');
+        await expect(
+            primaryNav.getByRole('link', { exact: true, name: 'Contact' }),
+        ).not.toHaveAttribute('aria-current', 'page');
+    });
 
-            await expectTopLevelPageLoaded(page, destination);
-        });
-    }
-});
+    test('contact is highlighted on the contact route', async ({ page }) => {
+        await page.goto('/contact/', { waitUntil: 'load' });
+        const primaryNav = page.getByRole('navigation', { name: 'Primary' });
 
-test('home call-to-action links reach the intended sections', async ({
-    page,
-}) => {
-    await page.goto(HOME_PAGE.route);
-
-    for (const cta of HOME_CTA_CONTRACTS) {
-        await test.step(cta.linkName, async () => {
-            await page.getByRole('link', { name: cta.linkName }).click();
-
-            await expectTopLevelPageLoaded(page, cta.destination);
-
-            await page.goto(HOME_PAGE.route);
-        });
-    }
-});
-
-test('footer repository link remains available on top-level pages', async ({
-    page,
-}) => {
-    for (const topLevelPage of TOP_LEVEL_PAGES) {
-        await test.step(topLevelPage.route, async () => {
-            await page.goto(topLevelPage.route);
-
-            const repositoryLink = page.getByRole('link', {
-                name: 'GitHub repository',
-            });
-
-            await expect(repositoryLink).toHaveAttribute(
-                'href',
-                FOOTER_REPOSITORY_URL,
-            );
-            await expect(repositoryLink).toHaveAttribute('target', '_blank');
-            await expect(repositoryLink).toHaveAttribute(
-                'rel',
-                'noopener noreferrer',
-            );
-        });
-    }
+        await expect(
+            primaryNav.getByRole('link', { exact: true, name: 'Contact' }),
+        ).toHaveAttribute('aria-current', 'page');
+        await expect(
+            primaryNav.getByRole('link', { exact: true, name: 'About me' }),
+        ).not.toHaveAttribute('aria-current', 'page');
+        await expect(
+            primaryNav.getByRole('link', { exact: true, name: 'Projects' }),
+        ).not.toHaveAttribute('aria-current', 'page');
+    });
 });

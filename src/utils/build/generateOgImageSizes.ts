@@ -28,8 +28,6 @@ const imageFiles = readdirSync(ogImagesDirectory)
 
 const imageSizes = imageFiles.map((fileName) => {
     const imagePath = path.join(ogImagesDirectory, fileName);
-    // The path is resolved from the fixed OG images directory.
-    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const { width, height } = imageSize(readFileSync(imagePath));
 
     if (!width || !height) {

@@ -7,14 +7,12 @@ import {
     classifyLinkResource,
     isAllowedResourceUrl,
     isExecutableScript,
-} from './cspCompatibility.ts'; // eslint-disable-line import/extensions
+} from './cspCompatibility.ts';
 
 const outDir = path.resolve(process.cwd(), 'dist/client');
 const BANNED_SELECTORS = ['iframe', 'object', 'embed'] as const;
-const REMOTE_RESOURCE_TIMEOUT_MS = 10_000;
 
 async function findHtmlFiles(dir: string): Promise<string[]> {
-    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const dirents = await fs.readdir(dir, { withFileTypes: true });
     const files = await Promise.all(
         dirents.map(async (dirent) => {
@@ -43,69 +41,17 @@ function formatElementViolation({
     return `${path.relative(outDir, filePath)}: <${tagName.toLowerCase()}> ${details}`;
 }
 
-function shouldResolveRuntimeUrl(url: string): boolean {
-    return (
-        url.startsWith('//') ||
-        url.startsWith('http://') ||
-        url.startsWith('https://')
-    );
+function normalizeUrlForValidation(url: string): string {
+    return url.startsWith('//') ? `https:${url}` : url;
 }
 
-async function resolveRuntimeResourceUrl(url: string): Promise<string> {
-    if (!shouldResolveRuntimeUrl(url)) {
-        return url;
-    }
-
-    const resolvedUrl = url.startsWith('//') ? `https:${url}` : url;
-    const controller = new AbortController();
-    const timeout = setTimeout(() => {
-        controller.abort();
-    }, REMOTE_RESOURCE_TIMEOUT_MS);
-
-    try {
-        const headResponse = await fetch(resolvedUrl, {
-            method: 'HEAD',
-            redirect: 'follow',
-            signal: controller.signal,
-        });
-
-        if (headResponse.url) {
-            return headResponse.url;
-        }
-    } catch {
-        // Fall back to GET below for origins that reject HEAD.
-    } finally {
-        clearTimeout(timeout);
-    }
-
-    const getController = new AbortController();
-    const getTimeout = setTimeout(() => {
-        getController.abort();
-    }, REMOTE_RESOURCE_TIMEOUT_MS);
-
-    try {
-        const getResponse = await fetch(resolvedUrl, {
-            method: 'GET',
-            redirect: 'follow',
-            signal: getController.signal,
-        });
-
-        await getResponse.body?.cancel();
-
-        return getResponse.url || resolvedUrl;
-    } finally {
-        clearTimeout(getTimeout);
-    }
-}
-
-async function validateResourceUrl({
+function validateResourceUrl({
     attributeName,
     filePath,
     resourceType,
     tagName,
     url,
     violations,
-    runtimeUrlCache,
 }: {
     attributeName: 'href' | 'poster' | 'src';
     filePath: string;
@@ -113,31 +59,15 @@ async function validateResourceUrl({
     tagName: string;
     url: string;
     violations: string[];
-    runtimeUrlCache: Map<string, Promise<string>>;
-}): Promise<void> {
-    try {
-        const runtimeUrlPromise =
-            runtimeUrlCache.get(url) ?? resolveRuntimeResourceUrl(url);
+}): void {
+    const normalizedUrl = normalizeUrlForValidation(url);
+    const normalizedDetails =
+        normalizedUrl === url ? '' : `, normalized URL "${normalizedUrl}"`;
 
-        runtimeUrlCache.set(url, runtimeUrlPromise);
-        const runtimeUrl = await runtimeUrlPromise;
-
-        if (!isAllowedResourceUrl(runtimeUrl, resourceType)) {
-            const runtimeDetails =
-                runtimeUrl === url ? '' : `, runtime URL "${runtimeUrl}"`;
-
-            violations.push(
-                formatElementViolation({
-                    details: `resource origin is outside the ${resourceType} allowlist (${attributeName}="${url}"${runtimeDetails})`,
-                    filePath,
-                    tagName,
-                }),
-            );
-        }
-    } catch (error) {
+    if (!isAllowedResourceUrl(normalizedUrl, resourceType)) {
         violations.push(
             formatElementViolation({
-                details: `failed to resolve runtime URL for ${attributeName}="${url}" (${String(error)})`,
+                details: `resource origin is outside the ${resourceType} allowlist (${attributeName}="${url}"${normalizedDetails})`,
                 filePath,
                 tagName,
             }),
@@ -156,10 +86,8 @@ async function validateBuiltHtmlCsp(): Promise<void> {
         }
 
         const violations: string[] = [];
-        const runtimeUrlCache = new Map<string, Promise<string>>();
 
         for (const file of htmlFiles) {
-            // eslint-disable-next-line security/detect-non-literal-fs-filename
             const content = await fs.readFile(file, 'utf8');
             const dom = new JSDOM(content);
             const { document } = dom.window;
@@ -193,53 +121,43 @@ async function validateBuiltHtmlCsp(): Promise<void> {
                 }
             }
 
-            await Promise.all(
-                Array.from(
-                    document.querySelectorAll(
-                        'img[src], source[src], video[src], audio[src], track[src]',
-                    ),
-                ).map(async (element) => {
-                    const url = element.getAttribute('src');
-                    const tagName = element.tagName;
-                    const resourceType = tagName === 'IMG' ? 'image' : 'media';
+            for (const element of document.querySelectorAll(
+                'img[src], source[src], video[src], audio[src], track[src]',
+            )) {
+                const url = element.getAttribute('src');
+                const tagName = element.tagName;
+                const resourceType = tagName === 'IMG' ? 'image' : 'media';
 
-                    if (!url) {
-                        return;
-                    }
+                if (!url) {
+                    continue;
+                }
 
-                    await validateResourceUrl({
-                        attributeName: 'src',
-                        filePath: file,
-                        resourceType,
-                        runtimeUrlCache,
-                        tagName,
-                        url,
-                        violations,
-                    });
-                }),
-            );
+                validateResourceUrl({
+                    attributeName: 'src',
+                    filePath: file,
+                    resourceType,
+                    tagName,
+                    url,
+                    violations,
+                });
+            }
 
-            await Promise.all(
-                Array.from(document.querySelectorAll('video[poster]')).map(
-                    async (element) => {
-                        const posterUrl = element.getAttribute('poster');
+            for (const element of document.querySelectorAll('video[poster]')) {
+                const posterUrl = element.getAttribute('poster');
 
-                        if (!posterUrl) {
-                            return;
-                        }
+                if (!posterUrl) {
+                    continue;
+                }
 
-                        await validateResourceUrl({
-                            attributeName: 'poster',
-                            filePath: file,
-                            resourceType: 'image',
-                            runtimeUrlCache,
-                            tagName: element.tagName,
-                            url: posterUrl,
-                            violations,
-                        });
-                    },
-                ),
-            );
+                validateResourceUrl({
+                    attributeName: 'poster',
+                    filePath: file,
+                    resourceType: 'image',
+                    tagName: element.tagName,
+                    url: posterUrl,
+                    violations,
+                });
+            }
 
             for (const element of document.querySelectorAll(
                 'link[href][rel]',
@@ -272,11 +190,10 @@ async function validateBuiltHtmlCsp(): Promise<void> {
                     continue;
                 }
 
-                await validateResourceUrl({
+                validateResourceUrl({
                     attributeName: 'href',
                     filePath: file,
                     resourceType,
-                    runtimeUrlCache,
                     tagName,
                     url: href,
                     violations,

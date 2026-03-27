@@ -7,7 +7,6 @@ const outDir = path.resolve(process.cwd(), 'dist/client');
 const EXCLUDED_EXTENSIONS = new Set(['.mp4', '.webm', '.ogg']);
 
 async function findHtmlFiles(dir: string): Promise<string[]> {
-    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const dirents = await fs.readdir(dir, { withFileTypes: true });
     const files = await Promise.all(
         dirents.map(async (dirent) => {
@@ -68,7 +67,6 @@ async function transformImagePaths(): Promise<void> {
         let transformedCount = 0;
 
         for (const file of htmlFiles) {
-            // eslint-disable-next-line security/detect-non-literal-fs-filename
             const content = await fs.readFile(file, 'utf-8');
             const dom = new JSDOM(content);
             const { document } = dom.window;
@@ -99,7 +97,6 @@ async function transformImagePaths(): Promise<void> {
             }
 
             if (replacementsInFile > 0) {
-                // eslint-disable-next-line security/detect-non-literal-fs-filename
                 await fs.writeFile(file, dom.serialize(), 'utf-8');
                 transformedCount += replacementsInFile;
             }

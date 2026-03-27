@@ -26,7 +26,6 @@ import path from 'node:path';
 import 'dotenv/config';
 import { Octokit } from 'octokit';
 
-// eslint-disable-next-line import/extensions
 import { PROJECTS } from '../../features/Projects/projectsData.ts';
 
 const OWNER = 'tenemo';

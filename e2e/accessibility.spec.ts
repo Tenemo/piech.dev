@@ -1,17 +1,14 @@
 import { AxeBuilder } from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
-import { PROJECTS } from '../src/features/Projects/projectsData';
-import { getProjectRoutePath } from '../src/features/Projects/projectUtils';
+import { FLAGSHIP_PROJECTS, TOP_LEVEL_PAGES } from './support/siteContracts';
 
 type AxeViolations = Awaited<ReturnType<AxeBuilder['analyze']>>['violations'];
 
 const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
 const ACCESSIBILITY_ROUTES = [
-    '/',
-    '/projects/',
-    '/contact/',
-    ...PROJECTS.map(({ repo }) => getProjectRoutePath(repo)),
+    ...TOP_LEVEL_PAGES.map(({ route }) => route),
+    ...FLAGSHIP_PROJECTS.map(({ route }) => route),
 ];
 const DESKTOP_KEYBOARD_PROJECTS = new Set([
     'Desktop Chrome',

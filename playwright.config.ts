@@ -35,13 +35,48 @@ const galaxyS24 = devices['Galaxy S24'];
 const { defaultBrowserType: _defaultBrowserType, ...galaxyS24Device } =
     galaxyS24;
 
+function parseWorkerCount(
+    rawValue: string | undefined,
+    fallback: number | undefined,
+): number | undefined {
+    if (rawValue === undefined || rawValue === '') {
+        return fallback;
+    }
+
+    const parsedValue = Number(rawValue);
+
+    if (
+        !Number.isFinite(parsedValue) ||
+        !Number.isInteger(parsedValue) ||
+        parsedValue < 1
+    ) {
+        throw new Error(
+            `Invalid worker count "${rawValue}". Expected a positive integer.`,
+        );
+    }
+
+    return parsedValue;
+}
+
+const ciWorkerCount = parseWorkerCount(process.env.PLAYWRIGHT_CI_WORKERS, 4);
+const remoteCiWorkerCount = parseWorkerCount(
+    process.env.PLAYWRIGHT_REMOTE_CI_WORKERS,
+    1,
+);
+
 export default defineConfig({
     testDir: './e2e',
     outputDir: 'test-results',
     fullyParallel: Boolean(process.env.CI) && !SHOULD_USE_REMOTE_E2E,
     forbidOnly: Boolean(process.env.CI),
     retries: process.env.CI ? 1 : 0,
-    workers: SHOULD_USE_REMOTE_E2E ? 1 : process.env.CI ? 4 : undefined,
+    workers: SHOULD_USE_REMOTE_E2E
+        ? process.env.CI
+            ? remoteCiWorkerCount
+            : 1
+        : process.env.CI
+          ? ciWorkerCount
+          : undefined,
     reporter: reporters,
     use: {
         baseURL: E2E_BASE_URL,

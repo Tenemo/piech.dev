@@ -60,6 +60,7 @@
         "e2e/**/*",
         "netlify/**/*",
         "scripts/**/*",
+        ".github/scripts/**/*",
         "temp/**/*",
         "eslint.config.js",
         "playwright.config.ts",

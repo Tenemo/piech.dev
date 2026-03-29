@@ -8,9 +8,59 @@ permissions:
     contents: read
 
 jobs:
+    resolve_config:
+        name: Resolve Playwright config
+        runs-on: ubuntu-latest
+        outputs:
+            runner_label: ${{ steps.config.outputs.runner_label }}
+            workers: ${{ steps.config.outputs.workers }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v5
+
+            - name: Use Node.js
+              uses: actions/setup-node@v5
+              with:
+                  node-version: '22.x'
+
+            - name: Read Playwright workflow config
+              id: config
+              run: node --experimental-strip-types .github/scripts/readPlaywrightWorkflowConfig.ts pull_request >> "$GITHUB_OUTPUT"
+
+    setup:
+        name: Prepare Playwright E2E
+        needs: resolve_config
+        runs-on: ${{ needs.resolve_config.outputs.runner_label }}
+        timeout-minutes: 30
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v5
+
+            - name: Use Node.js
+              uses: actions/setup-node@v5
+              with:
+                  node-version: '22.x'
+                  cache: 'npm'
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Build production output
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: npm run build:skip
+
+            - name: Upload built site artifact
+              uses: actions/upload-artifact@v6
+              with:
+                  name: playwright-dist-client
+                  path: dist/client/
+                  if-no-files-found: error
+
     playwright:
         name: Playwright E2E (${{ matrix.engine.name }})
-        runs-on: ubuntu-latest
+        needs: [resolve_config, setup]
+        runs-on: ${{ needs.resolve_config.outputs.runner_label }}
         timeout-minutes: 30
         strategy:
             fail-fast: false
@@ -36,6 +86,7 @@ jobs:
                       mobile_project: Mobile Safari (iPhone 15)
         env:
             PLAYWRIGHT_BLOB_REPORT: 'true'
+            PLAYWRIGHT_CI_WORKERS: ${{ needs.resolve_config.outputs.workers }}
         steps:
             - name: Checkout
               uses: actions/checkout@v5
@@ -49,13 +100,21 @@ jobs:
             - name: Install dependencies
               run: npm ci
 
+            - name: Restore built site artifact
+              uses: actions/download-artifact@v5
+              with:
+                  name: playwright-dist-client
+                  path: dist/client
+
+            - name: Cache Playwright browsers
+              id: playwright-browser-cache
+              uses: actions/cache@v4
+              with:
+                  path: ~/.cache/ms-playwright
+                  key: ${{ runner.os }}-playwright-${{ matrix.engine.browser }}-${{ hashFiles('package-lock.json') }}
+
             - name: Install Playwright browser
               run: npx playwright install --with-deps ${{ matrix.engine.browser }}
-
-            - name: Build production output
-              env:
-                  GH_TOKEN: ${{ github.token }}
-              run: npm run build:skip
 
             - name: Run Playwright tests
               run: |
@@ -89,19 +148,27 @@ jobs:
         name: Merge Playwright report
         runs-on: ubuntu-latest
         steps:
+            - name: Skip merged report on green matrix
+              if: needs.playwright.result == 'success'
+              run: echo "Skipping merged Playwright HTML report because all PR matrix jobs passed."
+
             - name: Checkout
+              if: needs.playwright.result != 'success'
               uses: actions/checkout@v5
 
             - name: Use Node.js
+              if: needs.playwright.result != 'success'
               uses: actions/setup-node@v5
               with:
                   node-version: '22.x'
                   cache: 'npm'
 
             - name: Install dependencies
+              if: needs.playwright.result != 'success'
               run: npm ci
 
             - name: Download Playwright blob reports
+              if: needs.playwright.result != 'success'
               uses: actions/download-artifact@v5
               with:
                   merge-multiple: true
@@ -109,10 +176,11 @@ jobs:
                   pattern: playwright-blob-report-*
 
             - name: Merge Playwright HTML report
+              if: needs.playwright.result != 'success'
               run: npx playwright merge-reports --reporter html ./all-blob-reports
 
             - name: Upload merged Playwright HTML report
-              if: always()
+              if: needs.playwright.result != 'success'
               uses: actions/upload-artifact@v6
               with:
                   name: playwright-report

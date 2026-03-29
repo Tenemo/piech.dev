@@ -68,6 +68,19 @@ describe('trigger-production-e2e Netlify function', () => {
         expect(fetchMock.mock.calls[0]?.[1]).toMatchObject({
             method: 'POST',
         });
+        expect(fetchMock.mock.calls[0]?.[1]?.body).toBe(
+            JSON.stringify({
+                inputs: {
+                    base_url: 'https://piech.dev',
+                    deploy_branch: 'master',
+                    deploy_context: 'production',
+                    deploy_id: 'deploy-123',
+                    deploy_url: 'https://65b.example.netlify.app',
+                    published_url: 'https://piech.dev',
+                },
+                ref: 'master',
+            }),
+        );
         expect(response.body).toContain('"dispatched":true');
     });
 

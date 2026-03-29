@@ -6,6 +6,7 @@
 - Never use any emojis anywhere, in code, comments, documentation, anywhere.
 - Never run any potentially destructive git commands or anything that could undo work. Do not rely on git, leave it to me.
 - Never run any potentially destructive commands outside of the repository.
+- When writing tests, do not rely only on obvious "A equals A" kind of tests. Test various, aggressive cases, different inputs, edge cases. Make sure the tests are robust. The tests should be useful, not just brittle simple equality checks. Do not test external libraries, focus on testing the application logic we wrote.
 
 # Debugging
 

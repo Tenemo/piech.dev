@@ -181,10 +181,7 @@ export const handler = async (
             'production-e2e.yml',
         );
         const githubToken = getEnv('PRODUCTION_E2E_GITHUB_TOKEN');
-        const dispatchRef = getEnv(
-            'PRODUCTION_E2E_GITHUB_REF',
-            deployMetadata.branch || 'master',
-        );
+        const dispatchRef = getEnv('PRODUCTION_E2E_GITHUB_REF', requiredBranch);
         const dispatchPayload = buildWorkflowDispatchPayload({
             baseUrl: targetUrl,
             deployMetadata,

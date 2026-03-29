@@ -4,7 +4,11 @@ import {
     type ReporterDescription,
 } from '@playwright/test';
 
-import { E2E_BASE_URL, E2E_PORT } from './e2e/support/e2eConfig';
+import {
+    E2E_BASE_URL,
+    E2E_PORT,
+    SHOULD_USE_REMOTE_E2E,
+} from './e2e/support/e2eConfig';
 
 const reporters: ReporterDescription[] = process.env.CI
     ? [
@@ -65,14 +69,16 @@ export default defineConfig({
             },
         },
     ],
-    webServer: {
-        command: 'npm run serve:e2e',
-        env: {
-            ...process.env,
-            PORT: String(E2E_PORT),
-        },
-        reuseExistingServer: !process.env.CI,
-        timeout: 120 * 1000,
-        url: E2E_BASE_URL,
-    },
+    webServer: SHOULD_USE_REMOTE_E2E
+        ? undefined
+        : {
+              command: 'npm run serve:e2e',
+              env: {
+                  ...process.env,
+                  PORT: String(E2E_PORT),
+              },
+              reuseExistingServer: !process.env.CI,
+              timeout: 120 * 1000,
+              url: E2E_BASE_URL,
+          },
 });

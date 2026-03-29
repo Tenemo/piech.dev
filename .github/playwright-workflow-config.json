@@ -1,0 +1,11 @@
+{
+    "pull_request": {
+        "runnerLabel": "ubuntu-latest",
+        "workers": 4
+    },
+    "production": {
+        "runnerLabel": "ubuntu-latest",
+        "maxParallel": 3,
+        "workers": 1
+    }
+}

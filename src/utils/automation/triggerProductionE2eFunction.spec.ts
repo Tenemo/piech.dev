@@ -2,7 +2,8 @@ import { createHash, createHmac } from 'node:crypto';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { handler } from '../../../netlify/functions/trigger-production-e2e';
+import { handler } from 'netlify/functions/trigger-production-e2e';
+import { PRODUCTION_E2E_REPOSITORY_DISPATCH_EVENT } from 'utils/automation/productionE2e';
 
 function createNetlifySignature(body: string, secret: string): string {
     const encodedHeader = Buffer.from(
@@ -70,7 +71,7 @@ describe('trigger-production-e2e Netlify function', () => {
         });
         expect(fetchMock.mock.calls[0]?.[1]?.body).toBe(
             JSON.stringify({
-                inputs: {
+                client_payload: {
                     base_url: 'https://piech.dev',
                     deploy_branch: 'master',
                     deploy_context: 'production',
@@ -78,7 +79,7 @@ describe('trigger-production-e2e Netlify function', () => {
                     deploy_url: 'https://65b.example.netlify.app',
                     published_url: 'https://piech.dev',
                 },
-                ref: 'master',
+                event_type: PRODUCTION_E2E_REPOSITORY_DISPATCH_EVENT,
             }),
         );
         expect(response.body).toContain('"dispatched":true');

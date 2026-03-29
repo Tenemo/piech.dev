@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 async function loadE2eConfig(): Promise<
-    typeof import('../../../e2e/support/e2eConfig')
+    typeof import('e2e/support/e2eConfig')
 > {
     vi.resetModules();
-    return import('../../../e2e/support/e2eConfig');
+    return import('e2e/support/e2eConfig');
 }
 
 describe('E2E config', () => {

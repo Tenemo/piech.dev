@@ -1,10 +1,12 @@
 import { expect, test } from '@playwright/test';
 
+import { gotoRoute } from './support/siteSupport';
+
 test.describe('navigation chrome', () => {
     test('skip link targets the current route instead of the site root', async ({
         page,
     }) => {
-        await page.goto('/projects/', { waitUntil: 'load' });
+        await gotoRoute(page, '/projects/');
 
         await expect(
             page.getByRole('link', { name: 'Skip to main content' }),
@@ -14,7 +16,7 @@ test.describe('navigation chrome', () => {
     test('projects is highlighted on the projects listing route', async ({
         page,
     }) => {
-        await page.goto('/projects/', { waitUntil: 'load' });
+        await gotoRoute(page, '/projects/');
         const primaryNav = page.getByRole('navigation', { name: 'Primary' });
 
         await expect(
@@ -29,7 +31,7 @@ test.describe('navigation chrome', () => {
     });
 
     test('contact is highlighted on the contact route', async ({ page }) => {
-        await page.goto('/contact/', { waitUntil: 'load' });
+        await gotoRoute(page, '/contact/');
         const primaryNav = page.getByRole('navigation', { name: 'Primary' });
 
         await expect(

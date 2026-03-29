@@ -1,12 +1,12 @@
 import { expect, test } from '@playwright/test';
 
 import { CONTACT_LINK_CONTRACTS, CONTACT_PAGE } from './support/siteContracts';
-import { expectTopLevelPageLoaded } from './support/siteSupport';
+import { expectTopLevelPageLoaded, gotoRoute } from './support/siteSupport';
 
 test('contact page renders expected contact methods and link attributes', async ({
     page,
 }) => {
-    await page.goto(CONTACT_PAGE.route);
+    await gotoRoute(page, CONTACT_PAGE.route);
 
     await expectTopLevelPageLoaded(page, CONTACT_PAGE);
 

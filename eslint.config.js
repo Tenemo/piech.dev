@@ -1,4 +1,4 @@
-import { readdirSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 
 import { fixupConfigRules, fixupPluginRules } from '@eslint/compat';
 import eslint from '@eslint/js';
@@ -23,11 +23,25 @@ import { plugin as tsPlugin, configs as tsConfigs } from 'typescript-eslint';
 const OFF = 0;
 const ERROR = 2;
 
-const srcAliasPattern = `^(${readdirSync(new URL('./src/', import.meta.url), {
-    withFileTypes: true,
-})
-    .map((direct) => direct.name.replace(/(\.ts){1}(x?)/, ''))
-    .join('|')})/`;
+const tsconfig = JSON.parse(
+    readFileSync(new URL('./tsconfig.json', import.meta.url), 'utf8'),
+);
+const compilerOptions =
+    typeof tsconfig === 'object' && tsconfig !== null
+        ? tsconfig.compilerOptions
+        : undefined;
+const tsconfigPaths =
+    typeof compilerOptions === 'object' &&
+    compilerOptions !== null &&
+    typeof compilerOptions.paths === 'object' &&
+    compilerOptions.paths !== null
+        ? compilerOptions.paths
+        : {};
+const srcAliasPattern = `^(${Object.keys(tsconfigPaths)
+    .map((aliasPattern) => aliasPattern.replace(/\/\*$/, ''))
+    .sort((left, right) => left.localeCompare(right))
+    .map((aliasPattern) => aliasPattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+    .join('|')})(/|$)`;
 
 export default defineConfig(
     eslint.configs.recommended,
@@ -276,6 +290,8 @@ export default defineConfig(
             '.tmp/*',
             'coverage/*',
             'dist/*',
+            'playwright-report/*',
+            'test-results/*',
             'temp/*',
             '**/*.html',
             '.react-router/*',

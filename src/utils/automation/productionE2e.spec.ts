@@ -3,10 +3,11 @@ import { createHash, createHmac } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
 
 import {
-    buildWorkflowDispatchPayload,
+    buildRepositoryDispatchPayload,
     extractNetlifyDeployMetadata,
     isMatchingProductionDeploy,
     parseGitHubRepository,
+    PRODUCTION_E2E_REPOSITORY_DISPATCH_EVENT,
     verifyNetlifyWebhookSignature,
 } from './productionE2e';
 
@@ -124,9 +125,9 @@ describe('production E2E automation helpers', () => {
         ).toBe(false);
     });
 
-    it('builds the GitHub workflow dispatch payload from deploy metadata', () => {
+    it('builds the GitHub repository dispatch payload from deploy metadata', () => {
         expect(
-            buildWorkflowDispatchPayload({
+            buildRepositoryDispatchPayload({
                 baseUrl: 'https://piech.dev',
                 deployMetadata: {
                     branch: 'master',
@@ -135,10 +136,9 @@ describe('production E2E automation helpers', () => {
                     deployUrl: 'https://65b.example.netlify.app',
                     publishedUrl: 'https://piech.dev',
                 },
-                ref: 'master',
             }),
         ).toEqual({
-            inputs: {
+            client_payload: {
                 base_url: 'https://piech.dev',
                 deploy_branch: 'master',
                 deploy_context: 'production',
@@ -146,7 +146,7 @@ describe('production E2E automation helpers', () => {
                 deploy_url: 'https://65b.example.netlify.app',
                 published_url: 'https://piech.dev',
             },
-            ref: 'master',
+            event_type: PRODUCTION_E2E_REPOSITORY_DISPATCH_EVENT,
         });
     });
 

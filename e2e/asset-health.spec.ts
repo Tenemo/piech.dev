@@ -1,30 +1,23 @@
 import { expect, test, type ConsoleMessage } from '@playwright/test';
 
-import { E2E_BASE_URL } from './support/e2eConfig';
-import {
-    getInternalAssetPaths,
-    getPublicRoutes,
-    runRouteChecks,
-} from './support/siteSupport';
+import { E2E_BASE_URL, SHOULD_USE_REMOTE_E2E } from './support/e2eConfig';
+import { PUBLIC_ROUTES } from './support/siteContracts';
+import { getInternalAssetPaths, gotoRoute } from './support/siteSupport';
 
-test.beforeEach(({ browserName: _browserName }, testInfo) => {
-    test.skip(
-        testInfo.project.name !== 'Desktop Chrome',
-        'Asset and console checks are browser-invariant and run once in Desktop Chrome.',
-    );
-});
+test.describe('asset health', () => {
+    test.describe.configure({ mode: 'parallel' });
 
-test('all public routes reference healthy internal assets', async ({
-    page,
-    request,
-}) => {
-    const publicRoutes = await getPublicRoutes(page);
+    for (const route of PUBLIC_ROUTES) {
+        test(`${route} references healthy internal assets`, async ({
+            page,
+            request,
+        }) => {
+            test.slow(
+                SHOULD_USE_REMOTE_E2E,
+                'Remote production asset checks traverse many routes and request every internal asset.',
+            );
 
-    await runRouteChecks({
-        routes: publicRoutes,
-        label: 'asset health route',
-        check: async (route) => {
-            await page.goto(route, { waitUntil: 'load' });
+            await gotoRoute(page, route);
 
             const internalAssetPaths = await getInternalAssetPaths(page);
 
@@ -38,45 +31,36 @@ test('all public routes reference healthy internal assets', async ({
                     `${route} asset ${assetPath} returned status ${String(response.status())}.`,
                 ).toBe(true);
             }
-        },
-    });
-});
+        });
 
-test('all public routes emit no console or page errors', async ({ page }) => {
-    const publicRoutes = await getPublicRoutes(page);
-    const consoleErrors: string[] = [];
-    const pageErrors: string[] = [];
-    const consoleListener = (message: ConsoleMessage): void => {
-        if (message.type() === 'error') {
-            consoleErrors.push(message.text());
-        }
-    };
-    const pageErrorListener = (error: Error): void => {
-        pageErrors.push(error.message);
-    };
+        test(`${route} emits no console or page errors`, async ({ page }) => {
+            const consoleErrors: string[] = [];
+            const pageErrors: string[] = [];
+            const consoleListener = (message: ConsoleMessage): void => {
+                if (message.type() === 'error') {
+                    consoleErrors.push(message.text());
+                }
+            };
+            const pageErrorListener = (error: Error): void => {
+                pageErrors.push(error.message);
+            };
 
-    page.on('console', consoleListener);
-    page.on('pageerror', pageErrorListener);
+            page.on('console', consoleListener);
+            page.on('pageerror', pageErrorListener);
 
-    try {
-        await runRouteChecks({
-            routes: publicRoutes,
-            label: 'runtime health route',
-            check: async (route) => {
-                consoleErrors.length = 0;
-                pageErrors.length = 0;
-
-                await page.goto(route, { waitUntil: 'load' });
+            try {
+                await gotoRoute(page, route);
+                await page.waitForTimeout(250);
 
                 expect(
                     consoleErrors,
                     `${route} emitted console errors.`,
                 ).toEqual([]);
                 expect(pageErrors, `${route} emitted page errors.`).toEqual([]);
-            },
+            } finally {
+                page.off('console', consoleListener);
+                page.off('pageerror', pageErrorListener);
+            }
         });
-    } finally {
-        page.off('console', consoleListener);
-        page.off('pageerror', pageErrorListener);
     }
 });

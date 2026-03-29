@@ -1,6 +1,13 @@
 [functions]
 directory = "netlify/functions"
 
+[[plugins]]
+package = "@netlify/plugin-lighthouse"
+
+[[plugins.inputs.audits]]
+path = "projects/"
+output_path = "reports/lighthouse-projects.html"
+
 [[headers]]
 for = "/*"
 [headers.values]

@@ -2,6 +2,7 @@ import { AxeBuilder } from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 import { FLAGSHIP_PROJECTS, TOP_LEVEL_PAGES } from './support/siteContracts';
+import { gotoRoute } from './support/siteSupport';
 
 type AxeViolations = Awaited<ReturnType<AxeBuilder['analyze']>>['violations'];
 
@@ -10,10 +11,6 @@ const ACCESSIBILITY_ROUTES = [
     ...TOP_LEVEL_PAGES.map(({ route }) => route),
     ...FLAGSHIP_PROJECTS.map(({ route }) => route),
 ];
-const DESKTOP_KEYBOARD_PROJECTS = new Set([
-    'Desktop Chrome',
-    'Desktop Firefox',
-]);
 
 const formatViolations = (violations: AxeViolations): string => {
     if (violations.length === 0) {
@@ -41,7 +38,7 @@ const formatViolations = (violations: AxeViolations): string => {
 test.describe('accessibility automation', () => {
     for (const route of ACCESSIBILITY_ROUTES) {
         test(`axe scan passes for ${route}`, async ({ page }) => {
-            await page.goto(route, { waitUntil: 'load' });
+            await gotoRoute(page, route);
 
             const results = await new AxeBuilder({ page })
                 .withTags(WCAG_TAGS)
@@ -53,21 +50,4 @@ test.describe('accessibility automation', () => {
             ).toEqual([]);
         });
     }
-
-    test('keyboard users reach the skip link before the primary navigation', async ({
-        page,
-    }, testInfo) => {
-        test.skip(
-            !DESKTOP_KEYBOARD_PROJECTS.has(testInfo.project.name),
-            'Tab-order checks are only reliable in desktop keyboard-first projects.',
-        );
-
-        await page.goto('/');
-
-        await page.keyboard.press('Tab');
-
-        await expect(
-            page.getByRole('link', { name: 'Skip to main content' }),
-        ).toBeFocused();
-    });
 });

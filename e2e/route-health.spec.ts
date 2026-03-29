@@ -1,24 +1,16 @@
 import { expect, test } from '@playwright/test';
 
-import { getPublicRoutes, runRouteChecks } from './support/siteSupport';
+import { PUBLIC_ROUTES } from './support/siteContracts';
+import { gotoRoute } from './support/siteSupport';
 
-test.beforeEach(({ browserName: _browserName }, testInfo) => {
-    test.skip(
-        testInfo.project.name !== 'Desktop Chrome',
-        'Route-health checks are browser-invariant and run once in Desktop Chrome.',
-    );
-});
+test.describe('route health', () => {
+    test.describe.configure({ mode: 'parallel' });
 
-test('every public route loads successfully with the global landmarks', async ({
-    page,
-}) => {
-    const publicRoutes = await getPublicRoutes(page);
-
-    await runRouteChecks({
-        routes: publicRoutes,
-        label: 'public route',
-        check: async (route) => {
-            const response = await page.goto(route, { waitUntil: 'load' });
+    for (const route of PUBLIC_ROUTES) {
+        test(`${route} loads successfully with the global landmarks`, async ({
+            page,
+        }) => {
+            const response = await gotoRoute(page, route);
 
             expect(
                 response,
@@ -32,6 +24,6 @@ test('every public route loads successfully with the global landmarks', async ({
             await expect(page.getByRole('banner')).toBeVisible();
             await expect(page.getByRole('main')).toBeVisible();
             await expect(page.getByRole('contentinfo')).toBeVisible();
-        },
-    });
+        });
+    }
 });

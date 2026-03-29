@@ -1,8 +1,11 @@
 import React from 'react';
 
-import { TECHNOLOGIES, type TechnologyName } from '../../technologies';
-
 import styles from './projectTechnologies.module.scss';
+
+import {
+    TECHNOLOGIES,
+    type TechnologyName,
+} from 'features/Projects/technologies';
 
 type ProjectTechnologiesProps = {
     technologies: readonly TechnologyName[];

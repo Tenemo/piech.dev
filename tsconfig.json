@@ -49,6 +49,7 @@
     "include": [
         "src/**/*",
         "e2e/**/*",
+        "netlify/**/*",
         "scripts/**/*",
         "temp/**/*",
         "eslint.config.js",

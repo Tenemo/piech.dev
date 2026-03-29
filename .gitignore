@@ -19,6 +19,7 @@ test-results/
 .DS_Store
 *concatenated.txt
 .react-router/
+.claude/
 
 # env
 .env

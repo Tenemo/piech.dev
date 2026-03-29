@@ -153,22 +153,22 @@ jobs:
               run: echo "Skipping merged Playwright HTML report because all PR matrix jobs passed."
 
             - name: Checkout
-              if: needs.playwright.result != 'success'
+              if: needs.playwright.result == 'failure' || needs.playwright.result == 'cancelled'
               uses: actions/checkout@v5
 
             - name: Use Node.js
-              if: needs.playwright.result != 'success'
+              if: needs.playwright.result == 'failure' || needs.playwright.result == 'cancelled'
               uses: actions/setup-node@v5
               with:
                   node-version: '22.x'
                   cache: 'npm'
 
             - name: Install dependencies
-              if: needs.playwright.result != 'success'
+              if: needs.playwright.result == 'failure' || needs.playwright.result == 'cancelled'
               run: npm ci
 
             - name: Download Playwright blob reports
-              if: needs.playwright.result != 'success'
+              if: needs.playwright.result == 'failure' || needs.playwright.result == 'cancelled'
               uses: actions/download-artifact@v5
               with:
                   merge-multiple: true
@@ -176,11 +176,11 @@ jobs:
                   pattern: playwright-blob-report-*
 
             - name: Merge Playwright HTML report
-              if: needs.playwright.result != 'success'
+              if: needs.playwright.result == 'failure' || needs.playwright.result == 'cancelled'
               run: npx playwright merge-reports --reporter html ./all-blob-reports
 
             - name: Upload merged Playwright HTML report
-              if: needs.playwright.result != 'success'
+              if: needs.playwright.result == 'failure' || needs.playwright.result == 'cancelled'
               uses: actions/upload-artifact@v6
               with:
                   name: playwright-report

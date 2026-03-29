@@ -36,6 +36,7 @@ const { defaultBrowserType: _defaultBrowserType, ...galaxyS24Device } =
     galaxyS24;
 
 function parseWorkerCount(
+    envVarName: string,
     rawValue: string | undefined,
     fallback: number | undefined,
 ): number | undefined {
@@ -51,15 +52,20 @@ function parseWorkerCount(
         parsedValue < 1
     ) {
         throw new Error(
-            `Invalid worker count "${rawValue}". Expected a positive integer.`,
+            `Invalid ${envVarName} value "${rawValue}". Expected a positive integer.`,
         );
     }
 
     return parsedValue;
 }
 
-const ciWorkerCount = parseWorkerCount(process.env.PLAYWRIGHT_CI_WORKERS, 4);
+const ciWorkerCount = parseWorkerCount(
+    'PLAYWRIGHT_CI_WORKERS',
+    process.env.PLAYWRIGHT_CI_WORKERS,
+    4,
+);
 const remoteCiWorkerCount = parseWorkerCount(
+    'PLAYWRIGHT_REMOTE_CI_WORKERS',
     process.env.PLAYWRIGHT_REMOTE_CI_WORKERS,
     1,
 );

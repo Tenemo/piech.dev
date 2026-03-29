@@ -28,6 +28,15 @@
             ],
             "utils/*": [
                 "./src/utils/*"
+            ],
+            "e2e/*": [
+                "./e2e/*"
+            ],
+            "netlify/*": [
+                "./netlify/*"
+            ],
+            "temp/*": [
+                "./temp/*"
             ]
         },
         "allowImportingTsExtensions": true,

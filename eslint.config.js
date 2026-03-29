@@ -23,11 +23,13 @@ import { plugin as tsPlugin, configs as tsConfigs } from 'typescript-eslint';
 const OFF = 0;
 const ERROR = 2;
 
-const srcAliasPattern = `^(${readdirSync(new URL('./src/', import.meta.url), {
-    withFileTypes: true,
-})
-    .map((direct) => direct.name.replace(/(\.ts){1}(x?)/, ''))
-    .join('|')})/`;
+const workspaceAliasNames = ['e2e', 'netlify', 'temp'];
+const srcAliasPattern = `^(${[
+    ...readdirSync(new URL('./src/', import.meta.url), {
+        withFileTypes: true,
+    }).map((direct) => direct.name.replace(/(\.ts){1}(x?)/, '')),
+    ...workspaceAliasNames,
+].join('|')})/`;
 
 export default defineConfig(
     eslint.configs.recommended,

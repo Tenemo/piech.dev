@@ -18,6 +18,11 @@ const srcRootContent = readdirSync(srcPath, { withFileTypes: true }).map(
 srcRootContent.forEach((directory) => {
     absolutePathAliases[directory] = path.join(srcPath, directory);
 });
+const workspacePathAliases: Record<string, string> = {
+    e2e: path.resolve('./e2e/'),
+    netlify: path.resolve('./netlify/'),
+    temp: path.resolve('./temp/'),
+};
 
 const manualChunks = (id: string): string | null => {
     if (id.includes('node_modules')) {
@@ -61,6 +66,7 @@ export default defineConfig(({ mode, command }) => {
             tsconfigPaths: true,
             alias: {
                 ...absolutePathAliases,
+                ...workspacePathAliases,
             },
         },
         server: {

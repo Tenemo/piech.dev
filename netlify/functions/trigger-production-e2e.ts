@@ -4,7 +4,7 @@ import {
     isMatchingProductionDeploy,
     parseGitHubRepository,
     verifyNetlifyWebhookSignature,
-} from '../../src/utils/automation/productionE2e';
+} from 'utils/automation/productionE2e';
 
 type NetlifyFunctionEvent = {
     body?: string | null;

@@ -2,7 +2,7 @@ import { createHash, createHmac } from 'node:crypto';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { handler } from './trigger-production-e2e';
+import { handler } from '../../../netlify/functions/trigger-production-e2e';
 
 function createNetlifySignature(body: string, secret: string): string {
     const encodedHeader = Buffer.from(

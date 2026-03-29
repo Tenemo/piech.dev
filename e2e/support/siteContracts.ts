@@ -1,3 +1,6 @@
+import { PROJECTS } from 'features/Projects/projectsData';
+import { getProjectRoutePath } from 'features/Projects/projectUtils';
+
 export type TopLevelPageContract = {
     route: string;
     navigationLinkName: string;
@@ -16,6 +19,12 @@ export type ContactLinkContract = {
     label: string;
     href: string;
     opensInNewTab: boolean;
+};
+
+export type ProjectRouteContract = {
+    name: string;
+    repo: string;
+    route: string;
 };
 
 export const PRODUCTION_SITE_ORIGIN = 'https://piech.dev';
@@ -105,6 +114,20 @@ export const CONTACT_LINK_CONTRACTS = [
         opensInNewTab: true,
     },
 ] as const satisfies readonly ContactLinkContract[];
+
+export const PROJECT_ROUTE_CONTRACTS: readonly ProjectRouteContract[] =
+    PROJECTS.map((project) => ({
+        name: project.name,
+        repo: project.repo,
+        route: getProjectRoutePath(project.repo),
+    })).sort((left, right) => left.route.localeCompare(right.route));
+
+export const PROJECT_ROUTES = PROJECT_ROUTE_CONTRACTS.map(({ route }) => route);
+
+export const PUBLIC_ROUTES = [
+    ...TOP_LEVEL_PAGES.map(({ route }) => route),
+    ...PROJECT_ROUTES,
+].sort((left, right) => left.localeCompare(right));
 
 export const toProductionUrl = (route: string): string =>
     new URL(route, `${PRODUCTION_SITE_ORIGIN}/`).toString();

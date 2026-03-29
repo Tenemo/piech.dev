@@ -1,35 +1,29 @@
 import { expect, test, type ConsoleMessage } from '@playwright/test';
 
 import { E2E_BASE_URL, SHOULD_USE_REMOTE_E2E } from './support/e2eConfig';
-import {
-    getInternalAssetPaths,
-    getPublicRoutes,
-    gotoRoute,
-    runRouteChecks,
-} from './support/siteSupport';
+import { PUBLIC_ROUTES } from './support/siteContracts';
+import { getInternalAssetPaths, gotoRoute } from './support/siteSupport';
 
-test.beforeEach(({ browserName: _browserName }, testInfo) => {
-    test.skip(
-        testInfo.project.name !== 'Desktop Chrome',
-        'Asset and console checks are browser-invariant and run once in Desktop Chrome.',
-    );
-});
+test.describe('asset health', () => {
+    test.describe.configure({ mode: 'parallel' });
 
-test('all public routes reference healthy internal assets', async ({
-    page,
-    request,
-}) => {
-    test.slow(
-        SHOULD_USE_REMOTE_E2E,
-        'Remote production asset checks traverse many routes and request every internal asset.',
-    );
+    test.beforeEach(({ browserName: _browserName }, testInfo) => {
+        test.skip(
+            testInfo.project.name !== 'Desktop Chrome',
+            'Asset and console checks are browser-invariant and run once in Desktop Chrome.',
+        );
+    });
 
-    const publicRoutes = await getPublicRoutes(page);
+    for (const route of PUBLIC_ROUTES) {
+        test(`${route} references healthy internal assets`, async ({
+            page,
+            request,
+        }) => {
+            test.slow(
+                SHOULD_USE_REMOTE_E2E,
+                'Remote production asset checks traverse many routes and request every internal asset.',
+            );
 
-    await runRouteChecks({
-        routes: publicRoutes,
-        label: 'asset health route',
-        check: async (route) => {
             await gotoRoute(page, route);
 
             const internalAssetPaths = await getInternalAssetPaths(page);
@@ -44,17 +38,9 @@ test('all public routes reference healthy internal assets', async ({
                     `${route} asset ${assetPath} returned status ${String(response.status())}.`,
                 ).toBe(true);
             }
-        },
-    });
-});
+        });
 
-test('all public routes emit no console or page errors', async ({ page }) => {
-    const publicRoutes = await getPublicRoutes(page);
-    await runRouteChecks({
-        routes: publicRoutes,
-        label: 'runtime health route',
-        check: async (route) => {
-            const routePage = await page.context().newPage();
+        test(`${route} emits no console or page errors`, async ({ page }) => {
             const consoleErrors: string[] = [];
             const pageErrors: string[] = [];
             const consoleListener = (message: ConsoleMessage): void => {
@@ -66,12 +52,12 @@ test('all public routes emit no console or page errors', async ({ page }) => {
                 pageErrors.push(error.message);
             };
 
-            routePage.on('console', consoleListener);
-            routePage.on('pageerror', pageErrorListener);
+            page.on('console', consoleListener);
+            page.on('pageerror', pageErrorListener);
 
             try {
-                await gotoRoute(routePage, route);
-                await routePage.waitForTimeout(250);
+                await gotoRoute(page, route);
+                await page.waitForTimeout(250);
 
                 expect(
                     consoleErrors,
@@ -79,10 +65,9 @@ test('all public routes emit no console or page errors', async ({ page }) => {
                 ).toEqual([]);
                 expect(pageErrors, `${route} emitted page errors.`).toEqual([]);
             } finally {
-                routePage.off('console', consoleListener);
-                routePage.off('pageerror', pageErrorListener);
-                await routePage.close();
+                page.off('console', consoleListener);
+                page.off('pageerror', pageErrorListener);
             }
-        },
-    });
+        });
+    }
 });

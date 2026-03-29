@@ -1,33 +1,28 @@
 import { expect, test, type Request } from '@playwright/test';
 
 import { E2E_BASE_URL } from './support/e2eConfig';
-import { PRODUCTION_SITE_ORIGIN } from './support/siteContracts';
+import { PRODUCTION_SITE_ORIGIN, PUBLIC_ROUTES } from './support/siteContracts';
 import {
-    getPublicRoutes,
     getSameOriginScriptSrcPaths,
     gotoRoute,
     getUnexpectedInlineScriptSummaries,
-    runRouteChecks,
 } from './support/siteSupport';
 
-test.beforeEach(({ browserName: _browserName }, testInfo) => {
-    test.skip(
-        testInfo.project.name !== 'Desktop Chrome',
-        'Zero-JS checks are browser-invariant and run once in Desktop Chrome.',
-    );
-});
+test.describe('zero-js contract', () => {
+    test.describe.configure({ mode: 'parallel' });
 
-test('all public routes ship without executable JavaScript', async ({
-    page,
-}) => {
-    const publicRoutes = await getPublicRoutes(page);
-    const sameOriginScriptRequests: string[] = [];
-    await runRouteChecks({
-        routes: publicRoutes,
-        label: 'zero-js route',
-        check: async (route) => {
-            sameOriginScriptRequests.length = 0;
+    test.beforeEach(({ browserName: _browserName }, testInfo) => {
+        test.skip(
+            testInfo.project.name !== 'Desktop Chrome',
+            'Zero-JS checks are browser-invariant and run once in Desktop Chrome.',
+        );
+    });
 
+    for (const route of PUBLIC_ROUTES) {
+        test(`${route} ships without executable JavaScript`, async ({
+            page,
+        }) => {
+            const sameOriginScriptRequests: string[] = [];
             const routeRequestListener = (request: Request): void => {
                 const requestUrl = new URL(request.url());
 
@@ -67,6 +62,6 @@ test('all public routes ship without executable JavaScript', async ({
             } finally {
                 page.off('request', routeRequestListener);
             }
-        },
-    });
+        });
+    }
 });

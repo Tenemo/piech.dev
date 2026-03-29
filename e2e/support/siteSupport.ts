@@ -1,16 +1,10 @@
-import {
-    expect,
-    test,
-    type APIRequestContext,
-    type Page,
-} from '@playwright/test';
+import { expect, type APIRequestContext, type Page } from '@playwright/test';
 
 import { E2E_BASE_URL, SHOULD_USE_REMOTE_E2E } from './e2eConfig';
 import {
     GITHUB_PROFILE_URL,
     PRODUCTION_SITE_ORIGIN,
     PROJECTS_PAGE,
-    TOP_LEVEL_PAGES,
     type TopLevelPageContract,
 } from './siteContracts';
 
@@ -40,14 +34,6 @@ const normalizeRoute = (route: string): string => {
 
 const uniqueSort = (values: readonly string[]): string[] =>
     Array.from(new Set(values)).sort();
-
-const formatError = (error: unknown): string => {
-    if (error instanceof Error) {
-        return error.message;
-    }
-
-    return String(error);
-};
 
 const isNetlifyChallengePage = async (page: Page): Promise<boolean> => {
     const bodyText = await page
@@ -127,42 +113,6 @@ export const gotoRoute = async (
     }
 
     return response ?? null;
-};
-
-export const getLinkedProjectRoutes = async (page: Page): Promise<string[]> => {
-    await gotoRoute(page, PROJECTS_PAGE.route);
-
-    return page.getByRole('link').evaluateAll((links, projectsRoute) => {
-        const normalize = (pathname: string): string =>
-            pathname === '/' || pathname.endsWith('/')
-                ? pathname
-                : `${pathname}/`;
-
-        return Array.from(
-            new Set(
-                links
-                    .map((link) => link.getAttribute('href'))
-                    .filter((href): href is string => href !== null)
-                    .map((href) => new URL(href, window.location.origin))
-                    .filter(
-                        (url) =>
-                            url.origin === window.location.origin &&
-                            url.pathname.startsWith(projectsRoute) &&
-                            url.pathname !== projectsRoute,
-                    )
-                    .map((url) => normalize(url.pathname)),
-            ),
-        ).sort();
-    }, PROJECTS_PAGE.route);
-};
-
-export const getPublicRoutes = async (page: Page): Promise<string[]> => {
-    const linkedProjectRoutes = await getLinkedProjectRoutes(page);
-
-    return uniqueSort([
-        ...TOP_LEVEL_PAGES.map(({ route }) => route),
-        ...linkedProjectRoutes,
-    ]);
 };
 
 export const getSitemapRoutes = async (
@@ -366,33 +316,4 @@ export const expectProjectPageLoaded = async (
     await expect(
         main.locator('p, ul, ol, pre, img, video').first(),
     ).toBeVisible();
-};
-
-export const runRouteChecks = async ({
-    routes,
-    label,
-    check,
-}: {
-    routes: readonly string[];
-    label: string;
-    check: (route: string) => Promise<void>;
-}): Promise<void> => {
-    const failures: string[] = [];
-
-    for (const route of routes) {
-        try {
-            await test.step(`${label}: ${route}`, async () => {
-                await check(route);
-            });
-        } catch (error) {
-            failures.push(`${route}\n${formatError(error)}`);
-        }
-    }
-
-    expect(
-        failures,
-        failures.length === 0
-            ? 'All route checks passed.'
-            : failures.join('\n\n'),
-    ).toEqual([]);
 };

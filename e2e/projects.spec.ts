@@ -1,42 +1,35 @@
 import { test } from '@playwright/test';
 
-import { FLAGSHIP_PROJECTS, PROJECTS_PAGE } from './support/siteContracts';
 import {
-    expectProjectPageLoaded,
-    getLinkedProjectRoutes,
-    gotoRoute,
-    runRouteChecks,
-} from './support/siteSupport';
+    PROJECT_ROUTE_CONTRACTS,
+    PROJECT_ROUTES,
+    PROJECTS_PAGE,
+} from './support/siteContracts';
+import { expectProjectPageLoaded, gotoRoute } from './support/siteSupport';
 
-test('flagship project cards open the intended detail pages', async ({
-    page,
-}) => {
-    await gotoRoute(page, PROJECTS_PAGE.route);
+test.describe('projects routes', () => {
+    test.describe.configure({ mode: 'parallel' });
 
-    for (const flagshipProject of FLAGSHIP_PROJECTS) {
-        await test.step(flagshipProject.cardName, async () => {
+    for (const projectRouteContract of PROJECT_ROUTE_CONTRACTS) {
+        test(`project card "${projectRouteContract.name}" opens its detail page`, async ({
+            page,
+        }) => {
+            await gotoRoute(page, PROJECTS_PAGE.route);
+
             await page
                 .getByRole('link', {
-                    name: `View ${flagshipProject.cardName} project details`,
+                    name: `View ${projectRouteContract.name} project details`,
                 })
                 .click();
 
-            await expectProjectPageLoaded(page, flagshipProject.route);
-
-            await gotoRoute(page, PROJECTS_PAGE.route);
+            await expectProjectPageLoaded(page, projectRouteContract.route);
         });
     }
-});
 
-test('all project detail routes load core content', async ({ page }) => {
-    const projectRoutes = await getLinkedProjectRoutes(page);
-
-    await runRouteChecks({
-        routes: projectRoutes,
-        label: 'project route',
-        check: async (route) => {
+    for (const route of PROJECT_ROUTES) {
+        test(`${route} loads core project content`, async ({ page }) => {
             await gotoRoute(page, route);
             await expectProjectPageLoaded(page, route);
-        },
-    });
+        });
+    }
 });

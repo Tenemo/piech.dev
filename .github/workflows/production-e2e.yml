@@ -8,31 +8,8 @@ on:
                 required: false
                 default: 'https://piech.dev'
                 type: string
-            deploy_branch:
-                description: Netlify deploy branch
-                required: false
-                default: ''
-                type: string
-            deploy_context:
-                description: Netlify deploy context
-                required: false
-                default: ''
-                type: string
-            deploy_id:
-                description: Netlify deploy ID
-                required: false
-                default: ''
-                type: string
-            deploy_url:
-                description: Netlify deploy URL
-                required: false
-                default: ''
-                type: string
-            published_url:
-                description: Netlify published URL
-                required: false
-                default: ''
-                type: string
+    repository_dispatch:
+        types: [production_e2e]
 
 permissions:
     contents: read
@@ -43,17 +20,40 @@ concurrency:
 
 jobs:
     playwright:
-        name: Production Playwright E2E
+        name: Production Playwright E2E (${{ matrix.project.name }})
         runs-on: ubuntu-latest
         timeout-minutes: 30
+        strategy:
+            fail-fast: false
+            max-parallel: 3
+            matrix:
+                project:
+                    - name: Desktop Chrome
+                      slug: desktop-chrome
+                      browser: chromium
+                    - name: Desktop Firefox
+                      slug: desktop-firefox
+                      browser: firefox
+                    - name: Desktop Safari
+                      slug: desktop-safari
+                      browser: webkit
+                    - name: Mobile Chrome (Galaxy S24)
+                      slug: mobile-chrome-galaxy-s24
+                      browser: chromium
+                    - name: Mobile Safari (iPhone 15)
+                      slug: mobile-safari-iphone-15
+                      browser: webkit
+                    - name: Mobile Firefox (Galaxy S24)
+                      slug: mobile-firefox-galaxy-s24
+                      browser: firefox
         env:
-            PLAYWRIGHT_BASE_URL: ${{ inputs.base_url || 'https://piech.dev' }}
+            PLAYWRIGHT_BLOB_REPORT: 'true'
         steps:
             - name: Checkout
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
 
             - name: Use Node.js
-              uses: actions/setup-node@v4
+              uses: actions/setup-node@v5
               with:
                   node-version: '22.x'
                   cache: 'npm'
@@ -61,8 +61,117 @@ jobs:
             - name: Install dependencies
               run: npm ci
 
-            - name: Install Playwright browsers
-              run: npx playwright install --with-deps
+            - name: Resolve production E2E context
+              env:
+                  EVENT_NAME: ${{ github.event_name }}
+                  INPUT_BASE_URL: ${{ inputs.base_url }}
+                  PAYLOAD_BASE_URL: ${{ github.event.client_payload.base_url }}
+                  PAYLOAD_DEPLOY_BRANCH: ${{ github.event.client_payload.deploy_branch }}
+                  PAYLOAD_DEPLOY_CONTEXT: ${{ github.event.client_payload.deploy_context }}
+                  PAYLOAD_DEPLOY_ID: ${{ github.event.client_payload.deploy_id }}
+                  PAYLOAD_DEPLOY_URL: ${{ github.event.client_payload.deploy_url }}
+                  PAYLOAD_PUBLISHED_URL: ${{ github.event.client_payload.published_url }}
+              run: |
+                  if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+                    base_url="${INPUT_BASE_URL:-https://piech.dev}"
+                    deploy_branch=""
+                    deploy_context=""
+                    deploy_id=""
+                    deploy_url=""
+                    published_url=""
+                  else
+                    base_url="${PAYLOAD_BASE_URL:-https://piech.dev}"
+                    deploy_branch="${PAYLOAD_DEPLOY_BRANCH:-}"
+                    deploy_context="${PAYLOAD_DEPLOY_CONTEXT:-}"
+                    deploy_id="${PAYLOAD_DEPLOY_ID:-}"
+                    deploy_url="${PAYLOAD_DEPLOY_URL:-}"
+                    published_url="${PAYLOAD_PUBLISHED_URL:-}"
+                  fi
+
+                  {
+                    echo "PLAYWRIGHT_BASE_URL=$base_url"
+                    echo "PRODUCTION_E2E_DEPLOY_BRANCH=$deploy_branch"
+                    echo "PRODUCTION_E2E_DEPLOY_CONTEXT=$deploy_context"
+                    echo "PRODUCTION_E2E_DEPLOY_ID=$deploy_id"
+                    echo "PRODUCTION_E2E_DEPLOY_URL=$deploy_url"
+                    echo "PRODUCTION_E2E_PUBLISHED_URL=$published_url"
+                  } >> "$GITHUB_ENV"
+
+            - name: Install Playwright browser
+              run: npx playwright install --with-deps ${{ matrix.project.browser }}
+
+            - name: Run Playwright tests against production
+              run: npx playwright test --project "${{ matrix.project.name }}"
+
+            - name: Upload Playwright blob report
+              if: always()
+              uses: actions/upload-artifact@v6
+              with:
+                  name: production-playwright-blob-report-${{ matrix.project.slug }}
+                  path: blob-report/
+                  if-no-files-found: ignore
+
+            - name: Upload Playwright raw results
+              if: failure()
+              uses: actions/upload-artifact@v6
+              with:
+                  name: production-playwright-test-results-${{ matrix.project.slug }}
+                  path: test-results/
+                  if-no-files-found: ignore
+
+    merge-production-playwright-report:
+        if: always()
+        needs: playwright
+        name: Merge Production Playwright report
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v5
+
+            - name: Use Node.js
+              uses: actions/setup-node@v5
+              with:
+                  node-version: '22.x'
+                  cache: 'npm'
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Resolve production E2E context
+              env:
+                  EVENT_NAME: ${{ github.event_name }}
+                  INPUT_BASE_URL: ${{ inputs.base_url }}
+                  PAYLOAD_BASE_URL: ${{ github.event.client_payload.base_url }}
+                  PAYLOAD_DEPLOY_BRANCH: ${{ github.event.client_payload.deploy_branch }}
+                  PAYLOAD_DEPLOY_CONTEXT: ${{ github.event.client_payload.deploy_context }}
+                  PAYLOAD_DEPLOY_ID: ${{ github.event.client_payload.deploy_id }}
+                  PAYLOAD_DEPLOY_URL: ${{ github.event.client_payload.deploy_url }}
+                  PAYLOAD_PUBLISHED_URL: ${{ github.event.client_payload.published_url }}
+              run: |
+                  if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+                    base_url="${INPUT_BASE_URL:-https://piech.dev}"
+                    deploy_branch=""
+                    deploy_context=""
+                    deploy_id=""
+                    deploy_url=""
+                    published_url=""
+                  else
+                    base_url="${PAYLOAD_BASE_URL:-https://piech.dev}"
+                    deploy_branch="${PAYLOAD_DEPLOY_BRANCH:-}"
+                    deploy_context="${PAYLOAD_DEPLOY_CONTEXT:-}"
+                    deploy_id="${PAYLOAD_DEPLOY_ID:-}"
+                    deploy_url="${PAYLOAD_DEPLOY_URL:-}"
+                    published_url="${PAYLOAD_PUBLISHED_URL:-}"
+                  fi
+
+                  {
+                    echo "PLAYWRIGHT_BASE_URL=$base_url"
+                    echo "PRODUCTION_E2E_DEPLOY_BRANCH=$deploy_branch"
+                    echo "PRODUCTION_E2E_DEPLOY_CONTEXT=$deploy_context"
+                    echo "PRODUCTION_E2E_DEPLOY_ID=$deploy_id"
+                    echo "PRODUCTION_E2E_DEPLOY_URL=$deploy_url"
+                    echo "PRODUCTION_E2E_PUBLISHED_URL=$published_url"
+                  } >> "$GITHUB_ENV"
 
             - name: Capture deploy metadata
               run: |
@@ -70,28 +179,27 @@ jobs:
                     echo "## Production deploy under test"
                     echo ""
                     echo "- Base URL: $PLAYWRIGHT_BASE_URL"
-                    echo "- Netlify deploy ID: ${{ inputs.deploy_id }}"
-                    echo "- Netlify deploy branch: ${{ inputs.deploy_branch }}"
-                    echo "- Netlify deploy context: ${{ inputs.deploy_context }}"
-                    echo "- Netlify deploy URL: ${{ inputs.deploy_url }}"
-                    echo "- Netlify published URL: ${{ inputs.published_url }}"
+                    echo "- Netlify deploy ID: $PRODUCTION_E2E_DEPLOY_ID"
+                    echo "- Netlify deploy branch: $PRODUCTION_E2E_DEPLOY_BRANCH"
+                    echo "- Netlify deploy context: $PRODUCTION_E2E_DEPLOY_CONTEXT"
+                    echo "- Netlify deploy URL: $PRODUCTION_E2E_DEPLOY_URL"
+                    echo "- Netlify published URL: $PRODUCTION_E2E_PUBLISHED_URL"
                   } >> "$GITHUB_STEP_SUMMARY"
 
-            - name: Run Playwright tests against production
-              run: npx playwright test
+            - name: Download Playwright blob reports
+              uses: actions/download-artifact@v5
+              with:
+                  merge-multiple: true
+                  path: production-blob-reports
+                  pattern: production-playwright-blob-report-*
 
-            - name: Upload Playwright HTML report
+            - name: Merge Playwright HTML report
+              run: npx playwright merge-reports --reporter html ./production-blob-reports
+
+            - name: Upload merged Playwright HTML report
               if: always()
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@v6
               with:
                   name: production-playwright-report
                   path: playwright-report/
-                  if-no-files-found: ignore
-
-            - name: Upload Playwright raw results
-              if: failure()
-              uses: actions/upload-artifact@v4
-              with:
-                  name: production-playwright-test-results
-                  path: test-results/
                   if-no-files-found: ignore

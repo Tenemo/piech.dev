@@ -10,16 +10,19 @@ import {
     SHOULD_USE_REMOTE_E2E,
 } from './e2e/support/e2eConfig';
 
-const reporters: ReporterDescription[] = process.env.CI
-    ? [
-          ['dot'],
-          ['github'],
-          ['html', { open: 'never', outputFolder: 'playwright-report' }],
-      ]
-    : [
-          ['list'],
-          ['html', { open: 'never', outputFolder: 'playwright-report' }],
-      ];
+const SHOULD_USE_BLOB_REPORTER = process.env.PLAYWRIGHT_BLOB_REPORT === 'true';
+const reporters: ReporterDescription[] = SHOULD_USE_BLOB_REPORTER
+    ? [['dot'], ['blob', { outputDir: 'blob-report' }]]
+    : process.env.CI
+      ? [
+            ['dot'],
+            ['github'],
+            ['html', { open: 'never', outputFolder: 'playwright-report' }],
+        ]
+      : [
+            ['list'],
+            ['html', { open: 'never', outputFolder: 'playwright-report' }],
+        ];
 const galaxyS24 = devices['Galaxy S24'];
 const { defaultBrowserType: _defaultBrowserType, ...galaxyS24Device } =
     galaxyS24;
@@ -27,9 +30,10 @@ const { defaultBrowserType: _defaultBrowserType, ...galaxyS24Device } =
 export default defineConfig({
     testDir: './e2e',
     outputDir: 'test-results',
+    fullyParallel: Boolean(process.env.CI) && !SHOULD_USE_REMOTE_E2E,
     forbidOnly: Boolean(process.env.CI),
     retries: process.env.CI ? 1 : 0,
-    workers: SHOULD_USE_REMOTE_E2E ? 1 : undefined,
+    workers: SHOULD_USE_REMOTE_E2E ? 1 : process.env.CI ? 4 : undefined,
     reporter: reporters,
     use: {
         baseURL: E2E_BASE_URL,

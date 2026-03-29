@@ -1,8 +1,9 @@
 import {
-    buildWorkflowDispatchPayload,
+    buildRepositoryDispatchPayload,
     extractNetlifyDeployMetadata,
     isMatchingProductionDeploy,
     parseGitHubRepository,
+    PRODUCTION_E2E_REPOSITORY_DISPATCH_EVENT,
     verifyNetlifyWebhookSignature,
 } from 'utils/automation/productionE2e';
 
@@ -176,22 +177,14 @@ export const handler = async (
         const repository = parseGitHubRepository(
             getEnv('PRODUCTION_E2E_GITHUB_REPOSITORY', 'Tenemo/piech.dev'),
         );
-        const workflowFile = getEnv(
-            'PRODUCTION_E2E_GITHUB_WORKFLOW',
-            'production-e2e.yml',
-        );
         const githubToken = getEnv('PRODUCTION_E2E_GITHUB_TOKEN');
-        const dispatchRef = getEnv('PRODUCTION_E2E_GITHUB_REF', requiredBranch);
-        const dispatchPayload = buildWorkflowDispatchPayload({
+        const dispatchPayload = buildRepositoryDispatchPayload({
             baseUrl: targetUrl,
             deployMetadata,
-            ref: dispatchRef,
         });
         const dispatchUrl = new URL(
-            `https://api.github.com/repos/${repository.owner}/${repository.repo}/actions/workflows/${encodeURIComponent(workflowFile)}/dispatches`,
+            `https://api.github.com/repos/${repository.owner}/${repository.repo}/dispatches`,
         );
-
-        dispatchUrl.searchParams.set('return_run_details', 'true');
 
         const dispatchResponse = await fetch(dispatchUrl, {
             body: JSON.stringify(dispatchPayload),
@@ -215,17 +208,9 @@ export const handler = async (
             });
         }
 
-        const dispatchResult = (await dispatchResponse
-            .json()
-            .catch(() => undefined)) as
-            | {
-                  html_url?: string;
-              }
-            | undefined;
-
         return jsonResponse(202, {
             dispatched: true,
-            run_url: dispatchResult?.html_url ?? '',
+            event_type: PRODUCTION_E2E_REPOSITORY_DISPATCH_EVENT,
         });
     } catch (error) {
         return jsonResponse(500, {

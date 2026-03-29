@@ -2,6 +2,7 @@ import { AxeBuilder } from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 import { FLAGSHIP_PROJECTS, TOP_LEVEL_PAGES } from './support/siteContracts';
+import { gotoRoute } from './support/siteSupport';
 
 type AxeViolations = Awaited<ReturnType<AxeBuilder['analyze']>>['violations'];
 
@@ -41,7 +42,7 @@ const formatViolations = (violations: AxeViolations): string => {
 test.describe('accessibility automation', () => {
     for (const route of ACCESSIBILITY_ROUTES) {
         test(`axe scan passes for ${route}`, async ({ page }) => {
-            await page.goto(route, { waitUntil: 'load' });
+            await gotoRoute(page, route);
 
             const results = await new AxeBuilder({ page })
                 .withTags(WCAG_TAGS)
@@ -62,7 +63,7 @@ test.describe('accessibility automation', () => {
             'Tab-order checks are only reliable in desktop keyboard-first projects.',
         );
 
-        await page.goto('/');
+        await gotoRoute(page, '/');
 
         await page.keyboard.press('Tab');
 

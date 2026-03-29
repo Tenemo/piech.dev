@@ -5,7 +5,7 @@ import {
     TOP_LEVEL_PAGES,
     toProductionUrl,
 } from './support/siteContracts';
-import { getJsonLdPayloads } from './support/siteSupport';
+import { getJsonLdPayloads, gotoRoute } from './support/siteSupport';
 
 const PRODUCTION_OG_IMAGE_PATTERN =
     /^https:\/\/piech\.dev\/media\/projects\/og_images\/.+$/;
@@ -20,7 +20,7 @@ test.beforeEach(({ browserName: _browserName }, testInfo) => {
 test('top-level pages expose the expected SEO contract', async ({ page }) => {
     for (const topLevelPage of TOP_LEVEL_PAGES) {
         await test.step(topLevelPage.route, async () => {
-            await page.goto(topLevelPage.route, { waitUntil: 'load' });
+            await gotoRoute(page, topLevelPage.route);
 
             await expect(page).toHaveTitle(topLevelPage.title);
             await expect(
@@ -62,7 +62,7 @@ test('flagship project pages expose canonical SEO metadata', async ({
 }) => {
     for (const flagshipProject of FLAGSHIP_PROJECTS) {
         await test.step(flagshipProject.route, async () => {
-            await page.goto(flagshipProject.route, { waitUntil: 'load' });
+            await gotoRoute(page, flagshipProject.route);
 
             await expect(
                 page.getByRole('main').getByRole('heading', {

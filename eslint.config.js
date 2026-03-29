@@ -278,6 +278,8 @@ export default defineConfig(
             '.tmp/*',
             'coverage/*',
             'dist/*',
+            'playwright-report/*',
+            'test-results/*',
             'temp/*',
             '**/*.html',
             '.react-router/*',

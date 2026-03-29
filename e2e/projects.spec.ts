@@ -4,13 +4,14 @@ import { FLAGSHIP_PROJECTS, PROJECTS_PAGE } from './support/siteContracts';
 import {
     expectProjectPageLoaded,
     getLinkedProjectRoutes,
+    gotoRoute,
     runRouteChecks,
 } from './support/siteSupport';
 
 test('flagship project cards open the intended detail pages', async ({
     page,
 }) => {
-    await page.goto(PROJECTS_PAGE.route);
+    await gotoRoute(page, PROJECTS_PAGE.route);
 
     for (const flagshipProject of FLAGSHIP_PROJECTS) {
         await test.step(flagshipProject.cardName, async () => {
@@ -22,7 +23,7 @@ test('flagship project cards open the intended detail pages', async ({
 
             await expectProjectPageLoaded(page, flagshipProject.route);
 
-            await page.goto(PROJECTS_PAGE.route);
+            await gotoRoute(page, PROJECTS_PAGE.route);
         });
     }
 });
@@ -34,7 +35,7 @@ test('all project detail routes load core content', async ({ page }) => {
         routes: projectRoutes,
         label: 'project route',
         check: async (route) => {
-            await page.goto(route, { waitUntil: 'load' });
+            await gotoRoute(page, route);
             await expectProjectPageLoaded(page, route);
         },
     });

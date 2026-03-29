@@ -5,7 +5,7 @@ import {
     type Page,
 } from '@playwright/test';
 
-import { E2E_BASE_URL } from './e2eConfig';
+import { E2E_BASE_URL, SHOULD_USE_REMOTE_E2E } from './e2eConfig';
 import {
     GITHUB_PROFILE_URL,
     PRODUCTION_SITE_ORIGIN,
@@ -21,6 +21,12 @@ const JAVASCRIPT_MIME_TYPES = new Set([
     'module',
     'text/javascript',
 ]);
+const NETLIFY_CHALLENGE_BODY_TEXT = 'We are verifying your connection';
+const NETLIFY_CHALLENGE_BRAND_TEXT = 'Security by Netlify';
+const REMOTE_NAVIGATION_RETRY_DELAY_MS = 1_000;
+const REMOTE_NAVIGATION_RETRY_COUNT = 3;
+const NETLIFY_CHALLENGE_WAIT_TIMEOUT_MS = 15_000;
+const PRERENDERED_ROUTE_WAIT_UNTIL = 'domcontentloaded';
 
 let cachedSitemapRoutesPromise: Promise<string[]> | undefined;
 
@@ -43,6 +49,18 @@ const formatError = (error: unknown): string => {
     return String(error);
 };
 
+const isNetlifyChallengePage = async (page: Page): Promise<boolean> => {
+    const bodyText = await page
+        .locator('body')
+        .innerText()
+        .catch(() => '');
+
+    return (
+        bodyText.includes(NETLIFY_CHALLENGE_BODY_TEXT) &&
+        bodyText.includes(NETLIFY_CHALLENGE_BRAND_TEXT)
+    );
+};
+
 export const getProjectSlugFromRoute = (route: string): string => {
     const segments = normalizeRoute(route).split('/').filter(Boolean);
     const projectSlug = segments[1];
@@ -56,8 +74,63 @@ export const getProjectSlugFromRoute = (route: string): string => {
     return projectSlug;
 };
 
+export const gotoRoute = async (
+    page: Page,
+    route: string,
+): Promise<Awaited<ReturnType<Page['goto']>>> => {
+    // The site is fully prerendered and ships without client JS, so DOMContentLoaded
+    // gives us stable markup without waiting for heavy media downloads on production.
+    const maxAttempts = SHOULD_USE_REMOTE_E2E
+        ? REMOTE_NAVIGATION_RETRY_COUNT
+        : 1;
+    let response: Awaited<ReturnType<Page['goto']>> | undefined;
+
+    for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+        response = await page.goto(route, {
+            waitUntil: PRERENDERED_ROUTE_WAIT_UNTIL,
+        });
+
+        if (await isNetlifyChallengePage(page)) {
+            try {
+                await page.waitForFunction(
+                    ({ challengeText, brandText }) => {
+                        const bodyText = document.body.innerText;
+
+                        return !(
+                            bodyText.includes(challengeText) &&
+                            bodyText.includes(brandText)
+                        );
+                    },
+                    {
+                        brandText: NETLIFY_CHALLENGE_BRAND_TEXT,
+                        challengeText: NETLIFY_CHALLENGE_BODY_TEXT,
+                    },
+                    {
+                        timeout: NETLIFY_CHALLENGE_WAIT_TIMEOUT_MS,
+                    },
+                );
+            } catch {
+                // Fall back to a bounded retry if the temporary challenge page persists.
+            }
+        }
+
+        const challengeStillVisible = await isNetlifyChallengePage(page);
+        const responseOk = response?.ok() ?? false;
+
+        if (!challengeStillVisible && responseOk) {
+            return response;
+        }
+
+        if (attempt < maxAttempts - 1) {
+            await page.waitForTimeout(REMOTE_NAVIGATION_RETRY_DELAY_MS);
+        }
+    }
+
+    return response ?? null;
+};
+
 export const getLinkedProjectRoutes = async (page: Page): Promise<string[]> => {
-    await page.goto(PROJECTS_PAGE.route, { waitUntil: 'load' });
+    await gotoRoute(page, PROJECTS_PAGE.route);
 
     return page.getByRole('link').evaluateAll((links, projectsRoute) => {
         const normalize = (pathname: string): string =>

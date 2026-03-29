@@ -1,9 +1,10 @@
 import { expect, test, type ConsoleMessage } from '@playwright/test';
 
-import { E2E_BASE_URL } from './support/e2eConfig';
+import { E2E_BASE_URL, SHOULD_USE_REMOTE_E2E } from './support/e2eConfig';
 import {
     getInternalAssetPaths,
     getPublicRoutes,
+    gotoRoute,
     runRouteChecks,
 } from './support/siteSupport';
 
@@ -18,13 +19,18 @@ test('all public routes reference healthy internal assets', async ({
     page,
     request,
 }) => {
+    test.slow(
+        SHOULD_USE_REMOTE_E2E,
+        'Remote production asset checks traverse many routes and request every internal asset.',
+    );
+
     const publicRoutes = await getPublicRoutes(page);
 
     await runRouteChecks({
         routes: publicRoutes,
         label: 'asset health route',
         check: async (route) => {
-            await page.goto(route, { waitUntil: 'load' });
+            await gotoRoute(page, route);
 
             const internalAssetPaths = await getInternalAssetPaths(page);
 
@@ -44,39 +50,39 @@ test('all public routes reference healthy internal assets', async ({
 
 test('all public routes emit no console or page errors', async ({ page }) => {
     const publicRoutes = await getPublicRoutes(page);
-    const consoleErrors: string[] = [];
-    const pageErrors: string[] = [];
-    const consoleListener = (message: ConsoleMessage): void => {
-        if (message.type() === 'error') {
-            consoleErrors.push(message.text());
-        }
-    };
-    const pageErrorListener = (error: Error): void => {
-        pageErrors.push(error.message);
-    };
+    await runRouteChecks({
+        routes: publicRoutes,
+        label: 'runtime health route',
+        check: async (route) => {
+            const routePage = await page.context().newPage();
+            const consoleErrors: string[] = [];
+            const pageErrors: string[] = [];
+            const consoleListener = (message: ConsoleMessage): void => {
+                if (message.type() === 'error') {
+                    consoleErrors.push(message.text());
+                }
+            };
+            const pageErrorListener = (error: Error): void => {
+                pageErrors.push(error.message);
+            };
 
-    page.on('console', consoleListener);
-    page.on('pageerror', pageErrorListener);
+            routePage.on('console', consoleListener);
+            routePage.on('pageerror', pageErrorListener);
 
-    try {
-        await runRouteChecks({
-            routes: publicRoutes,
-            label: 'runtime health route',
-            check: async (route) => {
-                consoleErrors.length = 0;
-                pageErrors.length = 0;
-
-                await page.goto(route, { waitUntil: 'load' });
+            try {
+                await gotoRoute(routePage, route);
+                await routePage.waitForTimeout(250);
 
                 expect(
                     consoleErrors,
                     `${route} emitted console errors.`,
                 ).toEqual([]);
                 expect(pageErrors, `${route} emitted page errors.`).toEqual([]);
-            },
-        });
-    } finally {
-        page.off('console', consoleListener);
-        page.off('pageerror', pageErrorListener);
-    }
+            } finally {
+                routePage.off('console', consoleListener);
+                routePage.off('pageerror', pageErrorListener);
+                await routePage.close();
+            }
+        },
+    });
 });

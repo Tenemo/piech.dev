@@ -29,6 +29,7 @@ export default defineConfig({
     outputDir: 'test-results',
     forbidOnly: Boolean(process.env.CI),
     retries: process.env.CI ? 1 : 0,
+    workers: SHOULD_USE_REMOTE_E2E ? 1 : undefined,
     reporter: reporters,
     use: {
         baseURL: E2E_BASE_URL,

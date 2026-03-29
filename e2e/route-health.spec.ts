@@ -1,6 +1,10 @@
 import { expect, test } from '@playwright/test';
 
-import { getPublicRoutes, runRouteChecks } from './support/siteSupport';
+import {
+    getPublicRoutes,
+    gotoRoute,
+    runRouteChecks,
+} from './support/siteSupport';
 
 test.beforeEach(({ browserName: _browserName }, testInfo) => {
     test.skip(
@@ -18,7 +22,7 @@ test('every public route loads successfully with the global landmarks', async ({
         routes: publicRoutes,
         label: 'public route',
         check: async (route) => {
-            const response = await page.goto(route, { waitUntil: 'load' });
+            const response = await gotoRoute(page, route);
 
             expect(
                 response,

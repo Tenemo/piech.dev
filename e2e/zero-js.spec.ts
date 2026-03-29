@@ -5,6 +5,7 @@ import { PRODUCTION_SITE_ORIGIN } from './support/siteContracts';
 import {
     getPublicRoutes,
     getSameOriginScriptSrcPaths,
+    gotoRoute,
     getUnexpectedInlineScriptSummaries,
     runRouteChecks,
 } from './support/siteSupport';
@@ -44,7 +45,7 @@ test('all public routes ship without executable JavaScript', async ({
             page.on('request', routeRequestListener);
 
             try {
-                await page.goto(route, { waitUntil: 'load' });
+                await gotoRoute(page, route);
 
                 const unexpectedScriptSources =
                     await getSameOriginScriptSrcPaths(page);

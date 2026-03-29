@@ -4,6 +4,7 @@ import {
     classifyLinkResource,
     isAllowedResourceUrl,
     isExecutableScript,
+    normalizeResourceOrigin,
 } from './cspCompatibility';
 
 describe('cspCompatibility', () => {
@@ -84,6 +85,17 @@ describe('cspCompatibility', () => {
         expect(
             isAllowedResourceUrl('https://example.com/video.mp4', 'media'),
         ).toBe(false);
+    });
+
+    it('normalizes protocol-relative URLs to their actual origin', () => {
+        expect(normalizeResourceOrigin('//cdn.example.com/image.png')).toBe(
+            'https://cdn.example.com',
+        );
+        expect(
+            normalizeResourceOrigin(
+                '//private-user-images.githubusercontent.com/example',
+            ),
+        ).toBe('https://private-user-images.githubusercontent.com');
     });
 
     it('classifies fetchable links for CSP validation', () => {

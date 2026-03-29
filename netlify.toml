@@ -42,11 +42,6 @@ for = "/media/projects/*.webm"
 [headers.values]
 Cache-Control = "public, max-age=31536000, immutable"
 
-[[redirects]]
-from = "/robots.txt"
-to = "/robots.txt"
-status = 200
-
 # Redirects for legacy portfolio routes to support old links
 [[redirects]]
 from = "/portfolio"

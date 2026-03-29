@@ -3,6 +3,8 @@ import path from 'path';
 
 import { JSDOM } from 'jsdom';
 
+import { findHtmlFiles } from './findHtmlFiles.ts';
+
 const outDir = path.resolve(process.cwd(), 'dist/client');
 
 let warningsCount = 0;
@@ -20,23 +22,6 @@ async function fileExists(filePath: string): Promise<boolean> {
     } catch {
         return false;
     }
-}
-
-async function findHtmlFiles(dir: string): Promise<string[]> {
-    const dirents = await fs.readdir(dir, { withFileTypes: true });
-    const files = await Promise.all(
-        dirents.map(async (dirent) => {
-            const resolvedPath = path.resolve(dir, dirent.name);
-
-            if (dirent.isDirectory()) {
-                return findHtmlFiles(resolvedPath);
-            }
-
-            return resolvedPath.endsWith('.html') ? [resolvedPath] : [];
-        }),
-    );
-
-    return files.flat();
 }
 
 async function resolveCssPath(

@@ -26,9 +26,8 @@ import path from 'node:path';
 import 'dotenv/config';
 import { Octokit } from 'octokit';
 
+import { GITHUB_OWNER } from '../../app/siteLinks.ts';
 import { PROJECTS } from '../../features/Projects/projectsData.ts';
-
-const OWNER = 'tenemo';
 const OUT_DIR = path.join(process.cwd(), 'temp');
 const OUT_PATH = path.join(OUT_DIR, 'githubData.json');
 const EPOCH_ISO = '1970-01-01T00:00:00.000Z';
@@ -123,7 +122,7 @@ async function getReadme(octokit: Octokit, repo: string): Promise<string> {
         const response = await octokit.request(
             'GET /repos/{owner}/{repo}/readme',
             {
-                owner: OWNER,
+                owner: GITHUB_OWNER,
                 repo,
                 headers: {
                     accept: 'application/vnd.github.raw+json',
@@ -150,7 +149,7 @@ async function getLastCommitDatetime(
 ): Promise<string | undefined> {
     try {
         const response = await octokit.rest.repos.getCommit({
-            owner: OWNER,
+            owner: GITHUB_OWNER,
             repo,
             ref: defaultBranch,
         });
@@ -171,11 +170,11 @@ async function buildRepositoryInfo(
 ): Promise<RepoInfo> {
     const [repoResult, topicsResult, readmeResult] = await Promise.allSettled([
         octokit.rest.repos.get({
-            owner: OWNER,
+            owner: GITHUB_OWNER,
             repo,
         }),
         octokit.rest.repos.getAllTopics({
-            owner: OWNER,
+            owner: GITHUB_OWNER,
             repo,
         }),
         getReadme(octokit, repo),

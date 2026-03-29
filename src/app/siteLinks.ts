@@ -1,3 +1,5 @@
+export const GITHUB_OWNER = 'tenemo';
+
 export const SITE_LINKS = {
     home: 'https://piech.dev/',
     emailAddress: 'piotr@piech.dev',

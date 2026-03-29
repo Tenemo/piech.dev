@@ -20,11 +20,10 @@ import {
 import { PERSON, PERSON_ID, WEBSITE, WEBSITE_ID } from './index';
 
 import { DEFAULT_KEYWORDS } from 'app/appConstants';
-import { HOME_PATH, PROJECTS_PATH } from 'app/routePaths';
+import { HOME_PATH, PROJECTS_PATH, getProjectPath } from 'app/routePaths';
 import { SITE_LINKS } from 'app/siteLinks';
 import Projects from 'features/Projects/Projects';
 import { PROJECTS } from 'features/Projects/projectsData';
-import { getProjectRoutePath } from 'features/Projects/projectUtils';
 
 const projectsItemList: ItemList = {
     '@type': 'ItemList',
@@ -32,7 +31,7 @@ const projectsItemList: ItemList = {
     itemListOrder: 'https://schema.org/ItemListOrderAscending',
     numberOfItems: PROJECTS.length,
     itemListElement: PROJECTS.map<ListItem>((project, index) => {
-        const url = getSiteUrl(getProjectRoutePath(project.repo));
+        const url = getSiteUrl(getProjectPath(project.repo));
         const code: SoftwareSourceCode = {
             '@type': 'SoftwareSourceCode',
             '@id': `${url}#code`,

@@ -235,7 +235,10 @@ export default defineConfig(
     },
     {
         files: [
+            'src/utils/build/cspCompatibility.ts',
             'src/utils/build/fetchGithubData.ts',
+            'src/utils/build/inlineCss.ts',
+            'src/utils/build/transformImagePaths.ts',
             'src/utils/build/validateBuiltHtmlCsp.ts',
             'e2e/support/serveDistClient.ts',
         ],

@@ -3,13 +3,16 @@ import React from 'react';
 import { Link } from 'react-router';
 
 import type { ProjectPreviewAsset } from '../projectsData';
-import { getProjectRoutePath } from '../projectUtils';
 import type { TechnologyName } from '../technologies';
 
 import styles from './projectCard.module.scss';
 import ProjectTechnologies from './ProjectTechnologies/ProjectTechnologies';
 
-import { SILENT_CAPTIONS_TRACK_PATH } from 'app/appConstants';
+import {
+    PROJECT_DATE_FORMAT,
+    SILENT_CAPTIONS_TRACK_PATH,
+} from 'app/appConstants';
+import { getProjectPath } from 'app/routePaths';
 import { OpenInNewIcon } from 'components/Icons';
 import { repositoriesData } from 'utils/data/githubData';
 
@@ -30,11 +33,11 @@ const ProjectCard = ({
     prioritizePreview = false,
     technologies,
 }: ProjectCardProps): React.JSX.Element => {
-    const projectPath = getProjectRoutePath(repo);
+    const projectPath = getProjectPath(repo);
     const repositoryInfo = repositoriesData[repo];
     const createdIso = repositoryInfo?.createdDatetime;
     const createdLabel = createdIso
-        ? format(new Date(createdIso), 'MMMM yyyy')
+        ? format(new Date(createdIso), PROJECT_DATE_FORMAT)
         : undefined;
 
     const previewSrc = `/media/projects/${projectPreview.fileName}`;

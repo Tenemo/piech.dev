@@ -1,16 +1,10 @@
-import {
-    expect,
-    test,
-    type APIRequestContext,
-    type Page,
-} from '@playwright/test';
+import { expect, type APIRequestContext, type Page } from '@playwright/test';
 
-import { E2E_BASE_URL } from './e2eConfig';
+import { E2E_BASE_URL, SHOULD_USE_REMOTE_E2E } from './e2eConfig';
 import {
     GITHUB_PROFILE_URL,
     PRODUCTION_SITE_ORIGIN,
     PROJECTS_PAGE,
-    TOP_LEVEL_PAGES,
     type TopLevelPageContract,
 } from './siteContracts';
 
@@ -21,6 +15,12 @@ const JAVASCRIPT_MIME_TYPES = new Set([
     'module',
     'text/javascript',
 ]);
+const NETLIFY_CHALLENGE_BODY_TEXT = 'We are verifying your connection';
+const NETLIFY_CHALLENGE_BRAND_TEXT = 'Security by Netlify';
+const REMOTE_NAVIGATION_RETRY_DELAY_MS = 1_000;
+const REMOTE_NAVIGATION_RETRY_COUNT = 3;
+const NETLIFY_CHALLENGE_WAIT_TIMEOUT_MS = 15_000;
+const PRERENDERED_ROUTE_WAIT_UNTIL = 'domcontentloaded';
 
 let cachedSitemapRoutesPromise: Promise<string[]> | undefined;
 
@@ -35,12 +35,16 @@ const normalizeRoute = (route: string): string => {
 const uniqueSort = (values: readonly string[]): string[] =>
     Array.from(new Set(values)).sort();
 
-const formatError = (error: unknown): string => {
-    if (error instanceof Error) {
-        return error.message;
-    }
+const isNetlifyChallengePage = async (page: Page): Promise<boolean> => {
+    const bodyText = await page
+        .locator('body')
+        .innerText()
+        .catch(() => '');
 
-    return String(error);
+    return (
+        bodyText.includes(NETLIFY_CHALLENGE_BODY_TEXT) &&
+        bodyText.includes(NETLIFY_CHALLENGE_BRAND_TEXT)
+    );
 };
 
 export const getProjectSlugFromRoute = (route: string): string => {
@@ -56,40 +60,59 @@ export const getProjectSlugFromRoute = (route: string): string => {
     return projectSlug;
 };
 
-export const getLinkedProjectRoutes = async (page: Page): Promise<string[]> => {
-    await page.goto(PROJECTS_PAGE.route, { waitUntil: 'load' });
+export const gotoRoute = async (
+    page: Page,
+    route: string,
+): Promise<Awaited<ReturnType<Page['goto']>>> => {
+    // The site is fully prerendered and ships without client JS, so DOMContentLoaded
+    // gives us stable markup without waiting for heavy media downloads on production.
+    const maxAttempts = SHOULD_USE_REMOTE_E2E
+        ? REMOTE_NAVIGATION_RETRY_COUNT
+        : 1;
+    let response: Awaited<ReturnType<Page['goto']>> | undefined;
 
-    return page.getByRole('link').evaluateAll((links, projectsRoute) => {
-        const normalize = (pathname: string): string =>
-            pathname === '/' || pathname.endsWith('/')
-                ? pathname
-                : `${pathname}/`;
+    for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+        response = await page.goto(route, {
+            waitUntil: PRERENDERED_ROUTE_WAIT_UNTIL,
+        });
 
-        return Array.from(
-            new Set(
-                links
-                    .map((link) => link.getAttribute('href'))
-                    .filter((href): href is string => href !== null)
-                    .map((href) => new URL(href, window.location.origin))
-                    .filter(
-                        (url) =>
-                            url.origin === window.location.origin &&
-                            url.pathname.startsWith(projectsRoute) &&
-                            url.pathname !== projectsRoute,
-                    )
-                    .map((url) => normalize(url.pathname)),
-            ),
-        ).sort();
-    }, PROJECTS_PAGE.route);
-};
+        if (await isNetlifyChallengePage(page)) {
+            try {
+                await page.waitForFunction(
+                    ({ challengeText, brandText }) => {
+                        const bodyText = document.body.innerText;
 
-export const getPublicRoutes = async (page: Page): Promise<string[]> => {
-    const linkedProjectRoutes = await getLinkedProjectRoutes(page);
+                        return !(
+                            bodyText.includes(challengeText) &&
+                            bodyText.includes(brandText)
+                        );
+                    },
+                    {
+                        brandText: NETLIFY_CHALLENGE_BRAND_TEXT,
+                        challengeText: NETLIFY_CHALLENGE_BODY_TEXT,
+                    },
+                    {
+                        timeout: NETLIFY_CHALLENGE_WAIT_TIMEOUT_MS,
+                    },
+                );
+            } catch {
+                // Fall back to a bounded retry if the temporary challenge page persists.
+            }
+        }
 
-    return uniqueSort([
-        ...TOP_LEVEL_PAGES.map(({ route }) => route),
-        ...linkedProjectRoutes,
-    ]);
+        const challengeStillVisible = await isNetlifyChallengePage(page);
+        const responseOk = response?.ok() ?? false;
+
+        if (!challengeStillVisible && responseOk) {
+            return response;
+        }
+
+        if (attempt < maxAttempts - 1) {
+            await page.waitForTimeout(REMOTE_NAVIGATION_RETRY_DELAY_MS);
+        }
+    }
+
+    return response ?? null;
 };
 
 export const getSitemapRoutes = async (
@@ -293,33 +316,4 @@ export const expectProjectPageLoaded = async (
     await expect(
         main.locator('p, ul, ol, pre, img, video').first(),
     ).toBeVisible();
-};
-
-export const runRouteChecks = async ({
-    routes,
-    label,
-    check,
-}: {
-    routes: readonly string[];
-    label: string;
-    check: (route: string) => Promise<void>;
-}): Promise<void> => {
-    const failures: string[] = [];
-
-    for (const route of routes) {
-        try {
-            await test.step(`${label}: ${route}`, async () => {
-                await check(route);
-            });
-        } catch (error) {
-            failures.push(`${route}\n${formatError(error)}`);
-        }
-    }
-
-    expect(
-        failures,
-        failures.length === 0
-            ? 'All route checks passed.'
-            : failures.join('\n\n'),
-    ).toEqual([]);
 };

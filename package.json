@@ -69,6 +69,7 @@
         "@axe-core/playwright": "^4.11.1",
         "@eslint/compat": "^2.0.3",
         "@eslint/js": "^10.0.1",
+        "@netlify/plugin-lighthouse": "^6.0.4",
         "@playwright/test": "^1.58.2",
         "@react-router/dev": "^7.13.2",
         "@react-router/node": "^7.13.2",

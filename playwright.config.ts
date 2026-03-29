@@ -10,16 +10,27 @@ import {
     SHOULD_USE_REMOTE_E2E,
 } from './e2e/support/e2eConfig';
 
-const reporters: ReporterDescription[] = process.env.CI
-    ? [
-          ['dot'],
-          ['github'],
-          ['html', { open: 'never', outputFolder: 'playwright-report' }],
-      ]
-    : [
-          ['list'],
-          ['html', { open: 'never', outputFolder: 'playwright-report' }],
-      ];
+const SHOULD_USE_BLOB_REPORTER = process.env.PLAYWRIGHT_BLOB_REPORT === 'true';
+const INVARIANT_SPEC_GLOBS = [
+    '**/asset-health.spec.ts',
+    '**/route-health.spec.ts',
+    '**/seo.spec.ts',
+    '**/sitemap.spec.ts',
+    '**/zero-js.spec.ts',
+];
+const KEYBOARD_ACCESSIBILITY_SPEC_GLOB = '**/accessibility-keyboard.spec.ts';
+const reporters: ReporterDescription[] = SHOULD_USE_BLOB_REPORTER
+    ? [['dot'], ['blob', { outputDir: 'blob-report' }]]
+    : process.env.CI
+      ? [
+            ['dot'],
+            ['github'],
+            ['html', { open: 'never', outputFolder: 'playwright-report' }],
+        ]
+      : [
+            ['list'],
+            ['html', { open: 'never', outputFolder: 'playwright-report' }],
+        ];
 const galaxyS24 = devices['Galaxy S24'];
 const { defaultBrowserType: _defaultBrowserType, ...galaxyS24Device } =
     galaxyS24;
@@ -27,8 +38,10 @@ const { defaultBrowserType: _defaultBrowserType, ...galaxyS24Device } =
 export default defineConfig({
     testDir: './e2e',
     outputDir: 'test-results',
+    fullyParallel: Boolean(process.env.CI) && !SHOULD_USE_REMOTE_E2E,
     forbidOnly: Boolean(process.env.CI),
     retries: process.env.CI ? 1 : 0,
+    workers: SHOULD_USE_REMOTE_E2E ? 1 : process.env.CI ? 4 : undefined,
     reporter: reporters,
     use: {
         baseURL: E2E_BASE_URL,
@@ -39,26 +52,49 @@ export default defineConfig({
     projects: [
         {
             name: 'Desktop Chrome',
+            testIgnore: INVARIANT_SPEC_GLOBS,
+            use: { ...devices['Desktop Chrome'] },
+        },
+        {
+            name: 'Desktop Chrome Invariant',
+            testMatch: INVARIANT_SPEC_GLOBS,
             use: { ...devices['Desktop Chrome'] },
         },
         {
             name: 'Desktop Firefox',
+            testIgnore: INVARIANT_SPEC_GLOBS,
             use: { ...devices['Desktop Firefox'] },
         },
         {
             name: 'Desktop Safari',
+            testIgnore: [
+                ...INVARIANT_SPEC_GLOBS,
+                KEYBOARD_ACCESSIBILITY_SPEC_GLOB,
+            ],
             use: { ...devices['Desktop Safari'] },
         },
         {
             name: 'Mobile Chrome (Galaxy S24)',
+            testIgnore: [
+                ...INVARIANT_SPEC_GLOBS,
+                KEYBOARD_ACCESSIBILITY_SPEC_GLOB,
+            ],
             use: { ...devices['Galaxy S24'] },
         },
         {
             name: 'Mobile Safari (iPhone 15)',
+            testIgnore: [
+                ...INVARIANT_SPEC_GLOBS,
+                KEYBOARD_ACCESSIBILITY_SPEC_GLOB,
+            ],
             use: { ...devices['iPhone 15'] },
         },
         {
             name: 'Mobile Firefox (Galaxy S24)',
+            testIgnore: [
+                ...INVARIANT_SPEC_GLOBS,
+                KEYBOARD_ACCESSIBILITY_SPEC_GLOB,
+            ],
             use: {
                 ...galaxyS24Device,
                 browserName: 'firefox',

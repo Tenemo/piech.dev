@@ -1,12 +1,11 @@
 import { screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
-
-import { meta as projectsMeta } from '../../routes/projects';
+import { describe, expect, it } from 'vitest';
 
 import ProjectPage from './Projects';
 import styles from './projects.module.scss';
 
 import { PROJECTS_PATH } from 'app/routePaths';
+import { meta as projectsMeta } from 'routes/projects';
 import { renderApp } from 'utils/testing/renderApp';
 
 describe('Projects page', () => {

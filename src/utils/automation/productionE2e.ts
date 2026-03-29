@@ -16,7 +16,7 @@ export type ProductionDeployMatchOptions = {
     targetUrl: string;
 };
 
-export type WorkflowDispatchInputs = {
+export type ProductionE2EClientPayload = {
     base_url: string;
     deploy_branch: string;
     deploy_context: string;
@@ -25,10 +25,12 @@ export type WorkflowDispatchInputs = {
     published_url: string;
 };
 
-export type WorkflowDispatchPayload = {
-    inputs: WorkflowDispatchInputs;
-    ref: string;
+export type RepositoryDispatchPayload = {
+    client_payload: ProductionE2EClientPayload;
+    event_type: string;
 };
+
+export const PRODUCTION_E2E_REPOSITORY_DISPATCH_EVENT = 'production_e2e';
 
 function isJsonRecord(value: unknown): value is JsonRecord {
     return typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -187,17 +189,15 @@ export function isMatchingProductionDeploy(
     return publishedOrigin === targetOrigin;
 }
 
-export function buildWorkflowDispatchPayload({
+export function buildRepositoryDispatchPayload({
     baseUrl,
     deployMetadata,
-    ref,
 }: {
     baseUrl: string;
     deployMetadata: NetlifyDeployMetadata;
-    ref: string;
-}): WorkflowDispatchPayload {
+}): RepositoryDispatchPayload {
     return {
-        inputs: {
+        client_payload: {
             base_url: baseUrl,
             deploy_branch: deployMetadata.branch,
             deploy_context: deployMetadata.context,
@@ -205,6 +205,6 @@ export function buildWorkflowDispatchPayload({
             deploy_url: deployMetadata.deployUrl,
             published_url: deployMetadata.publishedUrl,
         },
-        ref,
+        event_type: PRODUCTION_E2E_REPOSITORY_DISPATCH_EVENT,
     };
 }

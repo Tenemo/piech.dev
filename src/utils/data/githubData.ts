@@ -5,7 +5,7 @@ type GithubDataFile = {
 };
 
 const githubDataModules = import.meta.glob<GithubDataFile>(
-    '../../../temp/githubData.json',
+    'temp/githubData.json',
     {
         eager: true,
         import: 'default',

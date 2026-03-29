@@ -9,15 +9,39 @@ permissions:
 
 jobs:
     playwright:
-        name: Playwright E2E
+        name: Playwright E2E (${{ matrix.engine.name }})
         runs-on: ubuntu-latest
         timeout-minutes: 30
+        strategy:
+            fail-fast: false
+            matrix:
+                engine:
+                    - name: Chromium
+                      slug: chromium
+                      browser: chromium
+                      desktop_project: Desktop Chrome
+                      invariant_project: Desktop Chrome Invariant
+                      mobile_project: Mobile Chrome (Galaxy S24)
+                    - name: Firefox
+                      slug: firefox
+                      browser: firefox
+                      desktop_project: Desktop Firefox
+                      invariant_project: ''
+                      mobile_project: Mobile Firefox (Galaxy S24)
+                    - name: WebKit
+                      slug: webkit
+                      browser: webkit
+                      desktop_project: Desktop Safari
+                      invariant_project: ''
+                      mobile_project: Mobile Safari (iPhone 15)
+        env:
+            PLAYWRIGHT_BLOB_REPORT: 'true'
         steps:
             - name: Checkout
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
 
             - name: Use Node.js
-              uses: actions/setup-node@v4
+              uses: actions/setup-node@v5
               with:
                   node-version: '22.x'
                   cache: 'npm'
@@ -25,8 +49,8 @@ jobs:
             - name: Install dependencies
               run: npm ci
 
-            - name: Install Playwright browsers
-              run: npx playwright install --with-deps
+            - name: Install Playwright browser
+              run: npx playwright install --with-deps ${{ matrix.engine.browser }}
 
             - name: Build production output
               env:
@@ -34,20 +58,81 @@ jobs:
               run: npm run build:skip
 
             - name: Run Playwright tests
-              run: npx playwright test
+              run: |
+                  command=(npx playwright test --project "${{ matrix.engine.desktop_project }}" --project "${{ matrix.engine.mobile_project }}")
 
-            - name: Upload Playwright HTML report
+                  if [ -n "${{ matrix.engine.invariant_project }}" ]; then
+                    command+=(--project "${{ matrix.engine.invariant_project }}")
+                  fi
+
+                  "${command[@]}"
+
+            - name: Upload Playwright blob report
               if: always()
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@v6
+              with:
+                  name: playwright-blob-report-${{ matrix.engine.slug }}
+                  path: blob-report/
+                  if-no-files-found: ignore
+
+            - name: Upload Playwright raw results
+              if: failure()
+              uses: actions/upload-artifact@v6
+              with:
+                  name: playwright-test-results-${{ matrix.engine.slug }}
+                  path: test-results/
+                  if-no-files-found: ignore
+
+    merge-playwright-report:
+        if: always()
+        needs: playwright
+        name: Merge Playwright report
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v5
+
+            - name: Use Node.js
+              uses: actions/setup-node@v5
+              with:
+                  node-version: '22.x'
+                  cache: 'npm'
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Download Playwright blob reports
+              uses: actions/download-artifact@v5
+              with:
+                  merge-multiple: true
+                  path: all-blob-reports
+                  pattern: playwright-blob-report-*
+
+            - name: Merge Playwright HTML report
+              run: npx playwright merge-reports --reporter html ./all-blob-reports
+
+            - name: Upload merged Playwright HTML report
+              if: always()
+              uses: actions/upload-artifact@v6
               with:
                   name: playwright-report
                   path: playwright-report/
                   if-no-files-found: ignore
 
-            - name: Upload Playwright raw results
-              if: failure()
-              uses: actions/upload-artifact@v4
-              with:
-                  name: playwright-test-results
-                  path: test-results/
-                  if-no-files-found: ignore
+    playwright-status:
+        if: always()
+        needs: [playwright, merge-playwright-report]
+        name: Playwright E2E
+        runs-on: ubuntu-latest
+        steps:
+            - name: Assert Playwright jobs passed
+              run: |
+                  if [ "${{ needs.playwright.result }}" != "success" ]; then
+                    echo "Playwright matrix result: ${{ needs.playwright.result }}"
+                    exit 1
+                  fi
+
+                  if [ "${{ needs.merge-playwright-report.result }}" != "success" ]; then
+                    echo "Merge report result: ${{ needs.merge-playwright-report.result }}"
+                    exit 1
+                  fi

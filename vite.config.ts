@@ -1,5 +1,5 @@
-import { readdirSync } from 'fs';
-import path from 'path';
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
 
 import { reactRouter } from '@react-router/dev/vite';
 import browserslistToEsbuild from 'browserslist-to-esbuild';
@@ -9,15 +9,38 @@ import { patchCssModules } from 'vite-css-modules';
 
 import { suppressChromeDevtoolsProbePlugin } from './src/utils/vite/suppressChromeDevtoolsProbePlugin';
 
-// Automatically pick up all directories in the src/ directory and add them as aliases later
-const absolutePathAliases: Record<string, string> = {};
-const srcPath = path.resolve('./src/');
-const srcRootContent = readdirSync(srcPath, { withFileTypes: true }).map(
-    (direct) => direct.name.replace(/(\.ts){1}(x?)/, ''),
-);
-srcRootContent.forEach((directory) => {
-    absolutePathAliases[directory] = path.join(srcPath, directory);
-});
+type TsconfigShape = {
+    compilerOptions?: {
+        paths?: Record<string, readonly string[]>;
+    };
+};
+
+const readTsconfigAliasEntries = (): Record<string, string> => {
+    const tsconfig = JSON.parse(
+        readFileSync(path.resolve('./tsconfig.json'), 'utf8'),
+    ) as TsconfigShape;
+    const tsconfigPaths = tsconfig.compilerOptions?.paths ?? {};
+
+    return Object.fromEntries(
+        Object.entries(tsconfigPaths)
+            .filter(([_aliasPattern, targetPatterns]) => {
+                const firstTarget = targetPatterns[0];
+
+                return typeof firstTarget === 'string' && firstTarget !== '';
+            })
+            .map(([aliasPattern, targetPatterns]) => {
+                const firstTarget = targetPatterns[0];
+                const alias = aliasPattern.replace(/\/\*$/, '');
+                const target = firstTarget
+                    .replace(/\/\*$/, '')
+                    .replace(/^\.\//, '');
+
+                return [alias, path.resolve(target)];
+            }),
+    );
+};
+
+const absolutePathAliases = readTsconfigAliasEntries();
 
 const manualChunks = (id: string): string | null => {
     if (id.includes('node_modules')) {
@@ -59,9 +82,7 @@ export default defineConfig(({ mode, command }) => {
         },
         resolve: {
             tsconfigPaths: true,
-            alias: {
-                ...absolutePathAliases,
-            },
+            alias: absolutePathAliases,
         },
         server: {
             port: 3000,

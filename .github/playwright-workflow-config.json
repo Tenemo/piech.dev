@@ -1,7 +1,7 @@
 {
     "pull_request": {
-        "runnerLabel": "ubuntu-24.04-16core",
-        "workers": 8
+        "runnerLabel": "ubuntu-latest",
+        "workers": 4
     },
     "production": {
         "runnerLabel": "ubuntu-latest",

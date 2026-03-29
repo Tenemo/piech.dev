@@ -7,13 +7,6 @@ import { getInternalAssetPaths, gotoRoute } from './support/siteSupport';
 test.describe('asset health', () => {
     test.describe.configure({ mode: 'parallel' });
 
-    test.beforeEach(({ browserName: _browserName }, testInfo) => {
-        test.skip(
-            testInfo.project.name !== 'Desktop Chrome',
-            'Asset and console checks are browser-invariant and run once in Desktop Chrome.',
-        );
-    });
-
     for (const route of PUBLIC_ROUTES) {
         test(`${route} references healthy internal assets`, async ({
             page,

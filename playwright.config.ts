@@ -11,6 +11,14 @@ import {
 } from './e2e/support/e2eConfig';
 
 const SHOULD_USE_BLOB_REPORTER = process.env.PLAYWRIGHT_BLOB_REPORT === 'true';
+const INVARIANT_SPEC_GLOBS = [
+    '**/asset-health.spec.ts',
+    '**/route-health.spec.ts',
+    '**/seo.spec.ts',
+    '**/sitemap.spec.ts',
+    '**/zero-js.spec.ts',
+];
+const KEYBOARD_ACCESSIBILITY_SPEC_GLOB = '**/accessibility-keyboard.spec.ts';
 const reporters: ReporterDescription[] = SHOULD_USE_BLOB_REPORTER
     ? [['dot'], ['blob', { outputDir: 'blob-report' }]]
     : process.env.CI
@@ -44,26 +52,49 @@ export default defineConfig({
     projects: [
         {
             name: 'Desktop Chrome',
+            testIgnore: INVARIANT_SPEC_GLOBS,
+            use: { ...devices['Desktop Chrome'] },
+        },
+        {
+            name: 'Desktop Chrome Invariant',
+            testMatch: INVARIANT_SPEC_GLOBS,
             use: { ...devices['Desktop Chrome'] },
         },
         {
             name: 'Desktop Firefox',
+            testIgnore: INVARIANT_SPEC_GLOBS,
             use: { ...devices['Desktop Firefox'] },
         },
         {
             name: 'Desktop Safari',
+            testIgnore: [
+                ...INVARIANT_SPEC_GLOBS,
+                KEYBOARD_ACCESSIBILITY_SPEC_GLOB,
+            ],
             use: { ...devices['Desktop Safari'] },
         },
         {
             name: 'Mobile Chrome (Galaxy S24)',
+            testIgnore: [
+                ...INVARIANT_SPEC_GLOBS,
+                KEYBOARD_ACCESSIBILITY_SPEC_GLOB,
+            ],
             use: { ...devices['Galaxy S24'] },
         },
         {
             name: 'Mobile Safari (iPhone 15)',
+            testIgnore: [
+                ...INVARIANT_SPEC_GLOBS,
+                KEYBOARD_ACCESSIBILITY_SPEC_GLOB,
+            ],
             use: { ...devices['iPhone 15'] },
         },
         {
             name: 'Mobile Firefox (Galaxy S24)',
+            testIgnore: [
+                ...INVARIANT_SPEC_GLOBS,
+                KEYBOARD_ACCESSIBILITY_SPEC_GLOB,
+            ],
             use: {
                 ...galaxyS24Device,
                 browserName: 'firefox',

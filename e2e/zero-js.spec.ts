@@ -11,13 +11,6 @@ import {
 test.describe('zero-js contract', () => {
     test.describe.configure({ mode: 'parallel' });
 
-    test.beforeEach(({ browserName: _browserName }, testInfo) => {
-        test.skip(
-            testInfo.project.name !== 'Desktop Chrome',
-            'Zero-JS checks are browser-invariant and run once in Desktop Chrome.',
-        );
-    });
-
     for (const route of PUBLIC_ROUTES) {
         test(`${route} ships without executable JavaScript`, async ({
             page,

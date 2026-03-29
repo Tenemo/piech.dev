@@ -13,13 +13,6 @@ const PRODUCTION_OG_IMAGE_PATTERN =
 test.describe('seo metadata', () => {
     test.describe.configure({ mode: 'parallel' });
 
-    test.beforeEach(({ browserName: _browserName }, testInfo) => {
-        test.skip(
-            testInfo.project.name !== 'Desktop Chrome',
-            'SEO checks are browser-invariant and run once in Desktop Chrome.',
-        );
-    });
-
     for (const topLevelPage of TOP_LEVEL_PAGES) {
         test(`${topLevelPage.route} exposes the expected top-level SEO contract`, async ({
             page,

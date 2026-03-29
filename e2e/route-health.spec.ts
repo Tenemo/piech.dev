@@ -6,13 +6,6 @@ import { gotoRoute } from './support/siteSupport';
 test.describe('route health', () => {
     test.describe.configure({ mode: 'parallel' });
 
-    test.beforeEach(({ browserName: _browserName }, testInfo) => {
-        test.skip(
-            testInfo.project.name !== 'Desktop Chrome',
-            'Route-health checks are browser-invariant and run once in Desktop Chrome.',
-        );
-    });
-
     for (const route of PUBLIC_ROUTES) {
         test(`${route} loads successfully with the global landmarks`, async ({
             page,

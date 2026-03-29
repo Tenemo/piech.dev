@@ -20,16 +20,19 @@ jobs:
                       slug: chromium
                       browser: chromium
                       desktop_project: Desktop Chrome
+                      invariant_project: Desktop Chrome Invariant
                       mobile_project: Mobile Chrome (Galaxy S24)
                     - name: Firefox
                       slug: firefox
                       browser: firefox
                       desktop_project: Desktop Firefox
+                      invariant_project: ''
                       mobile_project: Mobile Firefox (Galaxy S24)
                     - name: WebKit
                       slug: webkit
                       browser: webkit
                       desktop_project: Desktop Safari
+                      invariant_project: ''
                       mobile_project: Mobile Safari (iPhone 15)
         env:
             PLAYWRIGHT_BLOB_REPORT: 'true'
@@ -55,7 +58,14 @@ jobs:
               run: npm run build:skip
 
             - name: Run Playwright tests
-              run: npx playwright test --project "${{ matrix.engine.desktop_project }}" --project "${{ matrix.engine.mobile_project }}"
+              run: |
+                  command=(npx playwright test --project "${{ matrix.engine.desktop_project }}" --project "${{ matrix.engine.mobile_project }}")
+
+                  if [ -n "${{ matrix.engine.invariant_project }}" ]; then
+                    command+=(--project "${{ matrix.engine.invariant_project }}")
+                  fi
+
+                  "${command[@]}"
 
             - name: Upload Playwright blob report
               if: always()

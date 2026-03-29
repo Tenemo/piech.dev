@@ -31,6 +31,9 @@ jobs:
                     - name: Desktop Chrome
                       slug: desktop-chrome
                       browser: chromium
+                    - name: Desktop Chrome Invariant
+                      slug: desktop-chrome-invariant
+                      browser: chromium
                     - name: Desktop Firefox
                       slug: desktop-firefox
                       browser: firefox

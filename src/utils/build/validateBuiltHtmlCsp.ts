@@ -8,26 +8,10 @@ import {
     isAllowedResourceUrl,
     isExecutableScript,
 } from './cspCompatibility.ts';
+import { findHtmlFiles } from './findHtmlFiles.ts';
 
 const outDir = path.resolve(process.cwd(), 'dist/client');
 const BANNED_SELECTORS = ['iframe', 'object', 'embed'] as const;
-
-async function findHtmlFiles(dir: string): Promise<string[]> {
-    const dirents = await fs.readdir(dir, { withFileTypes: true });
-    const files = await Promise.all(
-        dirents.map(async (dirent) => {
-            const resolvedPath = path.resolve(dir, dirent.name);
-
-            if (dirent.isDirectory()) {
-                return findHtmlFiles(resolvedPath);
-            }
-
-            return resolvedPath.endsWith('.html') ? [resolvedPath] : [];
-        }),
-    );
-
-    return files.flat();
-}
 
 function formatElementViolation({
     details,

@@ -5,6 +5,7 @@ import ProjectMarkdown from './ProjectMarkdown';
 import styles from './projectMarkdown.module.scss';
 
 import { SILENT_CAPTIONS_TRACK_PATH } from 'app/appConstants';
+import { GITHUB_OWNER } from 'app/siteLinks';
 
 describe('ProjectMarkdown', () => {
     it('renders basic markdown content', () => {
@@ -86,11 +87,11 @@ describe('ProjectMarkdown', () => {
 
         expect(screen.getByAltText('Test Image')).toHaveAttribute(
             'src',
-            'https://github.com/tenemo/test-repo/blob/main/media/test.webp?raw=true',
+            `https://github.com/${GITHUB_OWNER}/test-repo/blob/main/media/test.webp?raw=true`,
         );
         expect(screen.getByText('Test Link')).toHaveAttribute(
             'href',
-            'https://github.com/tenemo/test-repo/blob/main/src/index.ts',
+            `https://github.com/${GITHUB_OWNER}/test-repo/blob/main/src/index.ts`,
         );
     });
 
@@ -187,7 +188,7 @@ describe('ProjectMarkdown', () => {
         expect(container.querySelector('script')).not.toBeInTheDocument();
         expect(screen.getByAltText('Safe image')).toHaveAttribute(
             'src',
-            'https://github.com/tenemo/test-repo/blob/main/media/test.webp?raw=true',
+            `https://github.com/${GITHUB_OWNER}/test-repo/blob/main/media/test.webp?raw=true`,
         );
         expect(screen.getByAltText('Safe image')).not.toHaveAttribute(
             'onerror',

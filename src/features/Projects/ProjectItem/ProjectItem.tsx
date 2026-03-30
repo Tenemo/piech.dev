@@ -6,7 +6,7 @@ import ProjectMarkdown from './ProjectMarkdown/ProjectMarkdown';
 
 import { MAIN_CONTENT_ID } from 'app/accessibility';
 import { PROJECTS_PATH } from 'app/routePaths';
-import { SITE_LINKS } from 'app/siteLinks';
+import { GITHUB_OWNER, SITE_LINKS } from 'app/siteLinks';
 import { ArrowBackIcon, GitHubIcon } from 'components/Icons';
 import { repositoriesData } from 'utils/data/githubData';
 
@@ -37,7 +37,7 @@ const ProjectItemDetails: React.FC = (): React.JSX.Element => {
                     target="_blank"
                     title={`View ${repo} on GitHub`}
                 >
-                    <GitHubIcon /> github.com/tenemo/{repo}
+                    <GitHubIcon /> github.com/{GITHUB_OWNER}/{repo}
                 </a>
             </div>
             <ProjectMarkdown markdown={markdown} repo={repo} />

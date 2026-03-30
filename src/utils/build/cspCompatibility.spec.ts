@@ -4,6 +4,7 @@ import {
     classifyLinkResource,
     isAllowedResourceUrl,
     isExecutableScript,
+    normalizeResourceOrigin,
 } from './cspCompatibility';
 
 describe('cspCompatibility', () => {
@@ -56,6 +57,12 @@ describe('cspCompatibility', () => {
         ).toBe(true);
         expect(
             isAllowedResourceUrl(
+                '//github.com/user-attachments/assets/12345678-1234-5678-9abc-123456789abc',
+                'media',
+            ),
+        ).toBe(true);
+        expect(
+            isAllowedResourceUrl(
                 'https://github-production-user-asset-6210df.s3.amazonaws.com/example.mp4',
                 'media',
             ),
@@ -84,6 +91,22 @@ describe('cspCompatibility', () => {
         expect(
             isAllowedResourceUrl('https://example.com/video.mp4', 'media'),
         ).toBe(false);
+    });
+
+    it('normalizes protocol-relative URLs to their actual origin', () => {
+        expect(normalizeResourceOrigin('//cdn.example.com/image.png')).toBe(
+            'https://cdn.example.com',
+        );
+        expect(
+            normalizeResourceOrigin(
+                '//private-user-images.githubusercontent.com/example',
+            ),
+        ).toBe('https://private-user-images.githubusercontent.com');
+        expect(
+            normalizeResourceOrigin(
+                '//github.com/user-attachments/assets/12345678-1234-5678-9abc-123456789abc',
+            ),
+        ).toBe('https://github-production-user-asset-6210df.s3.amazonaws.com');
     });
 
     it('classifies fetchable links for CSP validation', () => {

@@ -1,5 +1,5 @@
+import { getProjectPath } from 'app/routePaths';
 import { PROJECTS } from 'features/Projects/projectsData';
-import { getProjectRoutePath } from 'features/Projects/projectUtils';
 
 export type TopLevelPageContract = {
     route: string;
@@ -119,7 +119,7 @@ export const PROJECT_ROUTE_CONTRACTS: readonly ProjectRouteContract[] =
     PROJECTS.map((project) => ({
         name: project.name,
         repo: project.repo,
-        route: getProjectRoutePath(project.repo),
+        route: getProjectPath(project.repo),
     })).sort((left, right) => left.route.localeCompare(right.route));
 
 export const PROJECT_ROUTES = PROJECT_ROUTE_CONTRACTS.map(({ route }) => route);

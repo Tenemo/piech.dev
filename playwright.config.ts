@@ -64,6 +64,11 @@ const ciWorkerCount = parseWorkerCount(
     process.env.PLAYWRIGHT_CI_WORKERS,
     4,
 );
+const localWorkerCount = parseWorkerCount(
+    'PLAYWRIGHT_LOCAL_WORKERS',
+    process.env.PLAYWRIGHT_LOCAL_WORKERS,
+    4,
+);
 const remoteCiWorkerCount = parseWorkerCount(
     'PLAYWRIGHT_REMOTE_CI_WORKERS',
     process.env.PLAYWRIGHT_REMOTE_CI_WORKERS,
@@ -82,7 +87,7 @@ export default defineConfig({
             : 1
         : process.env.CI
           ? ciWorkerCount
-          : undefined,
+          : localWorkerCount,
     reporter: reporters,
     use: {
         baseURL: E2E_BASE_URL,

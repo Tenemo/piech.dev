@@ -1,6 +1,9 @@
+const normalizeUrlForParsing = (url: string): string =>
+    url.startsWith('//') ? `https:${url}` : url;
+
 export function isGithubUserAttachmentUrl(url: string): boolean {
     try {
-        const parsedUrl = new URL(url);
+        const parsedUrl = new URL(normalizeUrlForParsing(url));
 
         return (
             parsedUrl.protocol === 'https:' &&

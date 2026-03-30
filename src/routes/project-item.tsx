@@ -13,7 +13,7 @@ import { PERSON, PERSON_ID, WEBSITE, WEBSITE_ID } from './index';
 
 import { DEFAULT_KEYWORDS } from 'app/appConstants';
 import { getProjectPath, HOME_PATH, PROJECTS_PATH } from 'app/routePaths';
-import { SITE_LINKS } from 'app/siteLinks';
+import { GITHUB_OWNER, SITE_LINKS } from 'app/siteLinks';
 import ProjectItem from 'features/Projects/ProjectItem/ProjectItem';
 import { findProjectByRepo } from 'features/Projects/projectUtils';
 import { repositoriesData } from 'utils/data/githubData';
@@ -23,7 +23,7 @@ export const meta: MetaFunction = ({ params }) => {
     const info = repositoriesData[repo];
     const description =
         info?.description ??
-        `Project details for ${repo} from github.com/tenemo/${repo}`;
+        `Project details for ${repo} from github.com/${GITHUB_OWNER}/${repo}`;
     const keywords =
         info?.topics && info.topics.length > 0
             ? info.topics.join(', ')

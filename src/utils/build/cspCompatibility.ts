@@ -1,3 +1,5 @@
+import { isGithubUserAttachmentUrl } from '../githubUrls.ts';
+
 export type ResourceKind =
     | 'document'
     | 'image'
@@ -40,20 +42,6 @@ const ALLOWED_ORIGIN_PATTERNS: Record<
 
 const NON_EXECUTABLE_SCRIPT_TYPES = new Set(['application/ld+json']);
 
-function isGithubUserAttachmentUrl(url: string): boolean {
-    try {
-        const parsedUrl = new URL(url);
-
-        return (
-            parsedUrl.protocol === 'https:' &&
-            parsedUrl.hostname === 'github.com' &&
-            parsedUrl.pathname.startsWith('/user-attachments/assets/')
-        );
-    } catch {
-        return false;
-    }
-}
-
 export function isExecutableScript({
     src,
     type,
@@ -83,12 +71,12 @@ export function normalizeResourceOrigin(url: string): string {
         return GITHUB_USER_ATTACHMENT_RUNTIME_ORIGIN;
     }
 
-    if (url.startsWith('/')) {
-        return 'self';
-    }
-
     if (url.startsWith('//')) {
         return new URL(`https:${url}`).origin;
+    }
+
+    if (url.startsWith('/')) {
+        return 'self';
     }
 
     try {

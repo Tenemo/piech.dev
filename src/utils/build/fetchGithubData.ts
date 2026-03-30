@@ -1,6 +1,6 @@
 /*
- - CLI usage: node --experimental-strip-types src/utils/build/fetchGithubData.ts [--refetch]
- - Programmatic usage: await fetchGithubData({ refetch?: boolean })
+ - CLI usage: node --experimental-strip-types src/utils/build/fetchGithubData.ts [--refetch] [--allow-cache-fallback]
+ - Programmatic usage: await fetchGithubData({ refetch?: boolean, allowCacheFallback?: boolean })
  - Writes temp/githubData.json with shape:
      {
          metadata: { fetchedDatetime: string },
@@ -26,9 +26,9 @@ import path from 'node:path';
 import 'dotenv/config';
 import { Octokit } from 'octokit';
 
+import { GITHUB_OWNER } from '../../app/siteLinks.ts';
 import { PROJECTS } from '../../features/Projects/projectsData.ts';
 
-const OWNER = 'tenemo';
 const OUT_DIR = path.join(process.cwd(), 'temp');
 const OUT_PATH = path.join(OUT_DIR, 'githubData.json');
 const EPOCH_ISO = '1970-01-01T00:00:00.000Z';
@@ -52,17 +52,48 @@ export type GithubData = {
     repositories: Record<string, RepoInfo>;
 };
 
-function isFallbackRepositoryInfo(
+type FetchGithubDataOptions = {
+    refetch?: boolean;
+    allowCacheFallback?: boolean;
+};
+
+type CacheState = {
+    isFresh: boolean;
+    isUsable: boolean;
+};
+
+function isNonEmptyString(value: unknown): value is string {
+    return typeof value === 'string' && value.trim() !== '';
+}
+
+function isValidIsoDatetime(value: unknown): value is string {
+    return (
+        isNonEmptyString(value) &&
+        value !== EPOCH_ISO &&
+        !Number.isNaN(Date.parse(value))
+    );
+}
+
+function isValidRepositoryInfo(
     repoInfo: Partial<RepoInfo> | undefined,
 ): boolean {
     if (!repoInfo) {
-        return true;
+        return false;
     }
 
     return (
-        repoInfo.readme_content === README_UNAVAILABLE ||
-        repoInfo.createdDatetime === EPOCH_ISO ||
-        repoInfo.lastCommitDatetime === EPOCH_ISO
+        isNonEmptyString(repoInfo.name) &&
+        typeof repoInfo.description === 'string' &&
+        isValidIsoDatetime(repoInfo.createdDatetime) &&
+        isValidIsoDatetime(repoInfo.lastCommitDatetime) &&
+        isNonEmptyString(repoInfo.defaultBranch) &&
+        isNonEmptyString(repoInfo.readme_content) &&
+        repoInfo.readme_content !== README_NOT_FOUND &&
+        repoInfo.readme_content !== README_UNAVAILABLE &&
+        (repoInfo.topics === undefined ||
+            (Array.isArray(repoInfo.topics) &&
+                repoInfo.topics.every((topic) => isNonEmptyString(topic)))) &&
+        (repoInfo.license === undefined || isNonEmptyString(repoInfo.license))
     );
 }
 
@@ -111,6 +142,39 @@ function normalizeLicense(
     return license.name ?? undefined;
 }
 
+function readCachedGithubData(
+    repos: readonly string[],
+): CacheState | undefined {
+    if (!fssync.existsSync(OUT_PATH)) {
+        return undefined;
+    }
+
+    try {
+        const raw = fssync.readFileSync(OUT_PATH, 'utf8');
+        const current = JSON.parse(raw) as Partial<GithubData>;
+        const metaStr = current.metadata?.fetchedDatetime;
+        const metaDate = metaStr ? new Date(metaStr) : undefined;
+        const fileMtimeMs = fssync.statSync(OUT_PATH).mtime.getTime();
+        const effectiveTimeMs =
+            metaDate && !Number.isNaN(metaDate.getTime())
+                ? metaDate.getTime()
+                : fileMtimeMs;
+        const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+        const repositories = current.repositories ?? {};
+        const isComplete = repos.every((repo) => repo in repositories);
+        const isUsable =
+            isComplete &&
+            repos.every((repo) => isValidRepositoryInfo(repositories[repo]));
+
+        return {
+            isFresh: Date.now() - effectiveTimeMs <= ONE_DAY_MS,
+            isUsable,
+        };
+    } catch {
+        return undefined;
+    }
+}
+
 function createOctokit(token?: string): Octokit {
     return new Octokit({
         auth: token,
@@ -123,7 +187,7 @@ async function getReadme(octokit: Octokit, repo: string): Promise<string> {
         const response = await octokit.request(
             'GET /repos/{owner}/{repo}/readme',
             {
-                owner: OWNER,
+                owner: GITHUB_OWNER,
                 repo,
                 headers: {
                     accept: 'application/vnd.github.raw+json',
@@ -131,15 +195,24 @@ async function getReadme(octokit: Octokit, repo: string): Promise<string> {
             },
         );
 
-        return typeof response.data === 'string'
-            ? response.data
-            : README_NOT_FOUND;
-    } catch (error) {
-        if (getErrorStatus(error) === 404) {
-            return README_NOT_FOUND;
+        if (!isNonEmptyString(response.data)) {
+            throw new Error(`Repository "${repo}" returned an empty README.`);
         }
 
-        throw error;
+        return response.data;
+    } catch (error) {
+        if (getErrorStatus(error) === 404) {
+            throw new Error(`Repository "${repo}" is missing a README.`, {
+                cause: error,
+            });
+        }
+
+        throw new Error(
+            `Failed to fetch README for "${repo}": ${stringifyReason(error)}`,
+            {
+                cause: error,
+            },
+        );
     }
 }
 
@@ -150,7 +223,7 @@ async function getLastCommitDatetime(
 ): Promise<string | undefined> {
     try {
         const response = await octokit.rest.repos.getCommit({
-            owner: OWNER,
+            owner: GITHUB_OWNER,
             repo,
             ref: defaultBranch,
         });
@@ -171,28 +244,30 @@ async function buildRepositoryInfo(
 ): Promise<RepoInfo> {
     const [repoResult, topicsResult, readmeResult] = await Promise.allSettled([
         octokit.rest.repos.get({
-            owner: OWNER,
+            owner: GITHUB_OWNER,
             repo,
         }),
         octokit.rest.repos.getAllTopics({
-            owner: OWNER,
+            owner: GITHUB_OWNER,
             repo,
         }),
         getReadme(octokit, repo),
     ]);
 
-    const readmeContent =
-        readmeResult.status === 'fulfilled'
-            ? readmeResult.value
-            : README_UNAVAILABLE;
-
-    if (readmeResult.status === 'rejected') {
-        console.warn(
-            '[githubData] README fetch failed for',
-            repo,
-            stringifyReason(readmeResult.reason),
+    if (repoResult.status === 'rejected') {
+        throw new Error(
+            `Failed to fetch repository metadata for "${repo}": ${stringifyReason(repoResult.reason)}`,
         );
     }
+
+    if (readmeResult.status === 'rejected') {
+        throw new Error(stringifyReason(readmeResult.reason));
+    }
+
+    const topics =
+        topicsResult.status === 'fulfilled'
+            ? topicsResult.value.data.names
+            : undefined;
 
     if (topicsResult.status === 'rejected') {
         console.warn(
@@ -202,125 +277,117 @@ async function buildRepositoryInfo(
         );
     }
 
-    const topics =
-        topicsResult.status === 'fulfilled'
-            ? topicsResult.value.data.names
-            : undefined;
+    const repository = repoResult.value.data;
+    const defaultBranch = repository.default_branch;
 
-    if (repoResult.status === 'rejected') {
-        console.warn(
-            '[githubData] Repo info failed for',
-            repo,
-            stringifyReason(repoResult.reason),
+    if (!isNonEmptyString(defaultBranch)) {
+        throw new Error(
+            `Repository "${repo}" is missing default branch metadata.`,
         );
-
-        return {
-            name: repo,
-            description: 'No description available',
-            createdDatetime: EPOCH_ISO,
-            lastCommitDatetime: EPOCH_ISO,
-            readme_content: readmeContent,
-            topics,
-        };
     }
 
-    const repository = repoResult.value.data;
+    if (!isValidIsoDatetime(repository.created_at)) {
+        throw new Error(
+            `Repository "${repo}" is missing a valid creation timestamp.`,
+        );
+    }
+
     const lastCommitDatetime = await getLastCommitDatetime(
         octokit,
         repo,
-        repository.default_branch,
+        defaultBranch,
     );
+    const resolvedLastCommitDatetime =
+        lastCommitDatetime ?? repository.pushed_at;
+
+    if (!isValidIsoDatetime(resolvedLastCommitDatetime)) {
+        throw new Error(
+            `Repository "${repo}" is missing a valid last commit timestamp.`,
+        );
+    }
 
     return {
         name: repository.name,
         description: repository.description ?? 'No description available',
         createdDatetime: repository.created_at,
-        lastCommitDatetime: lastCommitDatetime ?? repository.pushed_at,
-        defaultBranch: repository.default_branch,
+        lastCommitDatetime: resolvedLastCommitDatetime,
+        defaultBranch,
         license: normalizeLicense(repository.license),
-        readme_content: readmeContent,
+        readme_content: readmeResult.value,
         topics,
     };
 }
 
-export async function fetchGithubData(options?: {
-    refetch?: boolean;
-}): Promise<void> {
+export async function fetchGithubData(
+    options?: FetchGithubDataOptions,
+): Promise<void> {
+    const allowCacheFallback = Boolean(options?.allowCacheFallback);
     const refetch = Boolean(options?.refetch);
     const repos = Array.from(new Set(PROJECTS.map((project) => project.repo)));
+    const cacheState = readCachedGithubData(repos);
 
-    if (fssync.existsSync(OUT_PATH)) {
-        try {
-            const raw = fssync.readFileSync(OUT_PATH, 'utf8');
-            const current = JSON.parse(raw) as Partial<GithubData>;
-            const metaStr = current.metadata?.fetchedDatetime;
-            const metaDate = metaStr ? new Date(metaStr) : undefined;
-            const fileMtimeMs = fssync.statSync(OUT_PATH).mtime.getTime();
-            const effectiveTimeMs =
-                metaDate && !isNaN(metaDate.getTime())
-                    ? metaDate.getTime()
-                    : fileMtimeMs;
-            const ONE_DAY_MS = 24 * 60 * 60 * 1000;
-            const olderThanOneDay = Date.now() - effectiveTimeMs > ONE_DAY_MS;
-            const repositories = current.repositories ?? {};
-            const infoKeys = Object.keys(repositories);
-            const complete = repos.every((repo) => infoKeys.includes(repo));
-            const hasFallbackData = repos.some((repo) =>
-                isFallbackRepositoryInfo(repositories[repo]),
-            );
+    if (!refetch && cacheState?.isUsable && cacheState.isFresh) {
+        console.log('[githubData] Up-to-date and fresh file found, skipping.');
+        return;
+    }
 
-            if (!refetch && complete && !olderThanOneDay && !hasFallbackData) {
-                console.log(
-                    '[githubData] Up-to-date and fresh file found, skipping.',
-                );
-                return;
-            }
+    if (cacheState && !cacheState.isFresh) {
+        console.log(
+            '[githubData] Existing cache is older than a day; refetching.',
+        );
+    }
 
-            if (olderThanOneDay) {
-                console.log(
-                    '[githubData] Existing file is older than a day; refetching.',
-                );
-            }
-
-            if (hasFallbackData) {
-                console.log(
-                    '[githubData] Existing file contains fallback GitHub data; refetching.',
-                );
-            }
-        } catch {
-            // Rebuild the file if parsing the cache fails.
-        }
+    if (cacheState && !cacheState.isUsable) {
+        console.log(
+            '[githubData] Existing cache is incomplete or degraded; refetching.',
+        );
     }
 
     const token = process.env.PERSONAL_GITHUB_TOKEN ?? process.env.GH_TOKEN;
     const octokit = createOctokit(token);
-    const repositoryEntries = await Promise.all(
-        repos.map(
-            async (repo): Promise<readonly [string, RepoInfo]> => [
-                repo,
-                await buildRepositoryInfo(octokit, repo),
-            ],
-        ),
-    );
-    const repositories: GithubData['repositories'] =
-        Object.fromEntries(repositoryEntries);
 
-    await fs.mkdir(OUT_DIR, { recursive: true });
-    const payload: GithubData = {
-        metadata: { fetchedDatetime: new Date().toISOString() },
-        repositories,
-    };
-    await fs.writeFile(OUT_PATH, JSON.stringify(payload, null, 2), 'utf8');
-    console.log('[githubData] Wrote new format to', OUT_PATH);
+    try {
+        const repositoryEntries = await Promise.all(
+            repos.map(
+                async (repo): Promise<readonly [string, RepoInfo]> => [
+                    repo,
+                    await buildRepositoryInfo(octokit, repo),
+                ],
+            ),
+        );
+        const repositories: GithubData['repositories'] =
+            Object.fromEntries(repositoryEntries);
+
+        await fs.mkdir(OUT_DIR, { recursive: true });
+        const payload: GithubData = {
+            metadata: { fetchedDatetime: new Date().toISOString() },
+            repositories,
+        };
+        await fs.writeFile(OUT_PATH, JSON.stringify(payload, null, 2), 'utf8');
+        console.log('[githubData] Wrote new format to', OUT_PATH);
+    } catch (error) {
+        if (allowCacheFallback && cacheState?.isUsable) {
+            console.warn(
+                '[githubData] Fetch failed, using the existing cache because cache fallback was explicitly enabled.',
+                stringifyReason(error),
+            );
+            return;
+        }
+
+        throw error;
+    }
 }
 
 if (
     import.meta.url ===
     (process.argv[1] && new URL(`file://${process.argv[1]}`).href)
 ) {
+    const allowCacheFallback = process.argv.includes('--allow-cache-fallback');
     const refetch = process.argv.includes('--refetch');
-    void fetchGithubData({ refetch }).catch((error: unknown) => {
-        console.error('[githubData] Generation failed:', error);
-        process.exitCode = 1;
-    });
+    void fetchGithubData({ allowCacheFallback, refetch }).catch(
+        (error: unknown) => {
+            console.error('[githubData] Generation failed:', error);
+            process.exitCode = 1;
+        },
+    );
 }

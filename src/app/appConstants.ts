@@ -8,3 +8,5 @@ export const PRODUCTION_OG_IMAGES_DIRECTORY =
     'https://piech.dev/media/projects/og_images/';
 
 export const SILENT_CAPTIONS_TRACK_PATH = '/media/captions/silent.vtt';
+
+export const PROJECT_DATE_FORMAT = 'MMMM yyyy';

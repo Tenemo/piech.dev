@@ -6,7 +6,7 @@ on:
             base_url:
                 description: Production site URL to test
                 required: false
-                default: 'https://piech.dev'
+                default: "https://piech.dev"
                 type: string
     repository_dispatch:
         types: [production_e2e]
@@ -33,7 +33,7 @@ jobs:
             - name: Use Node.js
               uses: actions/setup-node@v5
               with:
-                  node-version: '22.x'
+                  node-version: "22.x"
 
             - name: Read Playwright workflow config
               id: config
@@ -71,7 +71,7 @@ jobs:
                       slug: mobile-firefox-galaxy-s24
                       browser: firefox
         env:
-            PLAYWRIGHT_BLOB_REPORT: 'true'
+            PLAYWRIGHT_BLOB_REPORT: "true"
             PLAYWRIGHT_REMOTE_CI_WORKERS: ${{ needs.resolve_config.outputs.workers }}
         steps:
             - name: Checkout
@@ -80,8 +80,8 @@ jobs:
             - name: Use Node.js
               uses: actions/setup-node@v5
               with:
-                  node-version: '22.x'
-                  cache: 'npm'
+                  node-version: "22.x"
+                  cache: "npm"
 
             - name: Install dependencies
               run: npm ci
@@ -124,7 +124,7 @@ jobs:
 
             - name: Cache Playwright browsers
               id: playwright-browser-cache
-              uses: actions/cache@v4
+              uses: actions/cache@v5
               with:
                   path: ~/.cache/ms-playwright
                   key: ${{ runner.os }}-playwright-${{ matrix.project.browser }}-${{ hashFiles('package-lock.json') }}
@@ -218,8 +218,8 @@ jobs:
               if: needs.playwright.result == 'failure' || needs.playwright.result == 'cancelled'
               uses: actions/setup-node@v5
               with:
-                  node-version: '22.x'
-                  cache: 'npm'
+                  node-version: "22.x"
+                  cache: "npm"
 
             - name: Install dependencies
               if: needs.playwright.result == 'failure' || needs.playwright.result == 'cancelled'

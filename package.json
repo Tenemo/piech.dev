@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "author": "Piotr Piech <piotr@piech.dev>",
     "license": "UNLICENSED",
+    "private": true,
     "description": "My personal page. It turned into a complex project itself: it supports loading all projects' information directly from GitHub, renders markdown, the whole site is pre-rendered and served with zero JS. It includes dynamic <meta> tags for each project, including og:image tags with sizes. Perfect 100/100/100/100 Lighthouse score for all routes.",
     "repository": {
         "type": "git",

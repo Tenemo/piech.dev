@@ -55,6 +55,18 @@ to = "/projects/:splat"
 status = 301
 force = true
 
+[[redirects]]
+from = "/projects/sealed-vote-web"
+to = "/projects/sealed-vote/"
+status = 301
+force = true
+
+[[redirects]]
+from = "/projects/sealed-vote-web/"
+to = "/projects/sealed-vote/"
+status = 301
+force = true
+
 # Contact routes
 [[redirects]]
 from = "/linkedin"

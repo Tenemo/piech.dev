@@ -33,7 +33,7 @@ export const PROJECTS = [
     },
     {
         name: 'sealed.vote',
-        repo: 'sealed-vote-web',
+        repo: 'sealed-vote',
         projectPreview: {
             fileName: 'sealed.vote.mp4',
             width: 2542,

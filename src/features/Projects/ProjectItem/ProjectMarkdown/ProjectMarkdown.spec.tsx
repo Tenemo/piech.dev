@@ -25,8 +25,8 @@ describe('ProjectMarkdown', () => {
     it('uses the configured project name as the page heading and strips a redundant README title', () => {
         render(
             <ProjectMarkdown
-                markdown={'# sealed-vote-web\n\nOverview paragraph.'}
-                repo="sealed-vote-web"
+                markdown={'# sealed-vote\n\nOverview paragraph.'}
+                repo="sealed-vote"
             />,
         );
 
@@ -36,7 +36,7 @@ describe('ProjectMarkdown', () => {
         expect(
             screen.queryByRole('heading', {
                 level: 1,
-                name: 'sealed-vote-web',
+                name: 'sealed-vote',
             }),
         ).not.toBeInTheDocument();
         expect(screen.getByText('Overview paragraph.')).toBeInTheDocument();

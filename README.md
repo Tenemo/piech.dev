@@ -1,6 +1,5 @@
 # piech.dev
 
-[piech.dev](https://piech.dev)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/4df86a71-2a3f-40f9-9bd5-b6dacd4f420c/deploy-status)](https://app.netlify.com/projects/piech-dev/deploys)
 [![Web status](https://img.shields.io/website?url=https%3A%2F%2Fpiech.dev&label=web%20status)](https://piech.dev)
 
@@ -14,9 +13,7 @@
 
 [![Node version](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Tenemo/piech.dev/badge-data/node.json)](./.nvmrc)
 
-[![License](https://img.shields.io/github/license/Tenemo/piech.dev)](./LICENSE)
-
-My personal page. Over time it turned into a complex project itself:
+My personal page, [piech.dev](https://piech.dev). Over time it turned into a complex project itself:
 
 - Despite being written in React, the whole page is pre-rendered and served with zero JavaScript!
 - It supports loading all projects' information directly from GitHub.

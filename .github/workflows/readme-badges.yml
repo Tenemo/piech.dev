@@ -1,0 +1,55 @@
+name: readme badges
+
+on:
+    push:
+        branches: [master, main]
+    workflow_dispatch:
+
+permissions:
+    contents: write
+
+jobs:
+    publish-badge-data:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v5
+              with:
+                  fetch-depth: 0
+
+            - uses: actions/setup-node@v5
+              with:
+                  node-version-file: '.nvmrc'
+                  cache: 'npm'
+
+            - name: install dependencies
+              run: npm ci
+
+            - name: generate badge data
+              run: npm run coverage:ci
+
+            - name: upload badge data
+              uses: actions/upload-artifact@v4
+              with:
+                  name: badge-data
+                  path: |
+                      coverage/coverage-summary.json
+                      .github/badge-data
+                  if-no-files-found: error
+
+            - name: publish badge data branch
+              env:
+                  GITHUB_TOKEN: ${{ github.token }}
+              run: |
+                  rm -rf badge-data-publish
+                  mkdir -p badge-data-publish
+                  cp -r .github/badge-data/. badge-data-publish/
+                  cd badge-data-publish
+                  git init
+                  git checkout -b badge-data
+                  git config user.name "github-actions[bot]"
+                  git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                  git add --all
+                  git commit -m "Update readme badge data"
+                  git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+                  git push --force origin badge-data

@@ -10,6 +10,7 @@ declare const markdownContainer: string;
 declare const dateBadge: string;
 declare const videoPlayer: string;
 declare const markdownImage: string;
+declare const badgeImage: string;
 declare const codeBlock: string;
 declare const inlineCode: string;
 
@@ -18,6 +19,7 @@ export {
 	dateBadge,
 	videoPlayer,
 	markdownImage,
+	badgeImage,
 	codeBlock,
 	inlineCode
 };
@@ -27,6 +29,7 @@ declare const __default_export__: {
 	dateBadge: typeof dateBadge;
 	videoPlayer: typeof videoPlayer;
 	markdownImage: typeof markdownImage;
+	badgeImage: typeof badgeImage;
 	codeBlock: typeof codeBlock;
 	inlineCode: typeof inlineCode;
 };

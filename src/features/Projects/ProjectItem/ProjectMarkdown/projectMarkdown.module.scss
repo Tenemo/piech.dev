@@ -122,6 +122,15 @@
     height: auto;
 }
 
+.badgeImage {
+    display: inline-block;
+    max-width: 100%;
+    height: auto;
+    margin: 0;
+    border-radius: 0;
+    vertical-align: middle;
+}
+
 .codeBlock {
     font-family: monospace;
     font-size: 0.9rem;

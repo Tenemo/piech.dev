@@ -59,7 +59,7 @@ export default defineConfig(
     ]),
     prettierPluginRecommended,
     {
-        files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
+        files: ['**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}'],
         ...reactHooksPlugin.configs['recommended-latest'],
         plugins: {
             '@typescript-eslint': tsPlugin,
@@ -227,6 +227,7 @@ export default defineConfig(
         files: [
             'eslint.config.js',
             'src/utils/build/**/*.ts',
+            '.github/scripts/**/*.{ts,mts}',
             'e2e/support/serveDistClient.ts',
         ],
         rules: {

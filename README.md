@@ -14,8 +14,6 @@
 
 [![Node version](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Tenemo/piech.dev/badge-data/node.json)](./.nvmrc)
 
-[![License](https://img.shields.io/github/license/Tenemo/piech.dev)](./LICENSE)
-
 My personal page. Over time it turned into a complex project itself:
 
 - Despite being written in React, the whole page is pre-rendered and served with zero JavaScript!

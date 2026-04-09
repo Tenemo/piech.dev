@@ -45,6 +45,12 @@ describe('cspCompatibility', () => {
         ).toBe(true);
         expect(
             isAllowedResourceUrl(
+                'https://img.shields.io/npm/dm/threshold-elgamal',
+                'image',
+            ),
+        ).toBe(true);
+        expect(
+            isAllowedResourceUrl(
                 'https://private-user-images.githubusercontent.com/example',
                 'image',
             ),

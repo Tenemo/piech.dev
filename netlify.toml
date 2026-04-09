@@ -15,7 +15,7 @@ X-Frame-Options = "DENY"
 X-Content-Type-Options = "nosniff"
 Cross-Origin-Opener-Policy = "same-origin"
 Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
-Content-Security-Policy = "default-src 'self'; script-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://api.netlify.com https://badge.fury.io https://d25lcipzij17d.cloudfront.net https://github.com https://raw.githubusercontent.com https://github-production-user-asset-6210df.s3.amazonaws.com https://*.githubusercontent.com; media-src 'self' https://github.com https://raw.githubusercontent.com https://github-production-user-asset-6210df.s3.amazonaws.com https://*.githubusercontent.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'none'; require-trusted-types-for 'script';"
+Content-Security-Policy = "default-src 'self'; script-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://api.netlify.com https://badge.fury.io https://d25lcipzij17d.cloudfront.net https://img.shields.io https://github.com https://raw.githubusercontent.com https://github-production-user-asset-6210df.s3.amazonaws.com https://*.githubusercontent.com; media-src 'self' https://github.com https://raw.githubusercontent.com https://github-production-user-asset-6210df.s3.amazonaws.com https://*.githubusercontent.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'none'; require-trusted-types-for 'script';"
 
 [[headers]]
 for = "/index.html"

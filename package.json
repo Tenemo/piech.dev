@@ -34,6 +34,7 @@
         "test": "vitest run",
         "test:watch": "vitest",
         "test:coverage": "vitest run --coverage",
+        "coverage:ci": "npm run test:coverage && node --experimental-strip-types .github/scripts/writeBadgeData.mts",
         "serve:e2e": "node --experimental-strip-types e2e/support/serveDistClient.ts",
         "test:e2e": "npm run build:skip && playwright test",
         "test:e2e:production": "cross-env PLAYWRIGHT_BASE_URL=https://piech.dev playwright test",

@@ -62,6 +62,40 @@ type ProjectMarkdownProps = {
     repo: string;
 };
 
+const BADGE_IMAGE_ORIGINS = new Set([
+    'https://api.netlify.com',
+    'https://badge.fury.io',
+    'https://d25lcipzij17d.cloudfront.net',
+    'https://img.shields.io',
+]);
+
+function isBadgeImageUrl(src: string | undefined): boolean {
+    if (!src) {
+        return false;
+    }
+
+    try {
+        const normalizedUrl = src.startsWith('//') ? `https:${src}` : src;
+        const url = new URL(normalizedUrl);
+
+        if (!BADGE_IMAGE_ORIGINS.has(url.origin)) {
+            return false;
+        }
+
+        if (url.origin === 'https://api.netlify.com') {
+            return url.pathname.startsWith('/api/v1/badges/');
+        }
+
+        if (url.origin === 'https://d25lcipzij17d.cloudfront.net') {
+            return url.pathname.endsWith('/badge.svg');
+        }
+
+        return true;
+    } catch {
+        return false;
+    }
+}
+
 const ProjectMarkdown = ({
     markdown,
     repo,
@@ -129,13 +163,17 @@ const ProjectMarkdown = ({
             );
         },
         img({ node: _node, className, src, alt, ...props }) {
+            const imageClassName = isBadgeImageUrl(src)
+                ? styles.badgeImage
+                : styles.markdownImage;
+
             return (
                 <img
                     alt={alt}
                     className={
                         className
-                            ? `${styles.markdownImage} ${className}`
-                            : styles.markdownImage
+                            ? `${imageClassName} ${className}`
+                            : imageClassName
                     }
                     decoding="async"
                     src={src}

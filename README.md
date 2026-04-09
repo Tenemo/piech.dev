@@ -1,8 +1,20 @@
 # piech.dev
 
 [piech.dev](https://piech.dev)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/4df86a71-2a3f-40f9-9bd5-b6dacd4f420c/deploy-status)](https://app.netlify.com/projects/piech-dev/deploys)
+[![Web status](https://img.shields.io/website?url=https%3A%2F%2Fpiech.dev&label=web%20status)](https://piech.dev)
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/4df86a71-2a3f-40f9-9bd5-b6dacd4f420c/deploy-status)](https://app.netlify.com/sites/piech-dev/deploys)
+---
+
+[![Production E2E tests](https://img.shields.io/github/actions/workflow/status/Tenemo/piech.dev/production-e2e.yml?branch=master&label=production%20e2e)](https://github.com/Tenemo/piech.dev/actions/workflows/production-e2e.yml)
+[![CI](https://img.shields.io/github/actions/workflow/status/Tenemo/piech.dev/ci.yml?branch=master&label=ci)](https://github.com/Tenemo/piech.dev/actions/workflows/ci.yml)
+[![Tests coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Tenemo/piech.dev/badge-data/coverage.json)](https://github.com/Tenemo/piech.dev/actions/workflows/readme-badges.yml)
+
+---
+
+[![Node version](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Tenemo/piech.dev/badge-data/node.json)](./.nvmrc)
+
+[![License](https://img.shields.io/github/license/Tenemo/piech.dev)](./LICENSE)
 
 My personal page. Over time it turned into a complex project itself:
 

@@ -157,6 +157,23 @@ describe('ProjectMarkdown', () => {
         expect(screen.getByAltText('Image')).toHaveClass(styles.markdownImage);
     });
 
+    it('renders README badge images inline instead of as block screenshots', () => {
+        render(
+            <ProjectMarkdown
+                markdown={
+                    '[![CI](https://img.shields.io/github/actions/workflow/status/Tenemo/piech.dev/ci.yml?branch=master&label=ci)](https://github.com/Tenemo/piech.dev/actions/workflows/ci.yml)\n[![Netlify status](https://api.netlify.com/api/v1/badges/example/deploy-status)](https://app.netlify.com/sites/example/deploys)'
+                }
+                repo="test-repo"
+            />,
+        );
+
+        expect(screen.getByAltText('CI')).toHaveClass(styles.badgeImage);
+        expect(screen.getByAltText('CI')).not.toHaveClass(styles.markdownImage);
+        expect(screen.getByAltText('Netlify status')).toHaveClass(
+            styles.badgeImage,
+        );
+    });
+
     it('adds an empty captions track to raw HTML videos without one', () => {
         render(
             <ProjectMarkdown

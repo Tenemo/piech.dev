@@ -20,6 +20,7 @@ test-results/
 *concatenated.txt
 .react-router/
 .claude/
+.github/badge-data/
 
 # env
 .env

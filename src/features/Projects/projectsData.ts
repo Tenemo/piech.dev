@@ -124,6 +124,42 @@ export const PROJECTS = [
         ],
     },
     {
+        name: 'Battle Brothers Legends build planner',
+        repo: 'battle-brothers-legends-browser',
+        projectPreview: {
+            fileName: 'battle-brothers-legends-browser.webp',
+            width: 1600,
+            height: 1000,
+        },
+        ogImage: 'battle-brothers-legends-browser_preview.jpg',
+        ogImageAlt:
+            'Battle Brothers Legends build planner showing background rankings, perk details, search results and category filters.',
+        programmingLanguage: 'TypeScript',
+        technologies: [
+            'typescript',
+            'react',
+            'sass',
+            'vitejs',
+            'eslint',
+            'prettier',
+            'netlify',
+        ],
+    },
+    {
+        name: 'aliases.sh',
+        repo: 'aliases.sh',
+        projectPreview: {
+            fileName: 'aliases.sh.webp',
+            width: 833,
+            height: 622,
+        },
+        ogImage: 'aliases.sh_preview.jpg',
+        ogImageAlt:
+            'Screenshot of aliases.sh showing bash aliases for npm and git, with sections for packages and git checkout commands.',
+        programmingLanguage: 'Bash',
+        technologies: ['bash'],
+    },
+    {
         name: 'expressplate',
         repo: 'expressplate',
         projectPreview: {
@@ -144,20 +180,6 @@ export const PROJECTS = [
             'prettier',
             'sentry',
         ],
-    },
-    {
-        name: 'aliases.sh',
-        repo: 'aliases.sh',
-        projectPreview: {
-            fileName: 'aliases.sh.webp',
-            width: 833,
-            height: 622,
-        },
-        ogImage: 'aliases.sh_preview.jpg',
-        ogImageAlt:
-            'Screenshot of aliases.sh showing bash aliases for npm and git, with sections for packages and git checkout commands.',
-        programmingLanguage: 'Bash',
-        technologies: ['bash'],
     },
     {
         name: 'tiles.town',

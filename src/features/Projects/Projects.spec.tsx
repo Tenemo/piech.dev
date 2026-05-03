@@ -42,6 +42,9 @@ describe('Projects page', () => {
         expect(getHeading(/sealed\.vote/i)).toBeInTheDocument();
         expect(getHeading(/expressplate/i)).toBeInTheDocument();
         expect(getHeading(/aliases\.sh/i)).toBeInTheDocument();
+        expect(
+            getHeading(/Battle Brothers Legends build planner/i),
+        ).toBeInTheDocument();
     });
 
     it('prioritizes only the first project grid image', () => {

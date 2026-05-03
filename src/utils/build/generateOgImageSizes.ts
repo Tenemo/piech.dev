@@ -37,10 +37,12 @@ const imageSizes = imageFiles.map((fileName) => {
     return { fileName, width, height };
 });
 
-const generatedEntries = imageSizes.map(
-    ({ fileName, width, height }) =>
-        `    '${fileName}': { width: ${String(width)}, height: ${String(height)} },`,
-);
+const generatedEntries = imageSizes.flatMap(({ fileName, width, height }) => [
+    `    '${fileName}': {`,
+    `        width: ${String(width)},`,
+    `        height: ${String(height)},`,
+    '    },',
+]);
 
 const fileContents = [
     'type OgImageSize = { width: number; height: number };',

@@ -10,8 +10,8 @@ declare const card: string;
 declare const description: string;
 declare const dateBadge: string;
 declare const previewContainer: string;
-declare const image: string;
 declare const previewLink: string;
+declare const image: string;
 declare const content: string;
 declare const projectTitle: string;
 declare const imageRight: string;
@@ -22,8 +22,8 @@ export {
 	description,
 	dateBadge,
 	previewContainer,
-	image,
 	previewLink,
+	image,
 	content,
 	projectTitle,
 	imageRight,
@@ -35,8 +35,8 @@ declare const __default_export__: {
 	description: typeof description;
 	dateBadge: typeof dateBadge;
 	previewContainer: typeof previewContainer;
-	image: typeof image;
 	previewLink: typeof previewLink;
+	image: typeof image;
 	content: typeof content;
 	projectTitle: typeof projectTitle;
 	imageRight: typeof imageRight;

@@ -81,9 +81,9 @@ export const FLAGSHIP_PROJECTS = [
         pageTitle: 'piech.dev | piech.dev',
     },
     {
-        route: '/projects/sealed-vote/',
-        cardName: 'sealed.vote',
-        pageTitle: 'sealed.vote | piech.dev',
+        route: '/projects/tiles-town/',
+        cardName: 'tiles.town',
+        pageTitle: 'tiles.town | piech.dev',
     },
     {
         route: '/projects/threshold-elgamal/',

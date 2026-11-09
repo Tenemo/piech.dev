@@ -12,6 +12,7 @@ const MIME_TYPES = new Map<string, string>([
     ['.jpeg', 'image/jpeg'],
     ['.jpg', 'image/jpeg'],
     ['.json', 'application/json; charset=utf-8'],
+    ['.md', 'text/markdown; charset=utf-8'],
     ['.mp4', 'video/mp4'],
     ['.png', 'image/png'],
     ['.svg', 'image/svg+xml'],

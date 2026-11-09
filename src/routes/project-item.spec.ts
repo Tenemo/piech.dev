@@ -5,10 +5,10 @@ import { meta as projectItemMeta } from './project-item';
 describe('project-item route meta', () => {
     it('uses a trailing-slash canonical URL for project routes', () => {
         const metaArgs = {
-            params: { repo: 'sealed-vote' },
+            params: { repo: 'tiles-town' },
             data: null,
             location: {
-                pathname: '/projects/sealed-vote/',
+                pathname: '/projects/tiles-town/',
                 search: '',
                 hash: '',
                 state: null,
@@ -23,15 +23,15 @@ describe('project-item route meta', () => {
 
         expect(tags).toEqual(
             expect.arrayContaining([
-                { title: 'sealed.vote | piech.dev' },
+                { title: 'tiles.town | piech.dev' },
                 expect.objectContaining({
                     tagName: 'link',
                     rel: 'canonical',
-                    href: 'https://piech.dev/projects/sealed-vote/',
+                    href: 'https://piech.dev/projects/tiles-town/',
                 }),
                 expect.objectContaining({
                     property: 'og:url',
-                    content: 'https://piech.dev/projects/sealed-vote/',
+                    content: 'https://piech.dev/projects/tiles-town/',
                 }),
             ]),
         );

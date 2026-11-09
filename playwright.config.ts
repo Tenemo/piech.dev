@@ -16,6 +16,7 @@ const INVARIANT_SPEC_GLOBS = [
     '**/route-health.spec.ts',
     '**/seo.spec.ts',
     '**/sitemap.spec.ts',
+    '**/llms.spec.ts',
     '**/zero-js.spec.ts',
 ];
 const KEYBOARD_ACCESSIBILITY_SPEC_GLOB = '**/accessibility-keyboard.spec.ts';

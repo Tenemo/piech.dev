@@ -236,6 +236,9 @@ export default defineConfig(
     },
     {
         files: [
+            'src/utils/build/generate-llms.ts',
+            'src/utils/build/llms-content.ts',
+            'src/utils/markdown-content.ts',
             'src/utils/build/cspCompatibility.ts',
             'src/utils/build/fetchGithubData.ts',
             'src/utils/build/inlineCss.ts',

@@ -31,30 +31,31 @@ export const PROJECTS = [
         programmingLanguage: 'TypeScript',
         technologies: ['typescript', 'npm', 'typedoc'],
     },
-    {
-        name: 'sealed.vote',
-        repo: 'sealed-vote',
-        projectPreview: {
-            fileName: 'sealed.vote.mp4',
-            width: 2542,
-            height: 1264,
-        },
-        ogImage: 'sealed.vote_preview.jpg',
-        ogImageAlt:
-            'sealed.vote ranked-choice voting UI with 1-10 rating buttons and a panel indicating the poll is waiting to be closed.',
-        programmingLanguage: 'TypeScript',
-        technologies: [
-            'typescript',
-            'fastify',
-            'postgresql',
-            'docker',
-            'react',
-            'redux',
-            'mui',
-            'netlify',
-            'sentry',
-        ],
-    },
+    // Temporarily excluded while its repository is unavailable to public builds.
+    // {
+    //     name: 'sealed.vote',
+    //     repo: 'sealed-vote',
+    //     projectPreview: {
+    //         fileName: 'sealed.vote.mp4',
+    //         width: 2542,
+    //         height: 1264,
+    //     },
+    //     ogImage: 'sealed.vote_preview.jpg',
+    //     ogImageAlt:
+    //         'sealed.vote ranked-choice voting UI with 1-10 rating buttons and a panel indicating the poll is waiting to be closed.',
+    //     programmingLanguage: 'TypeScript',
+    //     technologies: [
+    //         'typescript',
+    //         'fastify',
+    //         'postgresql',
+    //         'docker',
+    //         'react',
+    //         'redux',
+    //         'mui',
+    //         'netlify',
+    //         'sentry',
+    //     ],
+    // },
     {
         name: 'bob',
         repo: 'bob',

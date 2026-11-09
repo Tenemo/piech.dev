@@ -39,7 +39,10 @@ describe('Projects page', () => {
 
         expect(getHeading(/reactplate/i)).toBeInTheDocument();
         expect(getHeading(/threshold-elgamal/i)).toBeInTheDocument();
-        expect(getHeading(/sealed\.vote/i)).toBeInTheDocument();
+        expect(getHeading(/tiles\.town/i)).toBeInTheDocument();
+        expect(
+            screen.queryByRole('heading', { level: 3, name: 'sealed.vote' }),
+        ).not.toBeInTheDocument();
         expect(getHeading(/expressplate/i)).toBeInTheDocument();
         expect(getHeading(/aliases\.sh/i)).toBeInTheDocument();
         expect(

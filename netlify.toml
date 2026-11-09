@@ -67,6 +67,13 @@ to = "/projects/sealed-vote/"
 status = 301
 force = true
 
+# Temporarily unavailable project
+[[redirects]]
+from = "/projects/sealed-vote"
+to = "/projects/"
+status = 302
+force = true
+
 # Contact routes
 [[redirects]]
 from = "/linkedin"

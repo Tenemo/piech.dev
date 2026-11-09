@@ -30,6 +30,7 @@ export const Layout = ({
         <html lang="en">
             <head>
                 <base href="/" />
+                <link href="/llms.txt" rel="describedby" />
                 <meta content="piotr@piech.dev" name="author" />
                 <meta content="piech.dev" property="og:site_name"></meta>
                 <meta charSet="utf-8" />

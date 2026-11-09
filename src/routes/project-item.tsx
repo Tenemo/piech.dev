@@ -12,7 +12,12 @@ import {
 import { PERSON, PERSON_ID, WEBSITE, WEBSITE_ID } from './index';
 
 import { DEFAULT_KEYWORDS } from 'app/appConstants';
-import { getProjectPath, HOME_PATH, PROJECTS_PATH } from 'app/routePaths';
+import {
+    getProjectMarkdownPath,
+    getProjectPath,
+    HOME_PATH,
+    PROJECTS_PATH,
+} from 'app/routePaths';
 import { GITHUB_OWNER, SITE_LINKS } from 'app/siteLinks';
 import ProjectItem from 'features/Projects/ProjectItem/ProjectItem';
 import { findProjectByRepo } from 'features/Projects/projectUtils';
@@ -113,6 +118,14 @@ export const meta: MetaFunction = ({ params }) => {
         imageName: projectEntry.ogImage,
         imageAlt: projectEntry.ogImageAlt,
         graph,
+        extra: [
+            {
+                tagName: 'link',
+                rel: 'alternate',
+                type: 'text/markdown',
+                href: getProjectMarkdownPath(repo),
+            },
+        ],
     });
 };
 

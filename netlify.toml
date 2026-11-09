@@ -108,3 +108,15 @@ status = 301
 from = "/index.html"
 to = "/"
 status = 301
+
+[[headers]]
+for = "/llms.txt"
+[headers.values]
+Content-Type = "text/plain; charset=utf-8"
+Cache-Control = "public, max-age=300, stale-while-revalidate=3600"
+
+[[headers]]
+for = "/projects/*/index.md"
+[headers.values]
+Content-Type = "text/markdown; charset=utf-8"
+Cache-Control = "public, max-age=300, stale-while-revalidate=3600"

@@ -4,6 +4,9 @@ export const CONTACT_PATH = '/contact/';
 
 export const getProjectPath = (repo: string): string => `/projects/${repo}/`;
 
+export const getProjectMarkdownPath = (repo: string): string =>
+    `${getProjectPath(repo)}index.md`;
+
 export const ensureTrailingSlash = (path: string): string => {
     if (path === HOME_PATH) {
         return HOME_PATH;

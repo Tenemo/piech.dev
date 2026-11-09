@@ -22,7 +22,7 @@ My personal page, [piech.dev](https://piech.dev). Over time it turned into a com
 - All routes have appropriate JSON-LD objects with all relevant information, even if Google or other search engines currently don't support some of them.
 - Thanks to the above and a bunch of other optimizations, all routes, including the heaviest [projects/](https://piech.dev/projects/) route, score a perfect 100/100/100/100 on [Google Lighthouse](https://pagespeed.web.dev/) mobile, which throttles to a slow 4G network connection.
 
-_Not a single word of this readme was generated or even reviewed by LLMs ("AI"). Letting you know just in case you don't enjoy reading AI-generated documentation._
+_This README was originally written by hand; the llms.txt build notes were added with AI assistance._
 
 <img src="public/media/projects/piech.dev.webp" alt="Projects page of piech.dev" title="Projects page of piech.dev" width="500" />
 
@@ -54,6 +54,7 @@ This resulted in the project using the following post-build steps:
 4. Removing `dist/client/assets`, we don't need CSS/JS assets after CSS has been inlined.
 5. Traversing `dist/client` to remove all .js files from it. Again, could not make Vite + React Router not output some .js files, even if they were unused and wouldn't be served to the users anyway. Why waste network traffic and time on deploying those?
 6. Generating a sitemap with an in-house script using the `sitemap` package. `vite-plugin-sitemap` doesn't work with URLs with dots, apparently, which some of my projects have in their paths, e.g. it truncates /aliases.sh to /aliases.
+7. Generating `/llms.txt` and `/projects/<repo>/index.md` from the configured projects and the same GitHub cache used to render HTML. The guide links to project Markdown exports with resolved repository links and media URLs; adding a project updates these files automatically.
 
 Technically, I could also flatten the output directory from `dist/client` to `dist`, but it's solved with one line of Netlify config and is not bothering me enough to reconfigure all the build/post-build scripts and Netlify deployment configuration.
 

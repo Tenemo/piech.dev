@@ -115,6 +115,56 @@ describe('LLM content generation', () => {
         expect(result).toContain('(https://example.com/image.png?size=2)');
     });
 
+    it.each(['source', 'img'])(
+        'resolves every %s srcset candidate while preserving descriptors',
+        (tag) => {
+            const result = generate(
+                `<${tag} srcset="./small.webp?size=2#crop 1x, /large.webp 2x" src="./fallback.webp">`,
+            );
+            expect(result).toContain(
+                'srcset="https://github.com/Tenemo/piech.dev/blob/release%2Fdocs/small.webp?size=2&amp;raw=true#crop 1x, https://github.com/Tenemo/piech.dev/blob/release%2Fdocs/large.webp?raw=true 2x"',
+            );
+            expect(result).toContain(
+                'src="https://github.com/Tenemo/piech.dev/blob/release%2Fdocs/fallback.webp?raw=true"',
+            );
+        },
+    );
+
+    it('handles descriptor-free candidates, width descriptors, whitespace, and commas inside URLs', () => {
+        const result = generate(
+            '<img srcset="  ./small.webp,\n\t./wide.webp?colors=red,blue 640w, https://example.com/image,a.webp 1280w, //example.com/large.webp 1920w  ">',
+        );
+        expect(result.replace(/\s+/gu, ' ')).toContain(
+            'srcset=" https://github.com/Tenemo/piech.dev/blob/release%2Fdocs/small.webp?raw=true, https://github.com/Tenemo/piech.dev/blob/release%2Fdocs/wide.webp?colors=red%2Cblue&amp;raw=true 640w, https://example.com/image,a.webp 1280w, https://example.com/large.webp 1920w "',
+        );
+    });
+
+    it('preserves parenthesized descriptors and empty srcset attributes', () => {
+        const result = generate(
+            '<source srcset="./one.webp future(a,b), ./two.webp 2x"><img srcset="">',
+        );
+        expect(result).toContain(
+            'one.webp?raw=true future(a,b), https://github.com/Tenemo/piech.dev/blob/release%2Fdocs/two.webp?raw=true 2x',
+        );
+        expect(result).toContain('<img srcset="">');
+    });
+
+    it.each([
+        'data:image/png;base64,AAAA',
+        'javascript:alert(1)',
+        'file:///private.png',
+    ])('rejects unsafe srcset candidate %s', (url) => {
+        expect(() =>
+            generate(`<source srcset="./safe.webp 1x, ${url} 2x">`),
+        ).toThrow('Unsupported README URL protocol');
+    });
+
+    it('preserves srcset markup inside code examples', () => {
+        const code =
+            '\x60\x60\x60html\n<img srcset="./small.webp 1x, ./large.webp 2x">\n\x60\x60\x60';
+        expect(generate(code)).toContain(code);
+    });
+
     it('preserves external links, anchors, tables, and distinct README headings', () => {
         const result = generate(
             '# A different heading\n\n[API](https://example.com/api?q=1#part) [Contact](mailto:test@example.com) [Usage](#usage)\n\n![External](//example.com/image.png)\n\n| Name | Value |\n| --- | --- |\n| A | B |',

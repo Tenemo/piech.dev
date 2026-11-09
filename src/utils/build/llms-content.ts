@@ -47,7 +47,7 @@ function resolveRepositoryUrl(
         url: url.startsWith('/') && !url.startsWith('//') ? `.${url}` : url,
         repo,
         defaultBranch: encodeURIComponent(defaultBranch),
-        key: 'href',
+        key: media ? 'src' : 'href',
     });
     const resolved = new URL(
         absolute.startsWith('//') ? `https:${absolute}` : absolute,
@@ -61,9 +61,51 @@ function resolveRepositoryUrl(
             `Unsupported README URL protocol in ${repo}: ${resolved.protocol}`,
         );
     }
-    if (media && absolute !== url && !url.startsWith('//'))
-        resolved.searchParams.set('raw', 'true');
     return resolved.href;
+}
+
+function rewriteSourceSet(
+    value: string,
+    repo: string,
+    defaultBranch: string,
+): string {
+    let offset = 0;
+    let rewritten = '';
+    // Follow HTML srcset token boundaries: commas can belong to URLs or parenthesized descriptors.
+    // https://html.spec.whatwg.org/multipage/images.html#parsing-a-srcset-attribute
+    while (offset < value.length) {
+        const separatorStart = offset;
+        while (offset < value.length && /[\t\n\f\r ,]/u.test(value[offset]))
+            offset += 1;
+        rewritten += value.slice(separatorStart, offset);
+        if (offset === value.length) break;
+
+        const urlStart = offset;
+        while (offset < value.length && !/[\t\n\f\r ]/u.test(value[offset]))
+            offset += 1;
+        let urlEnd = offset;
+        while (value[urlEnd - 1] === ',') urlEnd -= 1;
+        rewritten += resolveRepositoryUrl(
+            value.slice(urlStart, urlEnd),
+            repo,
+            defaultBranch,
+            true,
+        );
+        rewritten += value.slice(urlEnd, offset);
+        if (urlEnd !== offset) continue;
+
+        const descriptorStart = offset;
+        let inParentheses = false;
+        while (offset < value.length) {
+            const character = value[offset];
+            offset += 1;
+            if (character === ')') inParentheses = false;
+            else if (character === '(') inParentheses = true;
+            else if (character === ',' && !inParentheses) break;
+        }
+        rewritten += value.slice(descriptorStart, offset);
+    }
+    return rewritten;
 }
 
 function rewriteHtml(
@@ -76,7 +118,11 @@ function rewriteHtml(
     function walk(node: DefaultTreeAdapterMap['node']): void {
         if (defaultTreeAdapter.isElementNode(node)) {
             for (const attribute of node.attrs) {
-                if (!['href', 'src', 'poster'].includes(attribute.name))
+                if (
+                    !['href', 'src', 'poster', 'srcset'].includes(
+                        attribute.name,
+                    )
+                )
                     continue;
                 const location =
                     node.sourceCodeLocation?.attrs?.[attribute.name];
@@ -84,12 +130,15 @@ function rewriteHtml(
                     throw new Error(
                         `Missing HTML attribute location in ${repo}`,
                     );
-                const url = resolveRepositoryUrl(
-                    attribute.value,
-                    repo,
-                    defaultBranch,
-                    attribute.name !== 'href',
-                );
+                const url =
+                    attribute.name === 'srcset'
+                        ? rewriteSourceSet(attribute.value, repo, defaultBranch)
+                        : resolveRepositoryUrl(
+                              attribute.value,
+                              repo,
+                              defaultBranch,
+                              attribute.name !== 'href',
+                          );
                 replacements.push({
                     start: location.startOffset,
                     end: location.endOffset,

@@ -131,7 +131,7 @@ export const stripRedundantLeadingHeading = ({
         const headingText = extractMarkdownHeadingFromLine(line);
 
         if (!headingText) {
-            return markdown;
+            return markdownWithoutBom;
         }
 
         const normalizedHeading = normalizeHeadingForComparison(headingText);
@@ -141,7 +141,7 @@ export const stripRedundantLeadingHeading = ({
         );
 
         if (!isRedundantHeading) {
-            return markdown;
+            return markdownWithoutBom;
         }
 
         return trimLeadingBlankLines(markdownWithoutBom.slice(nextOffset));
@@ -168,7 +168,8 @@ export const toRepositoryAssetUrl = ({
     const repositoryUrl = new URL(
         url,
         `https://github.com/${GITHUB_OWNER}/${repo}/blob/${defaultBranch}/`,
-    ).toString();
+    );
 
-    return key === 'src' ? `${repositoryUrl}?raw=true` : repositoryUrl;
+    if (key === 'src') repositoryUrl.searchParams.set('raw', 'true');
+    return repositoryUrl.toString();
 };
